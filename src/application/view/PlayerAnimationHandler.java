@@ -9,7 +9,6 @@ import javax.imageio.ImageIO;
 
 
 public class PlayerAnimationHandler {
-	//public static final int FALL = 0;
 	public static final int IDLE_LEFT = 0;
 	public static final int IDLE_RIGHT = 1;
 	public static final int WALK_LEFT = 2;
@@ -42,7 +41,7 @@ public class PlayerAnimationHandler {
 				break;
 			case "IdleLeft":
 				for(int i = 0; i < 2;i++) {
-					Image img = ImageIO.read(getClass().getResourceAsStream("/application/resources/IdleLeft/Idleleft"+i+".png"));
+					Image img = ImageIO.read(getClass().getResourceAsStream("/application/resources/IdleLeft/IdleLeft"+i+".png"));
 					images.add(img);
 				}
 				break;
