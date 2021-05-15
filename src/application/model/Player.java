@@ -1,85 +1,57 @@
 package application.model;
 
-import java.awt.Rectangle;
 import java.util.List;
 
 import application.Settings;
 
-public class Player {
+public class Player extends Entity {
 	int hp; // health point
-	int x;
-	int y;
-	int xspeed;
-	int yspeed;;
-	int direction;
-	Rectangle hitbox;
 
 	public Player(int x, int y) {
-		hitbox = new Rectangle(x, y, Settings.PLAYER_DIMENSION, Settings.PLAYER_DIMENSION);
+		super(x, y, Settings.PLAYER_DIMENSION, Settings.PLAYER_DIMENSION);
 		hp = 3;
-		xspeed = 10;
-		yspeed = 10;
-		this.x = x;
-		this.y = y;
-		direction = PlayerSettings.IDLE;
 	}
 
-	public Rectangle getHitbox() {
-		return hitbox;
-	}
-	private boolean touchingGround(List<Tile> tiles) {
-		hitbox.y += GameModel.getInstance().getGravity();
-		for (Tile t : tiles) {
-			if (hitbox.intersects(t)) {
-				hitbox.y -= GameModel.getInstance().getGravity();
-				return true;
-			}
-		}
-		return false;
-	}
-	//Prima di muovere il player in una direzione si calcolano le collisioni con un sistema di hitbox
+	// Metodo chiamato dal thread del gameloop, prima di muovere il player in una
+	// direzione si calcolano le collisioni con un sistema di hitbox
+	@Override
 	public void move() {
 		List<Tile> tiles = GameModel.getInstance().getTiles();
-		//Se tocca terra non applichiamo la gravit√†
-		if(!touchingGround(tiles)) {
-			y += GameModel.getInstance().getGravity();
+
+		// Se non tocca terra applichiamo la gravit‡
+		if (!WallCollisionHandler.touchingGround(this, tiles)) {
+			super.y += GameModel.getInstance().getGravity();
+			super.getHitbox().y += GameModel.getInstance().getGravity();
 		}
-		if (direction == PlayerSettings.MOVE_LEFT) {
-			hitbox.x -= xspeed;
-			for (Tile t : tiles) {
-				if (hitbox.intersects(t)) {
-					hitbox.x = t.x + hitbox.width;
-					x = t.x + hitbox.width;
-					return;
-				}
+		switch (direction) {
+		case PlayerSettings.MOVE_LEFT: {
+			Tile t = WallCollisionHandler.collideWithWall(this, direction, tiles);
+			if (t != null) {
+				hitbox.x = t.x + Settings.TILE_WIDHT;
+				x = t.x + Settings.TILE_WIDHT;
+			} 
+			else {
+				hitbox.x -= xspeed;
+				x -= xspeed;
 			}
-			x -= xspeed;
-		} else if (direction == PlayerSettings.MOVE_RIGHT) {
-			hitbox.x += xspeed;
-			for (Tile t : tiles) {
-				if (hitbox.intersects(t)) {
-					hitbox.x = t.x - hitbox.width;
-					x = t.x - hitbox.width;
-					return;
-				}
-			}
-			x += xspeed;
+			break;
 		}
-	}
-
-	public void update() {
-		move();
-	}
-
-	public int getX() {
-		return x;
-	}
-
-	public int getY() {
-		return y;
-	}
-
-	public int getDirection() {
-		return direction;
+		case PlayerSettings.MOVE_RIGHT: {
+			Tile t = WallCollisionHandler.collideWithWall(this, direction, tiles);
+			if (t != null) {
+				hitbox.x = t.x - hitbox.width;
+				x = t.x - hitbox.width;
+			}
+			else {
+				hitbox.x += xspeed;
+				x += xspeed;
+			}
+			break;
+		}
+		case PlayerSettings.IDLE:
+			break;
+		default:
+			throw new IllegalArgumentException("INVALID DIRECTION");
+		}
 	}
 }

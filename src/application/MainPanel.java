@@ -13,6 +13,7 @@ public class MainPanel {
 		GameController controller = new GameController(view);
 		view.addKeyListener(controller);
 		f.setSize(Settings.WINDOW_WIDTH,Settings.WINDOW_HEIGHT);
+		f.setLocationRelativeTo(null);
 		f.add(view);
 		f.setVisible(true);
 		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);

@@ -15,7 +15,7 @@ public class GameModel {
 	private int gravity;
 	
 	private GameModel() {
-		gravity = 2;
+		gravity = 4;
 		player = new Player(Settings.INITIAL_POSITION_X, Settings.INITIAL_POSITION_Y);
 		tiles = new ArrayList<Tile>();
 		tilesInitForTestPurposes();
@@ -23,8 +23,12 @@ public class GameModel {
 	//Va rimpiazzato con il load dei livelli
 	private void tilesInitForTestPurposes() {
 		for(int i = 0; i < 20;i++) {
-			tiles.add(new Tile(i*Settings.TILE_WIDHT, 300, Settings.TILE_WIDHT, Settings.TILE_HEIGHT));
+			tiles.add(new Tile(i*Settings.TILE_WIDHT, 500, Settings.TILE_WIDHT, Settings.TILE_HEIGHT));
 			tiles.add(new Tile(500,i*32,32,32));
+			tiles.add(new Tile(0, i*Settings.TILE_WIDHT, Settings.TILE_WIDHT, Settings.TILE_HEIGHT));
+			if(i > 5 && i < 10) {
+				tiles.add(new Tile(i*Settings.TILE_WIDHT, 300, Settings.TILE_WIDHT, Settings.TILE_HEIGHT));
+			}
 		}
 	}
 	public List<Tile> getTiles() {
