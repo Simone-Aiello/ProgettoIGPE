@@ -6,9 +6,7 @@ public class Player {
 	int y;
 	int xspeed;
 	int yspeed;;
-	//
-	public int direction;
-	//
+	int direction;
 	public Player(int x, int y) {
 		hp = 3;
 		xspeed = 10;
@@ -30,5 +28,7 @@ public class Player {
 	public int getY() {
 		return y;
 	}
-	
+	public int getDirection() {
+		return direction;
+	}
 }

@@ -39,13 +39,13 @@ public class GameController implements KeyListener {
 	public void keyReleased(KeyEvent e) {
 		switch(e.getKeyCode()) {
 		case KeyEvent.VK_A:
-			if(GameModel.getInstance().getPlayer().direction == PlayerSettings.MOVE_LEFT) {
+			if(GameModel.getInstance().getPlayer().getDirection() == PlayerSettings.MOVE_LEFT) {
 				GameModel.getInstance().movePlayer(100);
 				view.changeAnimation(PlayerAnimationHandler.IDLE_LEFT);
 			}
 			break;
 		case KeyEvent.VK_D:
-			if(GameModel.getInstance().getPlayer().direction == PlayerSettings.MOVE_RIGHT) {
+			if(GameModel.getInstance().getPlayer().getDirection() == PlayerSettings.MOVE_RIGHT) {
 				GameModel.getInstance().movePlayer(100);
 				view.changeAnimation(PlayerAnimationHandler.IDLE_RIGHT);
 			}
