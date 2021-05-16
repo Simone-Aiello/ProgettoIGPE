@@ -20,8 +20,17 @@ public class Player extends Entity {
 
 		// Se non tocca terra applichiamo la gravità
 		if (!WallCollisionHandler.touchingGround(this, tiles)) {
-			super.y += GameModel.getInstance().getGravity();
-			super.getHitbox().y += GameModel.getInstance().getGravity();
+			Tile t = WallCollisionHandler.collideForGravity(this, GameModel.getInstance().getGravity(), tiles);
+			//Se t non è nullo allora con la prossima "iterazione" della gravità collidiamo con una tile, reset della posizione in base alla tile stessa
+			if(t != null) {
+				y = t.y - Settings.PLAYER_DIMENSION;
+				hitbox.y = t.y - Settings.PLAYER_DIMENSION;
+			}
+			else {
+				super.y += GameModel.getInstance().getGravity();
+				super.getHitbox().y += GameModel.getInstance().getGravity();				
+			}
+			
 		}
 		switch (direction) {
 		case PlayerSettings.MOVE_LEFT: {

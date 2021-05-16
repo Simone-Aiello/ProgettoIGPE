@@ -6,14 +6,14 @@ import java.util.List;
 public class WallCollisionHandler {
 	//Return true se l'entità tocca il terreno, false altrimenti
 	public static boolean touchingGround(Entity e,List<Tile> tiles) {
-		e.getHitbox().y += GameModel.getInstance().getGravity();
-		for (Tile t : tiles) {
-			if (e.getHitbox().intersects(t)) {
-				e.getHitbox().y -= GameModel.getInstance().getGravity();
+		e.hitbox.y += 1;
+		for(Tile t : tiles) {
+			if(e.hitbox.intersects(t)) {
+				e.hitbox.y -= 1;
 				return true;
 			}
 		}
-		e.getHitbox().y -= GameModel.getInstance().getGravity();
+		e.hitbox.y -= 1;
 		return false;
 	}
 	//Muove l'hitbox nella direzione passata, se interseca un muro lo ritorna altrimento riporta l'hitbox al valore iniziale
@@ -30,6 +30,17 @@ public class WallCollisionHandler {
 			}
 		}
 		e.hitbox.x -=speed;
+		return null;
+	}
+	public static Tile collideForGravity(Entity e,int gravity, List<Tile> tiles) {
+		e.hitbox.y += gravity;
+		for(Tile t : tiles) {
+			if(e.hitbox.intersects(t)) {
+				e.hitbox.y -= gravity;
+				return t;
+			}
+		}
+		e.hitbox.y -= gravity;
 		return null;
 	}
 }

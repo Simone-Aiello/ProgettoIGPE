@@ -15,7 +15,7 @@ public class GameModel {
 	private int gravity;
 	
 	private GameModel() {
-		gravity = 4;
+		gravity = 12;
 		player = new Player(Settings.INITIAL_POSITION_X, Settings.INITIAL_POSITION_Y);
 		tiles = new ArrayList<Tile>();
 		tilesInitForTestPurposes();
