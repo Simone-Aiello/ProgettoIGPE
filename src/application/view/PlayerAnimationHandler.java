@@ -29,25 +29,25 @@ public class PlayerAnimationHandler {
 			switch(name) {
 			case "LeftMovement":
 				for(int i = 0; i < 7;i++) {
-					Image img = ImageIO.read(getClass().getResourceAsStream("/application/resources/LeftMovement/RunLeft"+i+".png"));
+					Image img = ImageIO.read(getClass().getResourceAsStream("/application/resources/Player/LeftMovement/RunLeft"+i+".png"));
 					images.add(img);
 				}
 				break;
 			case "RightMovement":
 				for(int i = 0; i < 7;i++) {
-					Image img = ImageIO.read(getClass().getResourceAsStream("/application/resources/RightMovement/RunRight"+i+".png"));
+					Image img = ImageIO.read(getClass().getResourceAsStream("/application/resources/Player/RightMovement/RunRight"+i+".png"));
 					images.add(img);
 				}
 				break;
 			case "IdleLeft":
 				for(int i = 0; i < 2;i++) {
-					Image img = ImageIO.read(getClass().getResourceAsStream("/application/resources/IdleLeft/IdleLeft"+i+".png"));
+					Image img = ImageIO.read(getClass().getResourceAsStream("/application/resources/Player/IdleLeft/IdleLeft"+i+".png"));
 					images.add(img);
 				}
 				break;
 			case "IdleRight":
 				for(int i = 0; i < 2;i++) {
-					Image img = ImageIO.read(getClass().getResourceAsStream("/application/resources/IdleRight/IdleRight"+i+".png"));
+					Image img = ImageIO.read(getClass().getResourceAsStream("/application/resources/Player/IdleRight/IdleRight"+i+".png"));
 					images.add(img);
 				}
 				break;
