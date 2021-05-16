@@ -12,46 +12,29 @@ public class Player extends Entity {
 		hp = 3;
 	}
 
-	// Metodo chiamato dal thread del gameloop, prima di muovere il player in una
-	// direzione si calcolano le collisioni con un sistema di hitbox
+	//metodo per il movimento con incremento di default(xspeed) a destra e sinistra
 	@Override
-	public void move() {
-		List<Tile> tiles = GameModel.getInstance().getTiles();
-
-		// Se non tocca terra applichiamo la gravità
-		if (!WallCollisionHandler.touchingGround(this, tiles)) {
-			super.y += GameModel.getInstance().getGravity();
-			super.getHitbox().y += GameModel.getInstance().getGravity();
-		}
-		switch (direction) {
-		case PlayerSettings.MOVE_LEFT: {
-			Tile t = WallCollisionHandler.collideWithWall(this, direction, tiles);
-			if (t != null) {
-				hitbox.x = t.x + Settings.TILE_WIDHT;
-				x = t.x + Settings.TILE_WIDHT;
-			} 
-			else {
-				hitbox.x -= xspeed;
-				x -= xspeed;
-			}
+	public void move() {  
+		switch(direction) {
+		case PlayerSettings.MOVE_LEFT:
+			hitbox.x -= xspeed;
+			x -= xspeed;
 			break;
-		}
-		case PlayerSettings.MOVE_RIGHT: {
-			Tile t = WallCollisionHandler.collideWithWall(this, direction, tiles);
-			if (t != null) {
-				hitbox.x = t.x - hitbox.width;
-				x = t.x - hitbox.width;
-			}
-			else {
-				hitbox.x += xspeed;
-				x += xspeed;
-			}
+		case PlayerSettings.MOVE_RIGHT:
+			hitbox.x += xspeed;
+			x += xspeed;
 			break;
-		}
-		case PlayerSettings.IDLE:
-			break;
-		default:
-			throw new IllegalArgumentException("INVALID DIRECTION");
 		}
 	}
+	
+	public void jump() {
+		hitbox.y -= yspeed;
+		y -= yspeed;
+	}
+	
+	public void fall() {
+		y += yspeed;
+		hitbox.y += yspeed;		
+	}
+
 }

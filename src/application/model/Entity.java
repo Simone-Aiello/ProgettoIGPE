@@ -8,14 +8,16 @@ public abstract class Entity {
 	int xspeed;
 	int yspeed;
 	int direction;
+	boolean jump;
 	Rectangle hitbox;
 	public Entity(int x, int y, int hitboxWidht,int hitboxHeight) {
 		xspeed = 10;
-		yspeed = 0;
+		yspeed = 16;
 		hitbox = new Rectangle(x, y, hitboxWidht, hitboxHeight);
 		this.x = x;
 		this.y = y;
 		direction = PlayerSettings.IDLE;
+		jump = false;
 	}
 	public Rectangle getHitbox() {
 		return hitbox;
@@ -29,8 +31,12 @@ public abstract class Entity {
 	public int getDirection() {
 		return direction;
 	}
+	
 	public abstract void move();
-	public void update() {
+	public abstract void jump();
+	public abstract void fall();
+	
+	/*public void update() {
 		move();
-	}
+	}*/
 }

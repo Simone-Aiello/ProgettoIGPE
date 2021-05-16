@@ -15,8 +15,9 @@ public class GameModel {
 	private int gravity;
 	
 	private GameModel() {
-		gravity = 4;
+		gravity = 16;
 		player = new Player(Settings.INITIAL_POSITION_X, Settings.INITIAL_POSITION_Y);
+		player.yspeed = gravity;
 		tiles = new ArrayList<Tile>();
 		tilesInitForTestPurposes();
 	}
@@ -40,15 +41,66 @@ public class GameModel {
 	}
 	public int getGravity() {
 		return gravity;
-	}
+	} 
+	
 	/*Funzione chiamata dall'update del controller per avere un movimento più fluido*/
 	public void update() {
-		player.update();
+		updatePlayer(); 
 	}
 	
 	public void movePlayer(int direction) {
 		player.direction = direction;
 	}
+	
+	// Metodo chiamato dal thread del gameloop, prima di muovere il player in una
+	// direzione si calcolano le collisioni con un sistema di hitbox
+	private void updatePlayer() {	
+		if (player.jump) {
+			int preJumpY = player.y;
+			while(player.y >= preJumpY -3*Settings.PLAYER_DIMENSION){
+				player.jump();
+			}			
+		}
+		// Se non tocca terra applichiamo la gravit�
+		if (!WallCollisionHandler.touchingGround(player, tiles)) {
+			player.fall();
+		}
+
+		switch (player.direction) {
+		case PlayerSettings.MOVE_LEFT: {
+			Tile t = WallCollisionHandler.collideWithWall(player, player.direction, tiles);
+			if (t != null) { //sta collidendo
+				player.hitbox.x = t.x + Settings.TILE_WIDHT;  
+				player.x = t.x + Settings.TILE_WIDHT; 
+			} 
+			else {
+				player.move();
+			}
+			break;
+		}
+		case PlayerSettings.MOVE_RIGHT: {
+			Tile t = WallCollisionHandler.collideWithWall(player, player.direction, tiles);
+			if (t != null) {
+				player.hitbox.x = t.x - player.hitbox.width;
+				player.x = t.x - player.hitbox.width;
+			}
+			else {
+				player.move();
+			}
+			break;
+		}
+		case PlayerSettings.IDLE:
+			break;
+		default:
+			throw new IllegalArgumentException("INVALID DIRECTION");
+		}
+	}
+
+	
+	public void handlePlayerJump(boolean isJumping) {
+		player.jump = isJumping;
+	}
+	
 	public Player getPlayer() {
 		return player;
 	}

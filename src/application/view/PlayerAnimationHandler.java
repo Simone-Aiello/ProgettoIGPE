@@ -1,8 +1,11 @@
 package application.view;
 
 import java.awt.Image;
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 
 import javax.imageio.ImageIO;
@@ -13,6 +16,11 @@ public class PlayerAnimationHandler {
 	public static final int IDLE_RIGHT = 1;
 	public static final int WALK_LEFT = 2;
 	public static final int WALK_RIGHT = 3;
+	public static final int JUMP_LEFT = 4;
+	public static final int JUMP_RIGHT = 5;
+	public static final int FALL_LEFT = 6;
+	public static final int FALL_RIGHT = 7;
+	
 	private HashMap<Integer, PlayerAnimation> animations;
 	private PlayerAnimation currentAnimation;
 	public PlayerAnimationHandler() {
@@ -21,39 +29,31 @@ public class PlayerAnimationHandler {
 		animations.put(WALK_RIGHT, new PlayerAnimation(getResources("RightMovement")));	
 		animations.put(IDLE_LEFT, new PlayerAnimation(getResources("IdleLeft")));
 		animations.put(IDLE_RIGHT, new PlayerAnimation(getResources("IdleRight")));
+		animations.put(FALL_LEFT, new PlayerAnimation(getResources("FallLeft")));
+		animations.put(FALL_RIGHT, new PlayerAnimation(getResources("FallRight")));	
+		animations.put(JUMP_LEFT, new PlayerAnimation(getResources("JumpLeft")));
+		animations.put(JUMP_RIGHT, new PlayerAnimation(getResources("JumpRight")));
 		currentAnimation = animations.get(IDLE_RIGHT);	
 	}
-	private ArrayList<Image> getResources(String name) {
+	private ArrayList<Image> getResources(String folder) {
 		ArrayList<Image> images = new ArrayList<Image>();
 		try {
-			switch(name) {
-			case "LeftMovement":
-				for(int i = 0; i < 7;i++) {
-					Image img = ImageIO.read(getClass().getResourceAsStream("/application/resources/Player/LeftMovement/RunLeft"+i+".png"));
-					images.add(img);
-				}
-				break;
-			case "RightMovement":
-				for(int i = 0; i < 7;i++) {
-					Image img = ImageIO.read(getClass().getResourceAsStream("/application/resources/Player/RightMovement/RunRight"+i+".png"));
-					images.add(img);
-				}
-				break;
-			case "IdleLeft":
-				for(int i = 0; i < 2;i++) {
-					Image img = ImageIO.read(getClass().getResourceAsStream("/application/resources/Player/IdleLeft/IdleLeft"+i+".png"));
-					images.add(img);
-				}
-				break;
-			case "IdleRight":
-				for(int i = 0; i < 2;i++) {
-					Image img = ImageIO.read(getClass().getResourceAsStream("/application/resources/Player/IdleRight/IdleRight"+i+".png"));
-					images.add(img);
-				}
-				break;
+			String path = "/application/resources/Player/" + folder + "/";
+			File f = new File(getClass().getResource(path).getPath());
+			ArrayList<File> listOfResources = new ArrayList<File>();
+			for (File r : f.listFiles()) {
+				listOfResources.add(r);				
 			}
-		}
-		catch(IOException e) {
+
+			Collections.sort(listOfResources, new Comparator<File>() {
+				public int compare(File o1, File o2) {
+					return o1.getName().compareTo(o2.getName());
+				}
+			});
+			for (File img : listOfResources) {				
+				images.add(ImageIO.read(getClass().getResourceAsStream(path + img.getName())));
+			}			
+		}catch(IOException e) {
 			System.out.println("CANNOT LOAD SOURCES");
 		}
 		return images;
