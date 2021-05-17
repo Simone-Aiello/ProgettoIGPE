@@ -62,9 +62,17 @@ public class PlayerAnimationHandler {
 		currentAnimation.update();
 	}
 	public void changeCurrentAnimation(int type) {
-		currentAnimation = animations.get(type);
-		
+		currentAnimation = animations.get(type);		
 	}
+	
+	public PlayerAnimation getCurrentAnimation() {
+		return currentAnimation;
+	}
+	
+	public HashMap<Integer, PlayerAnimation> getAnimations(){
+		return animations;
+	}
+	
 	public Image getCurrentImage() {
 		return currentAnimation.getCurrentImage();
 	}

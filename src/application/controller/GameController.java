@@ -32,11 +32,19 @@ public class GameController implements KeyListener {
 		switch(e.getKeyCode()) {
 		case KeyEvent.VK_A:
 			GameModel.getInstance().movePlayer(PlayerSettings.MOVE_LEFT);
-			view.changeAnimation(PlayerAnimationHandler.WALK_LEFT);
+			if (WallCollisionHandler.touchingGround(GameModel.getInstance().getPlayer(),
+					GameModel.getInstance().getTiles()))
+				view.changeAnimation(PlayerAnimationHandler.WALK_LEFT);
+			else
+				view.changeAnimation(PlayerAnimationHandler.FALL_LEFT);
 			break;
 		case KeyEvent.VK_D:
 			GameModel.getInstance().movePlayer(PlayerSettings.MOVE_RIGHT);
-			view.changeAnimation(PlayerAnimationHandler.WALK_RIGHT);
+			if (WallCollisionHandler.touchingGround(GameModel.getInstance().getPlayer(),
+					GameModel.getInstance().getTiles()))
+				view.changeAnimation(PlayerAnimationHandler.WALK_RIGHT);
+			else
+				view.changeAnimation(PlayerAnimationHandler.FALL_RIGHT);
 			break;
 		case KeyEvent.VK_SPACE: //salto
 			if (!spacebarAlreadyPressed) {
@@ -59,7 +67,6 @@ public class GameController implements KeyListener {
 		case KeyEvent.VK_A:
 			if (GameModel.getInstance().getPlayer().getDirection() == PlayerSettings.MOVE_LEFT) {
 				GameModel.getInstance().movePlayer(PlayerSettings.IDLE_LEFT);
-
 				/*se sta toccando terra allora l' animazione è quella di idle altrimenti prende
 				 l' animazione di falling*/
 				if (WallCollisionHandler.touchingGround(GameModel.getInstance().getPlayer(),

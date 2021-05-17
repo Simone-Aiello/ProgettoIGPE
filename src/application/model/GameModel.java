@@ -53,18 +53,20 @@ public class GameModel {
 	
 	// Metodo chiamato dal thread del gameloop, prima di muovere il player in una
 	// direzione si calcolano le collisioni con un sistema di hitbox
-	private void updatePlayer() {	
+	private void updatePlayer() {
+		Tile roof = null;
 		if (player.jump) { // vanno aggiunti i limiti all' altezza del salto
-			if (player.y > player.preJumpPos - 3 * Settings.PLAYER_DIMENSION)
+			if (player.y + player.yspeed > player.preJumpPos - 3 * Settings.PLAYER_DIMENSION ) {
+				roof = WallCollisionHandler.collideWithRoof(player, gravity, tiles); //controllo le collisioni col soffitto
 				player.jump();
-			else
+			}else
 				player.jump = false;
 		}
 		// Se non tocca terra applichiamo la gravit�
 		else if (!WallCollisionHandler.touchingGround(player, tiles)) {
 			Tile t = WallCollisionHandler.collideForGravity(player, gravity, tiles);
 			//Se t non è nullo allora con la prossima "iterazione" della gravità collidiamo con una tile, reset della posizione in base alla tile stessa
-			if(t != null) {
+			if(t != null && !t.equals(roof)) {
 				player.y = t.y - Settings.PLAYER_DIMENSION;
 				player.hitbox.y = t.y - Settings.PLAYER_DIMENSION;
 			}
@@ -76,7 +78,7 @@ public class GameModel {
 		switch (player.direction) {
 		case PlayerSettings.MOVE_LEFT: {
 			Tile t = WallCollisionHandler.collideWithWall(player, player.direction, tiles);
-			if (t != null) { //sta collidendo
+			if (t != null && !t.equals(roof)) { //sta collidendo
 				player.hitbox.x = t.x + Settings.TILE_WIDHT;  
 				player.x = t.x + Settings.TILE_WIDHT; 
 			} 
