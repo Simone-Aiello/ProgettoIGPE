@@ -10,14 +10,20 @@ import application.view.GameView;
 import application.view.PlayerAnimationHandler;
 
 public class GameController implements KeyListener {
+	
 	private GameView view;
+	private boolean spacebarAlreadyPressed;
+	
+	
+	public GameController(GameView view) {
+		this.view = view;
+		spacebarAlreadyPressed = false;
+	}
 	public void update() {   
 		GameModel.getInstance().update();
 		view.update();
 	}
-	public GameController(GameView view) {
-		this.view = view;
-	}
+	
 	@Override
 	public void keyTyped(KeyEvent e) {
 	}
@@ -33,12 +39,16 @@ public class GameController implements KeyListener {
 			view.changeAnimation(PlayerAnimationHandler.WALK_RIGHT);
 			break;
 		case KeyEvent.VK_SPACE: //salto
-			GameModel.getInstance().handlePlayerJump(true);
-			if(GameModel.getInstance().getPlayer().getDirection() == PlayerSettings.MOVE_LEFT || GameModel.getInstance().getPlayer().getDirection() == PlayerSettings.IDLE_LEFT)
-			    view.changeAnimation(PlayerAnimationHandler.JUMP_LEFT);
-			else
-				view.changeAnimation(PlayerAnimationHandler.JUMP_RIGHT);
-			break;
+			if (!spacebarAlreadyPressed) {
+				spacebarAlreadyPressed = true;
+				GameModel.getInstance().handlePlayerJump(true);
+				if (GameModel.getInstance().getPlayer().getDirection() == PlayerSettings.MOVE_LEFT
+						|| GameModel.getInstance().getPlayer().getDirection() == PlayerSettings.IDLE_LEFT)
+					view.changeAnimation(PlayerAnimationHandler.JUMP_LEFT);
+				else
+					view.changeAnimation(PlayerAnimationHandler.JUMP_RIGHT);
+				break;
+			}
 			default:
 				return;
 		}
@@ -71,20 +81,7 @@ public class GameController implements KeyListener {
 			}
 			break;
 		case KeyEvent.VK_SPACE:
-			GameModel.getInstance().handlePlayerJump(false);
-			// controllo se il player è arrivato a terra o sta ancora cadendo
-			if (WallCollisionHandler.touchingGround(GameModel.getInstance().getPlayer(),GameModel.getInstance().getTiles())) {
-
-				if (GameModel.getInstance().getPlayer().getDirection() == PlayerSettings.MOVE_RIGHT || GameModel.getInstance().getPlayer().getDirection() == PlayerSettings.IDLE_RIGHT)
-					view.changeAnimation(PlayerAnimationHandler.IDLE_RIGHT);
-				else
-					view.changeAnimation(PlayerAnimationHandler.IDLE_LEFT);
-			} else {
-				if (GameModel.getInstance().getPlayer().getDirection() == PlayerSettings.MOVE_RIGHT || GameModel.getInstance().getPlayer().getDirection() == PlayerSettings.IDLE_RIGHT)
-					view.changeAnimation(PlayerAnimationHandler.FALL_RIGHT);
-				else
-					view.changeAnimation(PlayerAnimationHandler.FALL_LEFT);
-			}
+			spacebarAlreadyPressed = false;
 			default:
 				return;
 		}

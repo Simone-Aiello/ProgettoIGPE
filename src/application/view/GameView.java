@@ -8,7 +8,9 @@ import javax.swing.JPanel;
 
 import application.Settings;
 import application.model.GameModel;
+import application.model.PlayerSettings;
 import application.model.Tile;
+import application.model.WallCollisionHandler;
 
 
 public class GameView  extends JPanel{
@@ -46,7 +48,24 @@ public class GameView  extends JPanel{
 		playerAnimation.changeCurrentAnimation(type);
 	}
 	public void update() {
+		switchIdleFalling();
 		playerAnimation.update();
 		repaint();
+	}
+	
+	//funzione che controlla se il player sta cadendo oppure sta toccadno il terreno scegliendo l' animazione corrente
+	private void switchIdleFalling() {
+		if (WallCollisionHandler.touchingGround(GameModel.getInstance().getPlayer(),GameModel.getInstance().getTiles())) {
+
+			if (GameModel.getInstance().getPlayer().getDirection() == PlayerSettings.MOVE_RIGHT || GameModel.getInstance().getPlayer().getDirection() == PlayerSettings.IDLE_RIGHT)
+				changeAnimation(PlayerAnimationHandler.IDLE_RIGHT);
+			else
+				changeAnimation(PlayerAnimationHandler.IDLE_LEFT);
+		} else {
+			if (GameModel.getInstance().getPlayer().getDirection() == PlayerSettings.MOVE_RIGHT || GameModel.getInstance().getPlayer().getDirection() == PlayerSettings.IDLE_RIGHT)
+				changeAnimation(PlayerAnimationHandler.FALL_RIGHT);
+			else
+				changeAnimation(PlayerAnimationHandler.FALL_LEFT);
+		}
 	}
 }

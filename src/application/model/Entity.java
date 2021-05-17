@@ -9,6 +9,7 @@ public abstract class Entity {
 	int yspeed;
 	int direction;
 	boolean jump;
+
 	Rectangle hitbox;
 	public Entity(int x, int y, int hitboxWidht,int hitboxHeight) {
 		xspeed = 10;
@@ -30,6 +31,10 @@ public abstract class Entity {
 	}
 	public int getDirection() {
 		return direction;
+	}
+	
+	public boolean isJumping() {
+		return jump;
 	}
 	
 	public abstract void move();

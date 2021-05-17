@@ -11,4 +11,5 @@ public class Tile extends Rectangle{
 	public Tile(int x,int y, int width,int height) {
 		super(x,y,width,height);
 	}
+	
 }

@@ -30,8 +30,7 @@ public class Player extends Entity {
 	
 	public void jump() {
 		y -= yspeed;
-		hitbox.y -= yspeed;		
-		System.out.println("jumping");
+		hitbox.y -= yspeed;
 	}
 	
 	public void fall() {

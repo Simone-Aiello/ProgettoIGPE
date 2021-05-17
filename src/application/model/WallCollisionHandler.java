@@ -46,4 +46,16 @@ public class WallCollisionHandler {
 		e.hitbox.y -= gravity;
 		return null;
 	}
+	
+	public static Tile collideWithRoof(Entity e,int upSpeed, List<Tile> tiles) {
+		e.hitbox.y -= upSpeed;
+		for(Tile t : tiles) {
+			if(e.hitbox.intersects(t)) {
+				e.hitbox.y += upSpeed;
+				return t;
+			}
+		}
+		e.hitbox.y += upSpeed;
+		return null;
+	}
 }

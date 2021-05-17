@@ -54,12 +54,12 @@ public class GameModel {
 	// Metodo chiamato dal thread del gameloop, prima di muovere il player in una
 	// direzione si calcolano le collisioni con un sistema di hitbox
 	private void updatePlayer() {	
-		if (player.jump) // vanno aggiunti i limiti all' altezza del salto
+		if (player.jump) { // vanno aggiunti i limiti all' altezza del salto
 			if (player.y > player.preJumpPos - 3 * Settings.PLAYER_DIMENSION)
 				player.jump();
 			else
 				player.jump = false;
-
+		}
 		// Se non tocca terra applichiamo la gravit�
 		else if (!WallCollisionHandler.touchingGround(player, tiles)) {
 			Tile t = WallCollisionHandler.collideForGravity(player, gravity, tiles);
@@ -76,6 +76,9 @@ public class GameModel {
 		switch (player.direction) {
 		case PlayerSettings.MOVE_LEFT: {
 			Tile t = WallCollisionHandler.collideWithWall(player, player.direction, tiles);
+			Tile roof = WallCollisionHandler.collideWithRoof(player, gravity, tiles);
+			if(roof != null && roof.equals(t))
+				t = null;
 			if (t != null) { //sta collidendo
 				player.hitbox.x = t.x + Settings.TILE_WIDHT;  
 				player.x = t.x + Settings.TILE_WIDHT; 
@@ -87,6 +90,9 @@ public class GameModel {
 		}
 		case PlayerSettings.MOVE_RIGHT: {
 			Tile t = WallCollisionHandler.collideWithWall(player, player.direction, tiles);
+			Tile roof = WallCollisionHandler.collideWithRoof(player, gravity, tiles);
+			if(roof != null && roof.equals(t))
+				t = null;
 			if (t != null) {
 				player.hitbox.x = t.x - player.hitbox.width;
 				player.x = t.x - player.hitbox.width;
@@ -106,7 +112,7 @@ public class GameModel {
 	}
 
 	public void handlePlayerJump(boolean isJumping) {
-		if (isJumping == true) {
+		if (isJumping == true && !player.jump) {
 			if (WallCollisionHandler.touchingGround(player, tiles)) {
 				player.jump = isJumping;
 				player.preJumpPos = player.y;
