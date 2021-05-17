@@ -1,14 +1,15 @@
 package application.model;
 
-import java.util.List;
 
 import application.Settings;
 
 public class Player extends Entity {
 	int hp; // health point
+	int preJumpPos;
 
 	public Player(int x, int y) {
 		super(x, y, Settings.PLAYER_DIMENSION, Settings.PLAYER_DIMENSION);
+		preJumpPos = y; 
 		hp = 3;
 	}
 
@@ -28,8 +29,9 @@ public class Player extends Entity {
 	}
 	
 	public void jump() {
-		hitbox.y -= yspeed;
 		y -= yspeed;
+		hitbox.y -= yspeed;		
+		System.out.println("jumping");
 	}
 	
 	public void fall() {

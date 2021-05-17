@@ -1,8 +1,7 @@
 package application.model;
 
-import java.awt.Point;
+
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 
 import application.Settings;
@@ -15,7 +14,7 @@ public class GameModel {
 	private int gravity;
 	
 	private GameModel() {
-		gravity = 16;
+		gravity = 12;
 		player = new Player(Settings.INITIAL_POSITION_X, Settings.INITIAL_POSITION_Y);
 		player.yspeed = gravity;
 		tiles = new ArrayList<Tile>();
@@ -55,15 +54,23 @@ public class GameModel {
 	// Metodo chiamato dal thread del gameloop, prima di muovere il player in una
 	// direzione si calcolano le collisioni con un sistema di hitbox
 	private void updatePlayer() {	
-		if (player.jump) {
-			int preJumpY = player.y;
-			while(player.y >= preJumpY -3*Settings.PLAYER_DIMENSION){
+		if (player.jump) // vanno aggiunti i limiti all' altezza del salto
+			if (player.y > player.preJumpPos - 3 * Settings.PLAYER_DIMENSION)
 				player.jump();
-			}			
-		}
+			else
+				player.jump = false;
+
 		// Se non tocca terra applichiamo la gravit�
-		if (!WallCollisionHandler.touchingGround(player, tiles)) {
-			player.fall();
+		else if (!WallCollisionHandler.touchingGround(player, tiles)) {
+			Tile t = WallCollisionHandler.collideForGravity(player, gravity, tiles);
+			//Se t non è nullo allora con la prossima "iterazione" della gravità collidiamo con una tile, reset della posizione in base alla tile stessa
+			if(t != null) {
+				player.y = t.y - Settings.PLAYER_DIMENSION;
+				player.hitbox.y = t.y - Settings.PLAYER_DIMENSION;
+			}
+			else {
+				player.fall();				
+			}
 		}
 
 		switch (player.direction) {
@@ -89,15 +96,23 @@ public class GameModel {
 			}
 			break;
 		}
-		case PlayerSettings.IDLE:
+		case PlayerSettings.IDLE_LEFT:
+			break;
+		case PlayerSettings.IDLE_RIGHT:
 			break;
 		default:
 			throw new IllegalArgumentException("INVALID DIRECTION");
 		}
 	}
 
-	
 	public void handlePlayerJump(boolean isJumping) {
+		if (isJumping == true) {
+			if (WallCollisionHandler.touchingGround(player, tiles)) {
+				player.jump = isJumping;
+				player.preJumpPos = player.y;
+			}  
+			return;
+		}
 		player.jump = isJumping;
 	}
 	

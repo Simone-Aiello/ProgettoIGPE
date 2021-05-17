@@ -16,7 +16,7 @@ public abstract class Entity {
 		hitbox = new Rectangle(x, y, hitboxWidht, hitboxHeight);
 		this.x = x;
 		this.y = y;
-		direction = PlayerSettings.IDLE;
+		direction = PlayerSettings.IDLE_RIGHT;
 		jump = false;
 	}
 	public Rectangle getHitbox() {
