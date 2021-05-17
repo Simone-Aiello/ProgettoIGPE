@@ -76,9 +76,6 @@ public class GameModel {
 		switch (player.direction) {
 		case PlayerSettings.MOVE_LEFT: {
 			Tile t = WallCollisionHandler.collideWithWall(player, player.direction, tiles);
-			Tile roof = WallCollisionHandler.collideWithRoof(player, gravity, tiles);
-			if(roof != null && roof.equals(t))
-				t = null;
 			if (t != null) { //sta collidendo
 				player.hitbox.x = t.x + Settings.TILE_WIDHT;  
 				player.x = t.x + Settings.TILE_WIDHT; 
@@ -89,10 +86,7 @@ public class GameModel {
 			break;
 		}
 		case PlayerSettings.MOVE_RIGHT: {
-			Tile t = WallCollisionHandler.collideWithWall(player, player.direction, tiles);
-			Tile roof = WallCollisionHandler.collideWithRoof(player, gravity, tiles);
-			if(roof != null && roof.equals(t))
-				t = null;
+			Tile t = WallCollisionHandler.collideWithWall(player, player.direction, tiles);			
 			if (t != null) {
 				player.hitbox.x = t.x - player.hitbox.width;
 				player.x = t.x - player.hitbox.width;

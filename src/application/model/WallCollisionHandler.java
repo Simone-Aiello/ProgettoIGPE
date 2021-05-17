@@ -27,6 +27,9 @@ public class WallCollisionHandler {
 		e.hitbox.x += speed;
 		for(Tile t : tiles) {
 			if(e.getHitbox().intersects(t)) {
+				Tile roof = WallCollisionHandler.collideWithRoof(e, e.yspeed, tiles);
+				if(roof != null && roof.equals(t))
+					break;
 				e.hitbox.x -=speed;
 				return t;
 			}
