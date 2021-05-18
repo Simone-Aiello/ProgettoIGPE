@@ -27,9 +27,6 @@ public class WallCollisionHandler {
 		e.hitbox.x += speed;
 		for(Tile t : tiles) {
 			if(e.getHitbox().intersects(t)) {
-				/*Tile roof = WallCollisionHandler.collideWithRoof(e, e.yspeed, tiles);
-				if(roof != null && roof.equals(t))
-					break;*/
 				e.hitbox.x -=speed;
 				return t;
 			}
@@ -50,15 +47,17 @@ public class WallCollisionHandler {
 		return null;
 	}
 	
-	public static Tile collideWithRoof(Entity e,int upSpeed, List<Tile> tiles) {
-		e.hitbox.y -= upSpeed;
-		for(Tile t : tiles) {
+	public static boolean currentlyCollidingWithRoof(Entity e, List<Tile> roof) {
+		if(roof == null) return false;
+		for(Tile t : roof) {
 			if(e.hitbox.intersects(t)) {
-				e.hitbox.y += upSpeed;
-				return t;
+				return true;
 			}
 		}
-		e.hitbox.y += upSpeed;
-		return null;
+		return false;
+	}
+	
+	public static boolean collidingWithBorder(Entity e, int direction) {
+		return false;
 	}
 }

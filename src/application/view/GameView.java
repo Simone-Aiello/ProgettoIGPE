@@ -53,7 +53,9 @@ public class GameView  extends JPanel{
 		repaint();
 	}
 	
-	//funzione che controlla se il player sta cadendo oppure sta toccadno il terreno scegliendo l' animazione corrente
+	/*funzione che controlla se il player sta cadendo oppure sta toccadno il terreno scegliendo l' animazione corrente
+	 * va modificato per gestire tutte le animazioni e il falling durante la fase di discesa del salto
+	 */
 	private void switchIdleFalling() {
 		if (WallCollisionHandler.touchingGround(GameModel.getInstance().getPlayer(),GameModel.getInstance().getTiles())) {
 			if (playerAnimation.getCurrentAnimation() == playerAnimation.getAnimations().get(PlayerAnimationHandler.FALL_RIGHT))
