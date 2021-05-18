@@ -12,6 +12,7 @@ public class GameLoop implements Runnable {
 
 	@Override
 	public void run() {
+		System.out.println("TEST");
 		while (true) {
 			controller.update();
 			try {
