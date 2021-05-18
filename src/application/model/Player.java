@@ -16,7 +16,7 @@ public class Player extends Entity {
 	//metodo per il movimento con incremento di default(xspeed) a destra e sinistra
 	@Override
 	public void move() {  
-		switch(direction) {
+		switch(xState) {
 		case PlayerSettings.MOVE_LEFT:
 			hitbox.x -= xspeed;
 			x -= xspeed;

@@ -10,30 +10,23 @@ import java.util.HashMap;
 
 import javax.imageio.ImageIO;
 
+import application.model.PlayerSettings;
 
-public class PlayerAnimationHandler {
-	public static final int IDLE_LEFT = 0;
-	public static final int IDLE_RIGHT = 1;
-	public static final int WALK_LEFT = 2;
-	public static final int WALK_RIGHT = 3;
-	public static final int JUMP_LEFT = 4;
-	public static final int JUMP_RIGHT = 5;
-	public static final int FALL_LEFT = 6;
-	public static final int FALL_RIGHT = 7;
-	
+
+public class PlayerAnimationHandler {	
 	private HashMap<Integer, PlayerAnimation> animations;
 	private PlayerAnimation currentAnimation;
 	public PlayerAnimationHandler() {
 		animations = new HashMap<Integer, PlayerAnimation>();
-		animations.put(WALK_LEFT, new PlayerAnimation(getResources("LeftMovement")));
-		animations.put(WALK_RIGHT, new PlayerAnimation(getResources("RightMovement")));	
-		animations.put(IDLE_LEFT, new PlayerAnimation(getResources("IdleLeft")));
-		animations.put(IDLE_RIGHT, new PlayerAnimation(getResources("IdleRight")));
-		animations.put(FALL_LEFT, new PlayerAnimation(getResources("FallLeft")));
-		animations.put(FALL_RIGHT, new PlayerAnimation(getResources("FallRight")));	
-		animations.put(JUMP_LEFT, new PlayerAnimation(getResources("JumpLeft")));
-		animations.put(JUMP_RIGHT, new PlayerAnimation(getResources("JumpRight")));
-		currentAnimation = animations.get(IDLE_RIGHT);	
+		animations.put(PlayerSettings.MOVE_LEFT, new PlayerAnimation(getResources("LeftMovement")));
+		animations.put(PlayerSettings.MOVE_RIGHT, new PlayerAnimation(getResources("RightMovement")));	
+		animations.put(PlayerSettings.IDLE_LEFT, new PlayerAnimation(getResources("IdleLeft")));
+		animations.put(PlayerSettings.IDLE_RIGHT, new PlayerAnimation(getResources("IdleRight")));
+		animations.put(PlayerSettings.FALL_LEFT, new PlayerAnimation(getResources("FallLeft")));
+		animations.put(PlayerSettings.FALL_RIGHT, new PlayerAnimation(getResources("FallRight")));	
+		animations.put(PlayerSettings.JUMP_LEFT, new PlayerAnimation(getResources("JumpLeft")));
+		animations.put(PlayerSettings.JUMP_RIGHT, new PlayerAnimation(getResources("JumpRight")));
+		currentAnimation = animations.get(PlayerSettings.IDLE_RIGHT);	
 	}
 	private ArrayList<Image> getResources(String folder) {
 		ArrayList<Image> images = new ArrayList<Image>();
@@ -44,7 +37,6 @@ public class PlayerAnimationHandler {
 			for (File r : f.listFiles()) {
 				listOfResources.add(r);				
 			}
-
 			Collections.sort(listOfResources, new Comparator<File>() {
 				public int compare(File o1, File o2) {
 					return o1.getName().compareTo(o2.getName());
@@ -54,15 +46,26 @@ public class PlayerAnimationHandler {
 				images.add(ImageIO.read(getClass().getResourceAsStream(path + img.getName())));
 			}			
 		}catch(IOException e) {
-			System.out.println("CANNOT LOAD SOURCES");
+			System.out.println("CANNOT LOAD RESOURCES");
 		}
 		return images;
 	}
-	public void update() {
+	public void changeCurrentAnimation(int playerXState,int playerYState) {
+		switch(playerYState) {
+			case PlayerSettings.Y_IDLE:
+				currentAnimation = animations.get(playerXState);
+			break;
+			case PlayerSettings.JUMPING:
+				if(playerXState == PlayerSettings.IDLE_RIGHT ||playerXState == PlayerSettings.MOVE_RIGHT) currentAnimation = animations.get(PlayerSettings.JUMP_RIGHT);
+				else currentAnimation = animations.get(PlayerSettings.JUMP_LEFT);
+			break;
+			case PlayerSettings.FALLING:
+				if(playerXState == PlayerSettings.IDLE_RIGHT ||playerXState == PlayerSettings.MOVE_RIGHT) currentAnimation = animations.get(PlayerSettings.FALL_RIGHT);
+				else currentAnimation = animations.get(PlayerSettings.FALL_LEFT);
+			break;
+			
+		}
 		currentAnimation.update();
-	}
-	public void changeCurrentAnimation(int type) {
-		currentAnimation = animations.get(type);		
 	}
 	
 	public PlayerAnimation getCurrentAnimation() {

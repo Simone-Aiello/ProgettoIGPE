@@ -28,6 +28,12 @@ public class GameView  extends JPanel{
 	@Override
 	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);
+		g.setColor(Color.CYAN);
+		//
+		List<Tile> tiles = GameModel.getInstance().getTiles();
+		for(Tile t : tiles) {
+			g.fillRect(t.x, t.y, t.width, t.height);
+		}
 		int x = GameModel.getInstance().getPlayer().getX();
 		int y = GameModel.getInstance().getPlayer().getY();
 		g.drawImage(playerAnimation.getCurrentImage(), x, y, Settings.PLAYER_DIMENSION, Settings.PLAYER_DIMENSION, null);
@@ -37,31 +43,11 @@ public class GameView  extends JPanel{
 		int hy = GameModel.getInstance().getPlayer().getHitbox().y;
 		g.setColor(Color.RED);
 		g.drawRect(hx, hy, dim, dim);
-		g.setColor(Color.CYAN);
-		//
-		List<Tile> tiles = GameModel.getInstance().getTiles();
-		for(Tile t : tiles) {
-			g.fillRect(t.x, t.y, t.width, t.height);
-		}
-	}
-	public void changeAnimation(int type) {
-		playerAnimation.changeCurrentAnimation(type);
 	}
 	public void update() {
-		switchIdleFalling();
-		playerAnimation.update();
+		int playerXState = GameModel.getInstance().getPlayer().getXState();
+		int playerYState = GameModel.getInstance().getPlayer().getYState();
+		playerAnimation.changeCurrentAnimation(playerXState,playerYState);
 		repaint();
-	}
-	
-	/*funzione che controlla se il player sta cadendo oppure sta toccadno il terreno scegliendo l' animazione corrente
-	 * va modificato per gestire tutte le animazioni e il falling durante la fase di discesa del salto
-	 */
-	private void switchIdleFalling() {
-		if (WallCollisionHandler.touchingGround(GameModel.getInstance().getPlayer(),GameModel.getInstance().getTiles())) {
-			if (playerAnimation.getCurrentAnimation() == playerAnimation.getAnimations().get(PlayerAnimationHandler.FALL_RIGHT))
-				changeAnimation(PlayerAnimationHandler.IDLE_RIGHT);
-			else if(playerAnimation.getCurrentAnimation() == playerAnimation.getAnimations().get(PlayerAnimationHandler.FALL_LEFT))
-				changeAnimation(PlayerAnimationHandler.IDLE_LEFT);
-		}
 	}
 }

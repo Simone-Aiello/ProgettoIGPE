@@ -48,17 +48,21 @@ public class GameModel {
 	}
 	
 	public void movePlayer(int direction) {
-		player.direction = direction;
+		player.xState = direction;
 	}
 	
 	// Metodo chiamato dal thread del gameloop, prima di muovere il player in una
 	// direzione si calcolano le collisioni con un sistema di hitbox
 	private void updatePlayer() {
-		if (player.jump) { // vanno aggiunti i limiti all' altezza del salto
+		player.yState = PlayerSettings.Y_IDLE;
+		if (player.jumping) { // vanno aggiunti i limiti all' altezza del salto  
 			if (player.y + player.yspeed > player.preJumpPos - 3 * Settings.PLAYER_DIMENSION ) {
 				player.jump();
-			}else
-				player.jump = false;
+				if(player.xState == PlayerSettings.MOVE_RIGHT || player.xspeed == PlayerSettings.IDLE_RIGHT) player.yState = PlayerSettings.JUMPING;
+				else player.yState = PlayerSettings.JUMPING;
+			}
+			else
+				player.jumping = false;
 		}
 		// Se non tocca terra applichiamo la gravit�
 		else if (!WallCollisionHandler.touchingGround(player, tiles)) {			
@@ -71,14 +75,16 @@ public class GameModel {
 			else {
 				player.fall();				
 			}
+			if(player.xState == PlayerSettings.MOVE_RIGHT || player.xspeed == PlayerSettings.IDLE_RIGHT) player.yState = PlayerSettings.FALLING;
+			else player.yState = PlayerSettings.FALLING;
 		}
 		//se sono in una tile a causa di un salto voglio ignorare le collisioni a dx e sx perche voglio potermi muovere attraverso i tile
 		boolean collidingWithRoof = WallCollisionHandler.currentlyCollidingWithRoof(player, tiles);
 
-		switch (player.direction) {
+		switch (player.xState) {
 		case PlayerSettings.MOVE_LEFT: {		
-			Tile t = WallCollisionHandler.collideWithWall(player, player.direction, tiles);
-			if ((t != null && !collidingWithRoof)|| WallCollisionHandler.collidingWithBorder(player, player.direction)) {
+			Tile t = WallCollisionHandler.collideWithWall(player, player.xState, tiles);
+			if ((t != null && !collidingWithRoof)|| WallCollisionHandler.collidingWithBorder(player, player.xState)) {
 				player.hitbox.x = t.x + Settings.TILE_WIDHT;  
 				player.x = t.x + Settings.TILE_WIDHT; 
 			} 
@@ -88,8 +94,8 @@ public class GameModel {
 			break;
 		}
 		case PlayerSettings.MOVE_RIGHT: {
-			Tile t = WallCollisionHandler.collideWithWall(player, player.direction, tiles);			
-			if ((t != null && !collidingWithRoof)|| WallCollisionHandler.collidingWithBorder(player, player.direction)) {
+			Tile t = WallCollisionHandler.collideWithWall(player, player.xState, tiles);			
+			if ((t != null && !collidingWithRoof)|| WallCollisionHandler.collidingWithBorder(player, player.xState)) {
 				player.hitbox.x = t.x - player.hitbox.width;
 				player.x = t.x - player.hitbox.width;
 			}
@@ -98,24 +104,20 @@ public class GameModel {
 			}
 			break;
 		}
-		case PlayerSettings.IDLE_LEFT:
-			break;
-		case PlayerSettings.IDLE_RIGHT:
-			break;
 		default:
-			throw new IllegalArgumentException("INVALID DIRECTION");
+			return;
 		}
 	}
 
 	public void handlePlayerJump(boolean isJumping) {
-		if (isJumping == true && !player.jump) {
+		if (isJumping && !player.jumping) {
 			if (WallCollisionHandler.touchingGround(player, tiles)) {
-				player.jump = isJumping;
+				player.jumping = isJumping;
 				player.preJumpPos = player.y;
 			}  
 			return;
 		}
-		player.jump = isJumping;
+		player.jumping = isJumping;
 	}
 	
 	public Player getPlayer() {
