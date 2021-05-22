@@ -10,7 +10,6 @@ public abstract class Entity {
 	int xState;
 	int yState;
 	boolean jumping;
-
 	Rectangle hitbox;
 	public Entity(int x, int y, int hitboxWidht,int hitboxHeight) {
 		xspeed = 10;

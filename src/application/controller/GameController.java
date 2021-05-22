@@ -39,9 +39,11 @@ public class GameController implements KeyListener {
 		case KeyEvent.VK_SPACE: //salto
 			if (!spacebarAlreadyPressed) {
 				spacebarAlreadyPressed = true;
-				GameModel.getInstance().handlePlayerJump(true);
-				break;
+				GameModel.getInstance().handlePlayerJump();
 			}
+			break;
+		case KeyEvent.VK_ESCAPE:
+			System.exit(0);
 			default:
 				return;
 		}

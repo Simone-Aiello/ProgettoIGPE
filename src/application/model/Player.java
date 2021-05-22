@@ -35,7 +35,7 @@ public class Player extends Entity {
 	
 	public void fall() {
 		y += yspeed;
-		hitbox.y += yspeed;		
+		hitbox.y += yspeed;
 	}
 
 }
