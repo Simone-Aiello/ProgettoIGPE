@@ -7,15 +7,19 @@ public abstract class Entity {
 	int y;
 	int xspeed;
 	int yspeed;
-	int direction;
+	int xState;
+	int yState;
+	boolean jumping;
 	Rectangle hitbox;
 	public Entity(int x, int y, int hitboxWidht,int hitboxHeight) {
 		xspeed = 10;
-		yspeed = 0;
+		yspeed = 16;
 		hitbox = new Rectangle(x, y, hitboxWidht, hitboxHeight);
 		this.x = x;
 		this.y = y;
-		direction = PlayerSettings.IDLE;
+		xState = PlayerSettings.IDLE_RIGHT;
+		yState = PlayerSettings.IDLE_RIGHT;
+		jumping = false;
 	}
 	public Rectangle getHitbox() {
 		return hitbox;
@@ -26,11 +30,23 @@ public abstract class Entity {
 	public int getY() {
 		return y;
 	}
-	public int getDirection() {
-		return direction;
+	public int getXState() {
+		return xState;
 	}
+	
+	public int getYState() {
+		return yState;
+	}
+	
+	public boolean isJumping() {
+		return jumping;
+	}
+	
 	public abstract void move();
-	public void update() {
+	public abstract void jump();
+	public abstract void fall();
+	
+	/*public void update() {
 		move();
-	}
+	}*/
 }

@@ -15,6 +15,7 @@ public class MainPanel {
 		f.setSize(Settings.WINDOW_WIDTH,Settings.WINDOW_HEIGHT);
 		f.setLocationRelativeTo(null);
 		f.add(view);
+		f.setUndecorated(true);
 		f.setVisible(true);
 		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		GameLoop loop = new GameLoop(controller);

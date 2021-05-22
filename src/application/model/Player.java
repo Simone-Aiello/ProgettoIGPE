@@ -1,66 +1,41 @@
 package application.model;
 
-import java.util.List;
 
 import application.Settings;
 
 public class Player extends Entity {
 	int hp; // health point
+	int preJumpPos;
 
 	public Player(int x, int y) {
 		super(x, y, Settings.PLAYER_DIMENSION, Settings.PLAYER_DIMENSION);
+		preJumpPos = y; 
 		hp = 3;
 	}
 
-	// Metodo chiamato dal thread del gameloop, prima di muovere il player in una
-	// direzione si calcolano le collisioni con un sistema di hitbox
+	//metodo per il movimento con incremento di default(xspeed) a destra e sinistra
 	@Override
-	public void move() {
-		List<Tile> tiles = GameModel.getInstance().getTiles();
-
-		// Se non tocca terra applichiamo la gravità
-		if (!WallCollisionHandler.touchingGround(this, tiles)) {
-			Tile t = WallCollisionHandler.collideForGravity(this, GameModel.getInstance().getGravity(), tiles);
-			//Se t non è nullo allora con la prossima "iterazione" della gravità collidiamo con una tile, reset della posizione in base alla tile stessa
-			if(t != null) {
-				y = t.y - Settings.PLAYER_DIMENSION;
-				hitbox.y = t.y - Settings.PLAYER_DIMENSION;
-			}
-			else {
-				super.y += GameModel.getInstance().getGravity();
-				super.getHitbox().y += GameModel.getInstance().getGravity();				
-			}
-			
-		}
-		switch (direction) {
-		case PlayerSettings.MOVE_LEFT: {
-			Tile t = WallCollisionHandler.collideWithWall(this, direction, tiles);
-			if (t != null) {
-				hitbox.x = t.x + Settings.TILE_WIDHT;
-				x = t.x + Settings.TILE_WIDHT;
-			} 
-			else {
-				hitbox.x -= xspeed;
-				x -= xspeed;
-			}
+	public void move() {  
+		switch(xState) {
+		case PlayerSettings.MOVE_LEFT:
+			hitbox.x -= xspeed;
+			x -= xspeed;
 			break;
-		}
-		case PlayerSettings.MOVE_RIGHT: {
-			Tile t = WallCollisionHandler.collideWithWall(this, direction, tiles);
-			if (t != null) {
-				hitbox.x = t.x - hitbox.width;
-				x = t.x - hitbox.width;
-			}
-			else {
-				hitbox.x += xspeed;
-				x += xspeed;
-			}
+		case PlayerSettings.MOVE_RIGHT:
+			hitbox.x += xspeed;
+			x += xspeed;
 			break;
-		}
-		case PlayerSettings.IDLE:
-			break;
-		default:
-			throw new IllegalArgumentException("INVALID DIRECTION");
 		}
 	}
+	
+	public void jump() {
+		y -= yspeed;
+		hitbox.y -= yspeed;
+	}
+	
+	public void fall() {
+		y += yspeed;
+		hitbox.y += yspeed;
+	}
+
 }
