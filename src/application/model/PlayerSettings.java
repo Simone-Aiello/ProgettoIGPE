@@ -15,5 +15,4 @@ public class PlayerSettings {
 	public static final int FALL_RIGHT = 8;
 	public static final int JUMP_LEFT = 9;
 	public static final int JUMP_RIGHT = 10;
-	
 }
