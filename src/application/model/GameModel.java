@@ -4,18 +4,20 @@ package application.model;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
 import application.Settings;
 
-public class GameModel {
+public class GameModel implements Serializable{
+
+	private static final long serialVersionUID = -2605783339471189943L;
+	
 	private Player player;
 	private List<Tile> tiles;
-	private static GameModel game = null;
 	private int gravity;
-	
-	private GameModel() {
+	public GameModel() {
 		gravity = 12;
 		player = new Player(Settings.INITIAL_POSITION_X, Settings.INITIAL_POSITION_Y);
 		player.yspeed = gravity;
@@ -28,10 +30,6 @@ public class GameModel {
 	}
 	public List<Tile> getTiles() {
 		return tiles;
-	}
-	public static GameModel getInstance() {
-		if(game == null) game = new GameModel();
-		return game;
 	}
 	public int getGravity() {
 		return gravity;
@@ -59,7 +57,15 @@ public class GameModel {
 		updatePlayer(); 
 	}
 	public void movePlayer(int direction) {
-		player.xState = direction;
+		if(direction == PlayerSettings.IDLE_LEFT) {
+			if(player.xState == PlayerSettings.MOVE_LEFT) player.xState = direction;
+			return;
+		}
+		else if(direction == PlayerSettings.IDLE_RIGHT) {
+			if(player.xState == PlayerSettings.MOVE_RIGHT) player.xState = direction;
+			return;
+		}
+		else player.xState = direction;
 	}
 	public void handlePlayerJump() {
 		if (!player.jumping) {

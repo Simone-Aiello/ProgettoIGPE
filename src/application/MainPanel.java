@@ -7,10 +7,16 @@ import application.view.GameView;
 
 public class MainPanel {
 	public static void main(String[] args) {
+		//Se si sceglie la modalità single player viene fatto partire un server in localhost
+		SinglePlayerServer server = new SinglePlayerServer();
+		Thread serverThread = new Thread(server);
+		serverThread.start();
+		
 		JFrame f = new JFrame();
 		GameView view = new GameView();
+		GameController controller = new GameController(view,"localhost",8000);
+		view.setSocket(controller.getSocket());
 		view.setFocusable(true);
-		GameController controller = new GameController(view);
 		view.addKeyListener(controller);
 		f.setSize(Settings.WINDOW_WIDTH,Settings.WINDOW_HEIGHT);
 		f.setLocationRelativeTo(null);

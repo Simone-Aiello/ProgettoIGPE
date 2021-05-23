@@ -1,8 +1,13 @@
 package application.model;
 
 import java.awt.Rectangle;
+import java.io.Serializable;
 
-public abstract class Entity {
+public abstract class Entity implements Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 7975286625857830824L;
 	int x;
 	int y;
 	int xspeed;

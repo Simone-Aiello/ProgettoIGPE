@@ -2,15 +2,16 @@ package application.view;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.net.Socket;
 import java.util.List;
 
 import javax.swing.JPanel;
 
 import application.Settings;
 import application.model.GameModel;
-import application.model.PlayerSettings;
 import application.model.Tile;
-import application.model.WallCollisionHandler;
 
 
 public class GameView  extends JPanel{
@@ -20,34 +21,50 @@ public class GameView  extends JPanel{
 	private static final long serialVersionUID = 1L;
 	
 	private PlayerAnimationHandler playerAnimation;
-
+	private Socket socket;
+	private ObjectInputStream reader;
+	private GameModel model = null;
 	public GameView() {
-		playerAnimation = new PlayerAnimationHandler();
-		this.setBackground(Color.BLACK);
+			playerAnimation = new PlayerAnimationHandler();
+			this.setBackground(Color.BLACK);
+	}
+	public void setSocket(Socket s) {
+		try {
+			this.socket = s;
+			reader = new ObjectInputStream(socket.getInputStream());
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 	@Override
 	protected void paintComponent(Graphics g) {
+		if(model == null) return;
 		super.paintComponent(g);
 		g.setColor(Color.CYAN);
 		//
-		List<Tile> tiles = GameModel.getInstance().getTiles();
+		List<Tile> tiles = model.getTiles();
 		for(Tile t : tiles) {
 			g.fillRect(t.x, t.y, t.width, t.height);
 		}
-		int x = GameModel.getInstance().getPlayer().getX();
-		int y = GameModel.getInstance().getPlayer().getY();
+		int x = model.getPlayer().getX();
+		int y = model.getPlayer().getY();
 		g.drawImage(playerAnimation.getCurrentImage(), x, y, Settings.PLAYER_DIMENSION, Settings.PLAYER_DIMENSION, null);
 		//Visualizing hitbox for debug purposes, to be removed
-		int dim = (int) GameModel.getInstance().getPlayer().getHitbox().getHeight();
-		int hx = GameModel.getInstance().getPlayer().getHitbox().x;
-		int hy = GameModel.getInstance().getPlayer().getHitbox().y;
+		int dim = (int) model.getPlayer().getHitbox().getHeight();
+		int hx = model.getPlayer().getHitbox().x;
+		int hy = model.getPlayer().getHitbox().y;
 		g.setColor(Color.RED);
 		g.drawRect(hx, hy, dim, dim);
 	}
 	public void update() {
-		int playerXState = GameModel.getInstance().getPlayer().getXState();
-		int playerYState = GameModel.getInstance().getPlayer().getYState();
-		playerAnimation.changeCurrentAnimation(playerXState,playerYState);
-		repaint();
+		try {
+			model = (GameModel) reader.readObject();
+			int playerXState = model.getPlayer().getXState();
+			int playerYState = model.getPlayer().getYState();
+			playerAnimation.changeCurrentAnimation(playerXState,playerYState);
+			repaint();
+		} catch (ClassNotFoundException | IOException e) {
+			e.printStackTrace();
+		}
 	}
 }

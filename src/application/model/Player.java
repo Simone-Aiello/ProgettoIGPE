@@ -1,9 +1,15 @@
 package application.model;
 
 
+import java.io.Serializable;
+
 import application.Settings;
 
-public class Player extends Entity {
+public class Player extends Entity implements Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -6854671907296980605L;
 	int hp; // health point
 	int preJumpPos;
 
