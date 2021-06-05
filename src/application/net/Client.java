@@ -1,0 +1,64 @@
+package application.net;
+
+import java.io.BufferedOutputStream;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.net.Socket;
+
+import application.model.Utilities;
+
+
+public class Client {
+	private Socket socket;
+	private PrintWriter out;
+	private BufferedReader in;
+	private String roomCode;
+	private boolean startedCorrectly;
+	public Client(String mode,String code) {
+		try {
+			startedCorrectly = true;
+			socket = new Socket("localhost",8000);
+			out = new PrintWriter(new BufferedOutputStream(socket.getOutputStream()),true);
+			in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+			if(mode == Utilities.HOST) {
+				out.println(Utilities.HOST);
+				roomCode = in.readLine();
+			}
+			else if(mode == Utilities.JOIN) {
+				out.println(Utilities.joinRequest(code));
+				if(in.readLine().equals(Utilities.JOIN_ERROR)) {
+					startedCorrectly = false;
+				}
+			}
+		} catch (IOException e) {
+			socket = null;
+			out = null;
+			in = null;
+			startedCorrectly = false;
+		}
+	}
+	public boolean isStartedCorrectly() {
+		return startedCorrectly;
+	}
+	public String getRoomCode() {
+		return roomCode;
+	}
+	public void sendMessage(String message) {
+		if(out != null) out.println(message);
+	}
+	public String[] read() {
+		String[] res = null;
+		try { 
+			if(in != null && in.ready()) {
+				String line = in.readLine();
+				res = line.split(Utilities.MESSAGE_SEPARATOR);		
+			}
+		}
+		catch(IOException e) {
+			return null;
+		}
+		return res;
+	}
+}

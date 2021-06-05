@@ -12,10 +12,10 @@ public class GameLoop implements Runnable {
 
 	@Override
 	public void run() {
-		while (true) {
+		while (!Thread.currentThread().isInterrupted()) {
 			controller.update();
 			try {
-				Thread.sleep(frequency);
+				if(controller.isSinglePlayer())Thread.sleep(frequency);
 			} catch (InterruptedException e) {
 				return;
 			}

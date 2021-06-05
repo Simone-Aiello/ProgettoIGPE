@@ -2,30 +2,39 @@ package application;
 
 import javax.swing.JFrame;
 
-import application.controller.GameController;
-import application.view.GameView;
+import menu.view.GenericMessagePanel;
+import menu.view.InitialMenu;
+import menu.view.LoginMenu;
+import menu.view.MultiplayerMenu;
+import menu.view.StartView;
 
 public class MainPanel {
+	
+	
 	public static void main(String[] args) {
-		//Se si sceglie la modalità single player viene fatto partire un server in localhost
-		SinglePlayerServer server = new SinglePlayerServer();
-		Thread serverThread = new Thread(server);
-		serverThread.start();
-		
-		JFrame f = new JFrame();
-		GameView view = new GameView();
-		GameController controller = new GameController(view,"localhost",8000);
-		view.setSocket(controller.getSocket());
-		view.setFocusable(true);
-		view.addKeyListener(controller);
+		JFrame f = new JFrame("BubbleBobble");
 		f.setSize(Settings.WINDOW_WIDTH,Settings.WINDOW_HEIGHT);
 		f.setLocationRelativeTo(null);
-		f.add(view);
-		f.setUndecorated(true);
+		//f.setUndecorated(true);
+		
+		ChangeSceneHandler.getInstance().init(f);
+		
+		//GameView view = new GameView();	
+		StartView startScene= new StartView();
+		InitialMenu initialMenu = new InitialMenu();
+		LoginMenu loginMenu = new LoginMenu();
+		MultiplayerMenu multiplayerMenu = new MultiplayerMenu();
+		GenericMessagePanel messagePanel = new GenericMessagePanel();
+
+		//ChangeSceneHandler.add("game", view);
+		ChangeSceneHandler.add("start", startScene);
+		ChangeSceneHandler.add("initialMenu", initialMenu);
+		ChangeSceneHandler.add("loginMenu", loginMenu);
+		ChangeSceneHandler.add("multiplayerMenu", multiplayerMenu);
+		ChangeSceneHandler.add("messagePanel", messagePanel);
+		ChangeSceneHandler.setCurrentScene("start");
+		
 		f.setVisible(true);
 		f.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		GameLoop loop = new GameLoop(controller);
-		Thread t = new Thread(loop);
-		t.start();
 	}
 }

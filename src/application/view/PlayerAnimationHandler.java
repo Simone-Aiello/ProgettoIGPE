@@ -10,73 +10,80 @@ import java.util.HashMap;
 
 import javax.imageio.ImageIO;
 
-import application.model.PlayerSettings;
+import application.model.Utilities;
 
 
-public class PlayerAnimationHandler {	
-	private HashMap<Integer, PlayerAnimation> animations;
-	private PlayerAnimation currentAnimation;
+public class PlayerAnimationHandler implements AnimationHandler {	
+	private HashMap<Integer, PlayerAnimation> animationsPlayerOne = null;
+	private HashMap<Integer, PlayerAnimation> animationsPlayerTwo = null;
+	private PlayerAnimation currentPlayerOneAnimation;
+	private PlayerAnimation currentPlayerTwoAnimation;
 	public PlayerAnimationHandler() {
-		animations = new HashMap<Integer, PlayerAnimation>();
-		animations.put(PlayerSettings.MOVE_LEFT, new PlayerAnimation(getResources("LeftMovement")));
-		animations.put(PlayerSettings.MOVE_RIGHT, new PlayerAnimation(getResources("RightMovement")));	
-		animations.put(PlayerSettings.IDLE_LEFT, new PlayerAnimation(getResources("IdleLeft")));
-		animations.put(PlayerSettings.IDLE_RIGHT, new PlayerAnimation(getResources("IdleRight")));
-		animations.put(PlayerSettings.FALL_LEFT, new PlayerAnimation(getResources("FallLeft")));
-		animations.put(PlayerSettings.FALL_RIGHT, new PlayerAnimation(getResources("FallRight")));	
-		animations.put(PlayerSettings.JUMP_LEFT, new PlayerAnimation(getResources("JumpLeft")));
-		animations.put(PlayerSettings.JUMP_RIGHT, new PlayerAnimation(getResources("JumpRight")));
-		currentAnimation = animations.get(PlayerSettings.IDLE_RIGHT);	
+		animationsPlayerOne = new HashMap<Integer, PlayerAnimation>();
+		String pathPlayerOne = "/application/resources/Player/";
+		animationsPlayerOne.put(Utilities.MOVE_LEFT, new PlayerAnimation(getResources(pathPlayerOne + "LeftMovement/")));
+		animationsPlayerOne.put(Utilities.MOVE_RIGHT, new PlayerAnimation(getResources(pathPlayerOne + "RightMovement/")));	
+		animationsPlayerOne.put(Utilities.IDLE_LEFT, new PlayerAnimation(getResources(pathPlayerOne + "IdleLeft/")));
+		animationsPlayerOne.put(Utilities.IDLE_RIGHT, new PlayerAnimation(getResources(pathPlayerOne + "IdleRight/")));
+		animationsPlayerOne.put(Utilities.FALL_LEFT, new PlayerAnimation(getResources(pathPlayerOne + "FallLeft/")));
+		animationsPlayerOne.put(Utilities.FALL_RIGHT, new PlayerAnimation(getResources(pathPlayerOne + "FallRight/")));	
+		animationsPlayerOne.put(Utilities.JUMP_LEFT, new PlayerAnimation(getResources(pathPlayerOne + "JumpLeft/")));
+		animationsPlayerOne.put(Utilities.JUMP_RIGHT, new PlayerAnimation(getResources(pathPlayerOne + "JumpRight/")));
+		currentPlayerOneAnimation = animationsPlayerOne.get(Utilities.IDLE_RIGHT);	
 	}
-	private ArrayList<Image> getResources(String folder) {
-		ArrayList<Image> images = new ArrayList<Image>();
-		try {
-			String path = "/application/resources/Player/" + folder + "/";
-			File f = new File(getClass().getResource(path).getPath());
-			ArrayList<File> listOfResources = new ArrayList<File>();
-			for (File r : f.listFiles()) {
-				listOfResources.add(r);				
-			}
-			Collections.sort(listOfResources, new Comparator<File>() {
-				public int compare(File o1, File o2) {
-					return o1.getName().compareTo(o2.getName());
-				}
-			});
-			for (File img : listOfResources) {				
-				images.add(ImageIO.read(getClass().getResourceAsStream(path + img.getName())));
-			}			
-		}catch(IOException e) {
-			System.out.println("CANNOT LOAD RESOURCES");
-		}
-		return images;
+	public void loadPlayerTwoImages() {
+		animationsPlayerTwo = new HashMap<Integer, PlayerAnimation>();
+		String pathPlayerTwo = "/application/resources/PlayerTwo/";
+		animationsPlayerTwo.put(Utilities.MOVE_LEFT, new PlayerAnimation(getResources(pathPlayerTwo + "LeftMovement/")));
+		animationsPlayerTwo.put(Utilities.MOVE_RIGHT, new PlayerAnimation(getResources(pathPlayerTwo + "RightMovement/")));	
+		animationsPlayerTwo.put(Utilities.IDLE_LEFT, new PlayerAnimation(getResources(pathPlayerTwo + "IdleLeft/")));
+		animationsPlayerTwo.put(Utilities.IDLE_RIGHT, new PlayerAnimation(getResources(pathPlayerTwo + "IdleRight/")));
+		animationsPlayerTwo.put(Utilities.FALL_LEFT, new PlayerAnimation(getResources(pathPlayerTwo + "FallLeft/")));
+		animationsPlayerTwo.put(Utilities.FALL_RIGHT, new PlayerAnimation(getResources(pathPlayerTwo + "FallRight/")));	
+		animationsPlayerTwo.put(Utilities.JUMP_LEFT, new PlayerAnimation(getResources(pathPlayerTwo + "JumpLeft/")));
+		animationsPlayerTwo.put(Utilities.JUMP_RIGHT, new PlayerAnimation(getResources(pathPlayerTwo + "JumpRight/")));
+		currentPlayerTwoAnimation = animationsPlayerTwo.get(Utilities.IDLE_RIGHT);
 	}
+	@Override
 	public void changeCurrentAnimation(int playerXState,int playerYState) {
 		switch(playerYState) {
-			case PlayerSettings.Y_IDLE:
-				currentAnimation = animations.get(playerXState);
+			case Utilities.Y_IDLE:
+				currentPlayerOneAnimation = animationsPlayerOne.get(playerXState);
 			break;
-			case PlayerSettings.JUMPING:
-				if(playerXState == PlayerSettings.IDLE_RIGHT ||playerXState == PlayerSettings.MOVE_RIGHT) currentAnimation = animations.get(PlayerSettings.JUMP_RIGHT);
-				else currentAnimation = animations.get(PlayerSettings.JUMP_LEFT);
+			case Utilities.JUMPING:
+				if(playerXState == Utilities.IDLE_RIGHT ||playerXState == Utilities.MOVE_RIGHT) currentPlayerOneAnimation = animationsPlayerOne.get(Utilities.JUMP_RIGHT);
+				else currentPlayerOneAnimation = animationsPlayerOne.get(Utilities.JUMP_LEFT);
 			break;
-			case PlayerSettings.FALLING:
-				if(playerXState == PlayerSettings.IDLE_RIGHT ||playerXState == PlayerSettings.MOVE_RIGHT) currentAnimation = animations.get(PlayerSettings.FALL_RIGHT);
-				else currentAnimation = animations.get(PlayerSettings.FALL_LEFT);
+			case Utilities.FALLING:
+				if(playerXState == Utilities.IDLE_RIGHT ||playerXState == Utilities.MOVE_RIGHT) currentPlayerOneAnimation = animationsPlayerOne.get(Utilities.FALL_RIGHT);
+				else currentPlayerOneAnimation = animationsPlayerOne.get(Utilities.FALL_LEFT);
 			break;
 			
 		}
-		currentAnimation.update();
+		currentPlayerOneAnimation.update();
 	}
-	
-	public PlayerAnimation getCurrentAnimation() {
-		return currentAnimation;
-	}
-	
-	public HashMap<Integer, PlayerAnimation> getAnimations(){
-		return animations;
-	}
-	
+	@Override
 	public Image getCurrentImage() {
-		return currentAnimation.getCurrentImage();
+		return currentPlayerOneAnimation.getCurrentImage();
+	}
+	public Image getPlayerTwoImage() {
+		return currentPlayerTwoAnimation.getCurrentImage();
+	}
+	public void changeCurrentPlayerTwoAnimation(int playerXState,int playerYState) {
+		switch(playerYState) {
+			case Utilities.Y_IDLE:
+				currentPlayerTwoAnimation = animationsPlayerTwo.get(playerXState);
+			break;
+			case Utilities.JUMPING:
+				if(playerXState == Utilities.IDLE_RIGHT ||playerXState == Utilities.MOVE_RIGHT) currentPlayerTwoAnimation = animationsPlayerTwo.get(Utilities.JUMP_RIGHT);
+				else currentPlayerTwoAnimation = animationsPlayerTwo.get(Utilities.JUMP_LEFT);
+			break;
+			case Utilities.FALLING:
+				if(playerXState == Utilities.IDLE_RIGHT ||playerXState == Utilities.MOVE_RIGHT) currentPlayerTwoAnimation = animationsPlayerTwo.get(Utilities.FALL_RIGHT);
+				else currentPlayerTwoAnimation = animationsPlayerTwo.get(Utilities.FALL_LEFT);
+			break;
+			
+		}
+		currentPlayerTwoAnimation.update();
 	}
 }

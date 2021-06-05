@@ -14,17 +14,20 @@ public abstract class Entity implements Serializable{
 	int yspeed;
 	int xState;
 	int yState;
+	int preJumpPos;
 	boolean jumping;
+	boolean requestedJump;
 	Rectangle hitbox;
 	public Entity(int x, int y, int hitboxWidht,int hitboxHeight) {
 		xspeed = 10;
-		yspeed = 16;
+		yspeed = 12;
 		hitbox = new Rectangle(x, y, hitboxWidht, hitboxHeight);
 		this.x = x;
 		this.y = y;
-		xState = PlayerSettings.IDLE_RIGHT;
-		yState = PlayerSettings.IDLE_RIGHT;
+		xState = Utilities.IDLE_RIGHT;
+		yState = Utilities.Y_IDLE;
 		jumping = false;
+		requestedJump = false;
 	}
 	public Rectangle getHitbox() {
 		return hitbox;
@@ -46,12 +49,37 @@ public abstract class Entity implements Serializable{
 	public boolean isJumping() {
 		return jumping;
 	}
-	
-	public abstract void move();
-	public abstract void jump();
-	public abstract void fall();
-	
-	/*public void update() {
-		move();
-	}*/
+	//metodo per il movimento con incremento di default(xspeed) a destra e sinistr
+	public void move() {  
+		switch(xState) {
+		case Utilities.MOVE_LEFT:
+			hitbox.x -= xspeed;
+			x -= xspeed;
+			break;
+		case Utilities.MOVE_RIGHT:
+			hitbox.x += xspeed;
+			x += xspeed;
+			break;
+		}
+	}
+	public void jump() {
+		y -= yspeed;
+		hitbox.y -= yspeed;
+	}
+	public void fall() {
+		y += yspeed;
+		hitbox.y += yspeed;
+	}
+	public void setxState(int xState) {
+		this.xState = xState;
+	}
+	public void setyState(int yState) {
+		this.yState = yState;
+	}
+	public void setX(int x) {
+		this.x = x;
+	}
+	public void setY(int y) {
+		this.y = y;
+	}
 }
