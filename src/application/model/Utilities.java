@@ -29,6 +29,10 @@ public class Utilities {
 	public static final String DISCONNECTED = "DISCONNECTED";
 	public static final String ROOM_FULL_ERROR = "FULL";
 	public static final String NOT_EXIXTS_ROOM = "NOTEXTISTS";
+	
+	//campi per il portocollo di connessione al db
+	public static final String LOGIN = "login";
+	
 	//I messaggi dal client al server saranno del tipo m xcord ycord
 	public static String moveLeft() {
 		return MOVE + " " + MOVE_LEFT; 
@@ -54,5 +58,7 @@ public class Utilities {
 	public static final String joinRequest(String code) {
 		return JOIN + " " + code;
 	}
+	
+	
 	
 }
