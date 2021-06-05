@@ -21,7 +21,7 @@ public class WallCollisionHandler {
 	//Muove l'hitbox nella direzione passata, se interseca un muro lo ritorna altrimento riporta l'hitbox al valore iniziale
 	public static Tile collideWithWall(Entity e,int direction, List<Tile> tiles) {
 		int speed = e.xspeed;
-		if(direction == PlayerSettings.MOVE_LEFT) {
+		if(direction == Utilities.MOVE_LEFT) {
 			speed *= -1;
 		}
 		e.hitbox.x += speed;
@@ -56,11 +56,11 @@ public class WallCollisionHandler {
 	}
 	public static boolean collidingWithBorder(Entity e, int direction) {
 		switch(direction) {
-		case PlayerSettings.MOVE_RIGHT:
+		case Utilities.MOVE_RIGHT:
 			return e.x+e.xspeed + Settings.PLAYER_DIMENSION > Settings.WINDOW_WIDTH - Settings.TILE_WIDHT;
-		case PlayerSettings.MOVE_LEFT:
+		case Utilities.MOVE_LEFT:
 			return e.x - e.xspeed  < Settings.TILE_WIDHT;
-		case PlayerSettings.JUMPING:
+		case Utilities.JUMPING:
 			break;
 		}
 		return false;
