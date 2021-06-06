@@ -15,6 +15,7 @@ public class Client {
 	private PrintWriter out;
 	private BufferedReader in;
 	private String roomCode;
+	private String error = null;
 	private boolean startedCorrectly;
 	public Client(String mode,String code) {
 		try {
@@ -27,9 +28,12 @@ public class Client {
 				roomCode = in.readLine();
 			}
 			else if(mode == Utilities.JOIN) {
+				roomCode = code;
 				out.println(Utilities.joinRequest(code));
-				if(in.readLine().equals(Utilities.JOIN_ERROR)) {
+				String response = in.readLine();
+				if(!response.equals(Utilities.OK_JOIN)) {
 					startedCorrectly = false;
+					error = response;
 				}
 			}
 		} catch (IOException e) {
@@ -60,5 +64,8 @@ public class Client {
 			return null;
 		}
 		return res;
+	}
+	public String getError() {
+		return error;
 	}
 }

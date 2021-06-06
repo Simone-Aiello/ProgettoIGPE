@@ -2,8 +2,11 @@ package application.controller;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.time.Duration;
+import java.time.Instant;
 
 import application.ChangeSceneHandler;
+import application.GameStarter;
 import application.model.GameModel;
 import application.model.Player;
 import application.model.Utilities;
@@ -17,7 +20,8 @@ public class GameController implements KeyListener {
 	private boolean spacebarAlreadyPressed;
 	private boolean isSinglePlayer;
 	private Client client;
-
+	
+	private Instant lastUpdate = null;
 	public GameController(GameView view, boolean isSinglePlayer) {
 		this.view = view;
 		spacebarAlreadyPressed = false;
@@ -71,8 +75,16 @@ public class GameController implements KeyListener {
 					}
 				}
 				view.update();
+				lastUpdate = Instant.now();
 			}
-		} else {
+			else {
+				if(lastUpdate != null && Duration.between(lastUpdate, Instant.now()).toSecondsPart() > 3) {
+					ChangeSceneHandler.showMessage("Connection lost");
+					GameStarter.resetAll();
+				}
+			}
+		} 
+		else {
 			model.update();
 			view.update();
 		}

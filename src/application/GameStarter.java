@@ -26,34 +26,41 @@ public class GameStarter {
 
 	public static void hostRequest() {
 		client = new Client(Utilities.HOST,null);
-		GenericMessagePanel panel = (GenericMessagePanel) ChangeSceneHandler.scenes.get("messagePanel");
 		if(client.isStartedCorrectly()) {
-			panel.setText("Your room code is: " + client.getRoomCode()+"\n\n"
+			String text = "Your room code is: " + client.getRoomCode()+"\n\n"
 					+ "Give it to your friend and start playing!\n\n"
-					+ "Do not return to main menu, your room will be cancelled");
-			ChangeSceneHandler.setCurrentScene("messagePanel");
-			startGame(false, client);			
+					+ "Do not return to main menu, your room will be cancelled";
+			ChangeSceneHandler.showMessage(text);
+			startGame(false, client);
 		}
 		else {
-			panel.setText("Error while hosting the room\n\n"
+			String text = "Error while hosting the room\n\n"
 					+ "- Check your internet connection\n\n"
-					+ "- Try again in a few minutes");
-			ChangeSceneHandler.setCurrentScene("messagePanel");
+					+ "- Try again in a few minutes";
+			ChangeSceneHandler.showMessage(text);
 		}
 	}
 	public static void joinRequest(String code) {
 		if(code.equals("")) return;
 		client = new Client(Utilities.JOIN,code);
 		if(client.isStartedCorrectly()) {
-			startGame(false, client);			
+			startGame(false, client);
+		}
+		else if(client.getError() != null && client.getError().equals(Utilities.NOT_EXIXTS_ROOM)) {
+			String text = "There is no room with code: " + client.getRoomCode()+"\n\n"
+					+ "- Check the spelling of the code\n\n"
+					+ "- Make sure your friend hasn't returned to the main menu";
+			ChangeSceneHandler.showMessage(text);
+		}
+		else if(client.getError() != null && client.getError().equals(Utilities.ROOM_FULL_ERROR)) {
+			String text = "The room with code: " + client.getRoomCode()+" is full\n\n"
+					+ "- Check the spelling of the code or host a new room";
+			ChangeSceneHandler.showMessage(text);
 		}
 		else {
-			GenericMessagePanel panel = (GenericMessagePanel) ChangeSceneHandler.scenes.get("messagePanel");
-			panel.setText("Something went wrong:\n\n"
-					+ "- Check your internet connection\n\n "
-					+ "- Check the spelling of the code \n\n"
-					+ "- Make sure that your friend has not returned to the main menu");
-			ChangeSceneHandler.setCurrentScene("messagePanel");
+			String text = "Connection error\n\n"
+					+ "- Try again in a few minutes";
+			ChangeSceneHandler.showMessage(text);
 		}
 	}
 	public static void resetAll() {

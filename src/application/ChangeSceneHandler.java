@@ -10,6 +10,8 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
+import menu.view.GenericMessagePanel;
+
 
 public class ChangeSceneHandler {
 	
@@ -54,5 +56,11 @@ public class ChangeSceneHandler {
 		} catch (Exception e) {
 			System.out.println("error while loading the font");
 		}
+	}
+
+	public static void showMessage(String string) {
+		GenericMessagePanel p = (GenericMessagePanel) scenes.get("messagePanel");
+		p.setText(string);
+		setCurrentScene("messagePanel");
 	}
 }

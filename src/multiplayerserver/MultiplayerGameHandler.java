@@ -26,16 +26,37 @@ public class MultiplayerGameHandler implements Runnable {
 	private Instant lastUpdate;
 
 	private String roomCode;
-
+	
+	private Thread checkStillConnected;	
+	
 	boolean started = false;
 
 	public MultiplayerGameHandler(Socket playerOne, String roomCode) throws IOException {
 		out1 = new PrintWriter(new BufferedOutputStream(playerOne.getOutputStream()), false);
 		in1 = new BufferedReader(new InputStreamReader(playerOne.getInputStream()));
 		this.roomCode = roomCode;
+		checkStillConnected = new Thread(new Runnable() {	
+			@Override
+			public void run() {
+				while(!Thread.currentThread().isInterrupted()) {
+					try {
+						if(in1.ready()) {
+							if(in1.readLine().equals(Utilities.DISCONNECTED)) {
+								Thread.currentThread().interrupt();
+								closeAllConnections();
+								RoomHandler.rooms.remove(roomCode);
+							}
+						}
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+				}
+			}
+		});
+		checkStillConnected.start();
 	}
 
-	public void  addPlayerTwo(Socket playerTwo) throws IOException {
+	public void addPlayerTwo(Socket playerTwo) throws IOException {
 		out2 = new PrintWriter(new BufferedOutputStream(playerTwo.getOutputStream()), false);
 		in2 = new BufferedReader(new InputStreamReader(playerTwo.getInputStream()));
 		model = new GameModel();
@@ -115,16 +136,8 @@ public class MultiplayerGameHandler implements Runnable {
 
 	@Override
 	public void run() {
-		String message = null;
 		try {
-			while (in2 == null || out2 == null) {
-				if(in1.ready()) message = in1.readLine();
-				if (message != null && message.equals(Utilities.DISCONNECTED)) {
-					closeAllConnections();
-					RoomHandler.rooms.remove(roomCode);
-					return;
-				}
-			}
+			checkStillConnected.interrupt();
 			started = true;
 			while (!Thread.currentThread().isInterrupted()) {
 				read();

@@ -17,24 +17,20 @@ public class Server implements Runnable{
 	private JTextArea area;
 	private ExecutorService executor;
 	public Server(JTextArea area) {
-		try {
-			this.area = area;
-			executor = Executors.newCachedThreadPool();
-			server = new ServerSocket(8000);
-		} catch (IOException e) {
-			area.append("Error while starting the sever" + System.lineSeparator());
-		}
+		this.area = area;
 	}
 	@Override
 	public void run() {
 		try {
+			executor = Executors.newCachedThreadPool();
+			server = new ServerSocket(8000);
 			while(!Thread.currentThread().isInterrupted()) {
 				area.append("Waiting for connection..." + System.lineSeparator());
 				Socket connection1 = server.accept();
 				executor.submit(new InitialConnectionHandler(connection1));
 			}
 		} catch (IOException e) {
-			area.append("Error while connecting to the client" + System.lineSeparator());
+			area.append("Server error" + System.lineSeparator());
 		}
 	}
 }
