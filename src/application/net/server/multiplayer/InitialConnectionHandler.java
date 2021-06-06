@@ -28,21 +28,21 @@ public class InitialConnectionHandler implements Runnable {
 				out.println(code);
 				out = null;
 				in = null;
-				//MultiplayerGameHandler tmp = new MultiplayerGameHandler(socket, code);
-				//RoomHandler.excutor.submit(tmp);
-				//RoomHandler.rooms.put(code, tmp);
 				RoomHandler.rooms.put(code, new MultiplayerGameHandler(socket,code));
 			}
 			else {
 				String [] res = request.split(" ");
-				if(RoomHandler.rooms.containsKey(res[1]) && !RoomHandler.rooms.get(res[1]).isStarted()) {
-					RoomHandler.rooms.get(res[1]).addPlayerTwo(socket);
+				if(!RoomHandler.rooms.containsKey(res[1])) {
+					out.println(Utilities.NOT_EXIXTS_ROOM);
+				}
+				else if(RoomHandler.rooms.get(res[1]).isStarted()) {
+					out.println(Utilities.ROOM_FULL_ERROR);
+				}
+				else {
 					out.println(Utilities.OK_JOIN);
-					out = null;
-					in = null;
+					RoomHandler.rooms.get(res[1]).addPlayerTwo(socket);
 					RoomHandler.excutor.submit(RoomHandler.rooms.get(res[1]));
 				}
-				else out.println(Utilities.JOIN_ERROR);
 			}
 		} catch (IOException e) {
 			return;

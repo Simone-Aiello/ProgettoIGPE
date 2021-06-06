@@ -23,19 +23,21 @@ public class Server{
 	private ExecutorService executor;
 	
 	public Server(JTextArea area) {
-		try {
 			this.area = area;
-			executor = Executors.newCachedThreadPool();
-			multiplayerServer = new ServerSocket(8000);
-			dbServer = new ServerSocket(9000);
-		} catch (IOException e) {
-			area.append("Error while starting the sever" + System.lineSeparator());
-		}
 	}
 	
 	public void start() {
-		executor.submit(new DBServer(area, dbServer));
-		executor.submit(new MultiplayerServer(area, multiplayerServer));
+		
+		try {
+			executor = Executors.newCachedThreadPool();
+			multiplayerServer = new ServerSocket(8000);
+			dbServer = new ServerSocket(9000);
+			executor.submit(new DBServer(area, dbServer));
+			executor.submit(new MultiplayerServer(area, multiplayerServer));
+		} catch (IOException e) {
+			area.append("Server error" + System.lineSeparator());
+		}
+		
 	}
 
 }
