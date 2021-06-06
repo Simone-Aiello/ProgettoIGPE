@@ -1,4 +1,4 @@
-package multiplayerserver;
+package application.net.server;
 
 import java.awt.GridLayout;
 import java.awt.event.MouseEvent;
@@ -29,8 +29,7 @@ public class ServerStarter {
 			public void mouseReleased(MouseEvent e) {}
 			@Override
 			public void mousePressed(MouseEvent e) {
-				Thread t = new Thread(server);
-				t.start();
+				server.start();
 			}
 			@Override
 			public void mouseExited(MouseEvent e) {}	

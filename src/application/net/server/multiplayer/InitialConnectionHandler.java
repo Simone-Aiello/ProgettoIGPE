@@ -1,4 +1,4 @@
-package multiplayerserver;
+package application.net.server.multiplayer;
 
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;

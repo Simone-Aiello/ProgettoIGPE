@@ -3,7 +3,7 @@ package application;
 
 import application.controller.GameController;
 import application.model.Utilities;
-import application.net.Client;
+import application.net.client.Client;
 import application.view.GameView;
 import menu.view.GenericMessagePanel;
 

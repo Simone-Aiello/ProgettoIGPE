@@ -1,4 +1,4 @@
-package application.net;
+package application.net.client;
 
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
@@ -6,16 +6,19 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.net.UnknownHostException;
 
 import application.model.Utilities;
 
 
 public class Client {
+	
 	private Socket socket;
 	private PrintWriter out;
 	private BufferedReader in;
 	private String roomCode;
-	private boolean startedCorrectly;
+	private boolean startedCorrectly; 
+	
 	public Client(String mode,String code) {
 		try {
 			startedCorrectly = true;
@@ -39,6 +42,20 @@ public class Client {
 			startedCorrectly = false;
 		}
 	}
+	
+	public Client() { //se viene chiamato questo costruttore il client si connette sulla porta 9000 del server, quella per lo scambio di messaggi relativi al DB
+		try {
+			socket = new Socket("localhost",9000);
+			out = new PrintWriter(new BufferedOutputStream(socket.getOutputStream()),true);
+			in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+		} catch (Exception e) {
+			socket = null;
+			out = null;
+			in = null;
+			System.out.println("Error connecting to server");
+		}		
+	}
+	
 	public boolean isStartedCorrectly() {
 		return startedCorrectly;
 	}

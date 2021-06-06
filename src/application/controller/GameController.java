@@ -7,7 +7,7 @@ import application.ChangeSceneHandler;
 import application.model.GameModel;
 import application.model.Player;
 import application.model.Utilities;
-import application.net.Client;
+import application.net.client.Client;
 import application.view.GameView;
 
 public class GameController implements KeyListener {
@@ -42,7 +42,7 @@ public class GameController implements KeyListener {
 	public void update() {
 		if (!isSinglePlayer) {
 			String[] update = client.read();
-			//è null fino a quando non entra il secondo giocatore, perché prima il server non manda nessun messaggio
+			//ï¿½ null fino a quando non entra il secondo giocatore, perchï¿½ prima il server non manda nessun messaggio
 			if (update != null) {
 				if (!model.isStarted()) {
 					model.startGame(isSinglePlayer);
