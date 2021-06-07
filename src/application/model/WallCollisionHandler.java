@@ -8,14 +8,15 @@ import application.Settings;
 public class WallCollisionHandler {
 	//Return true se l'entitÃ  tocca il terreno, false altrimenti
 		public static boolean touchingGround(Entity e,List<Tile> tiles) {
-			e.hitbox.y += 1;
+			int step = e.yspeed < 0 ? -1 : 1;
+			e.hitbox.y += step;
 			for(Tile t : tiles) {
 				if(e.hitbox.intersects(t)) {
-					e.hitbox.y -= 1;
+					e.hitbox.y -= step;
 					return true;
 				}
 			}
-			e.hitbox.y -= 1;
+			e.hitbox.y -= step;
 			return false;
 		}
 	//Muove l'hitbox nella direzione passata, se interseca un muro lo ritorna altrimento riporta l'hitbox al valore iniziale

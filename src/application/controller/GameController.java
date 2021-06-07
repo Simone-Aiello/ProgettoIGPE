@@ -18,6 +18,7 @@ public class GameController implements KeyListener {
 	private GameView view;
 	private GameModel model;
 	private boolean spacebarAlreadyPressed;
+	private boolean shootAlreadyPressed;
 	private boolean isSinglePlayer;
 	private Client client;
 	
@@ -25,6 +26,7 @@ public class GameController implements KeyListener {
 	public GameController(GameView view, boolean isSinglePlayer) {
 		this.view = view;
 		spacebarAlreadyPressed = false;
+		shootAlreadyPressed = false;
 		this.isSinglePlayer = isSinglePlayer;
 		model = new GameModel();
 		if (isSinglePlayer) {
@@ -87,6 +89,8 @@ public class GameController implements KeyListener {
 		else {
 			model.update();
 			view.update();
+			model.freeBubbleMemory();
+			view.freeBubbleMemory();
 		}
 	}
 
@@ -109,6 +113,11 @@ public class GameController implements KeyListener {
 					return;
 				spacebarAlreadyPressed = true;
 				model.movePlayer(model.getPlayerOne(),Utilities.JUMPING);
+				break;
+			case KeyEvent.VK_P:
+				if(shootAlreadyPressed) return;
+				shootAlreadyPressed = true;
+				model.movePlayer(model.getPlayerOne(), Utilities.SHOOT);
 				break;
 			case KeyEvent.VK_ESCAPE:
 				System.exit(0);
@@ -149,6 +158,9 @@ public class GameController implements KeyListener {
 				break;
 			case KeyEvent.VK_SPACE:
 				spacebarAlreadyPressed = false;
+			case KeyEvent.VK_P:
+				shootAlreadyPressed = false;
+				break;
 			default:
 				return;
 			}

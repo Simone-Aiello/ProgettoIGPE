@@ -3,8 +3,6 @@ package application.model;
 import java.util.Random;
 
 public class RobotEnemy extends Entity implements Enemy {
-
-	private static final long serialVersionUID = 1L;
 	private Random r;
 	private int frameWithTheSameDirection;
 	

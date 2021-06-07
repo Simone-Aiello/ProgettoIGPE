@@ -3,11 +3,7 @@ package application.model;
 import java.awt.Rectangle;
 import java.io.Serializable;
 
-public abstract class Entity implements Serializable{
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 7975286625857830824L;
+public abstract class Entity{
 	int x;
 	int y;
 	int xspeed;
@@ -17,10 +13,12 @@ public abstract class Entity implements Serializable{
 	int preJumpPos;
 	boolean jumping;
 	boolean requestedJump;
+	boolean isAlive;
 	Rectangle hitbox;
 	public Entity(int x, int y, int hitboxWidht,int hitboxHeight) {
 		xspeed = 10;
 		yspeed = 12;
+		isAlive = true;
 		hitbox = new Rectangle(x, y, hitboxWidht, hitboxHeight);
 		this.x = x;
 		this.y = y;

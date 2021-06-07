@@ -5,14 +5,10 @@ import java.io.Serializable;
 
 import application.Settings;
 
-public class Player extends Entity implements Serializable{
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -6854671907296980605L;
+public class Player extends Entity{
 	
 	int hp; // health point
-
+	boolean requestedBubble;
 	public Player(int x, int y) {
 		super(x, y, Settings.PLAYER_DIMENSION, Settings.PLAYER_DIMENSION);
 		preJumpPos = y; 
@@ -20,6 +16,9 @@ public class Player extends Entity implements Serializable{
 	}
 	public void requestJump() {
 		requestedJump = true;
+	}
+	public void requestBubble() {
+		requestedBubble = true;
 	}
 
 }
