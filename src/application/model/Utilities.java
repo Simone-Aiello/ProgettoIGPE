@@ -30,8 +30,7 @@ public class Utilities {
 	public static final String ROOM_FULL_ERROR = "FULL";
 	public static final String NOT_EXIXTS_ROOM = "NOTEXTISTS";
 	
-	//campi per il portocollo di connessione al db
-	public static final String LOGIN = "login";
+	
 	
 	//I messaggi dal client al server saranno del tipo m xcord ycord
 	public static String moveLeft() {
@@ -53,12 +52,28 @@ public class Utilities {
 	public static String position(String who,int index,int x,int y,int xState,int yState) {
 		return POSITION + " " + who + " " + index + " " + x + " " + y + " " + xState + " " + yState; 
 	}
+	
+	//messaggi dal client al server
 	public static final String HOST = "h";
 	public static final String JOIN = "j";
 	public static final String joinRequest(String code) {
 		return JOIN + " " + code;
 	}
 	
+	//campi per il portocollo di connessione al db
+	public static final String DB_ACCESS = "DBaccess";
+	public static final String LOGIN = "login";
+	public static final String SIGNUP = "signup";
+	public static final String CLASSIFICATION = "classification";
+	public static final String UPDATE_SCORE = "update_score";
+	
+	//errori realtivi alla registrazione e al login	
+	public static final String SUCCESS_ACCESS = "OK_ACCESS";	
+	public static final String USER_ALREADY_EXIST = "USER_EXIST";
+	public static final String USER_NOT_EXIST = "USER_NOT_EXIST";
+	public static final String WRONG_PASSWORD = "WRONG_PASSWORD";
+	public static final String ERROR_CONNECTING_DB = "DB_ERROR";
+	public static final String PROGRESS_SAVED = "PROGRESS_SAVED";
 	
 	
 }

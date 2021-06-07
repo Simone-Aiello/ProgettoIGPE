@@ -29,7 +29,8 @@ public class ServerStarter {
 			public void mouseReleased(MouseEvent e) {}
 			@Override
 			public void mousePressed(MouseEvent e) {
-				server.start();
+				Thread t = new Thread(server);
+				t.start();
 			}
 			@Override
 			public void mouseExited(MouseEvent e) {}	

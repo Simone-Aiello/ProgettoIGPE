@@ -1,43 +1,33 @@
 package application.net.server;
 
 import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.HashMap;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 import javax.swing.JTextArea;
 
-import application.net.server.db.DBServer;
-import application.net.server.multiplayer.MultiplayerServer;
 
-
-public class Server{
-	
-	private ServerSocket multiplayerServer;
-	private ServerSocket dbServer;
+public class Server implements Runnable{
+	private ServerSocket server;
 	private JTextArea area;
 	private ExecutorService executor;
-	
 	public Server(JTextArea area) {
-			this.area = area;
+		this.area = area;
 	}
-	
-	public void start() {
-		
+	@Override
+	public void run() {
 		try {
 			executor = Executors.newCachedThreadPool();
-			multiplayerServer = new ServerSocket(8000);
-			dbServer = new ServerSocket(9000);
-			executor.submit(new DBServer(area, dbServer));
-			executor.submit(new MultiplayerServer(area, multiplayerServer));
+			server = new ServerSocket(8000);
+			while(!Thread.currentThread().isInterrupted()) {
+				area.append("Waiting for connection..." + System.lineSeparator());
+				Socket connection1 = server.accept();
+				executor.submit(new InitialConnectionHandler(connection1));
+			}
 		} catch (IOException e) {
 			area.append("Server error" + System.lineSeparator());
 		}
-		
 	}
-
 }
