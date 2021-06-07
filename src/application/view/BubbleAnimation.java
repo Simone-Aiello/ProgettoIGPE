@@ -12,7 +12,9 @@ public class BubbleAnimation {
 		animations = new ArrayList<AnimationHandler>();
 	}
 	public void changeCurrentAnimation(Integer index) {
-		if(index >= animations.size()) animations.add(new BubbleAnimationHandler());
+		if(index >= animations.size()) {
+			animations.add(new BubbleAnimationHandler());
+		}
 		animations.get(index).changeCurrentAnimation(Utilities.IDLE_RIGHT,Utilities.Y_IDLE);
 	}
 	public Image getCurrentImage(int index) {

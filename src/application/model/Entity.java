@@ -47,6 +47,9 @@ public abstract class Entity{
 	public boolean isJumping() {
 		return jumping;
 	}
+	public boolean isAlive() {
+		return isAlive;
+	}
 	//metodo per il movimento con incremento di default(xspeed) a destra e sinistr
 	public void move() {  
 		switch(xState) {

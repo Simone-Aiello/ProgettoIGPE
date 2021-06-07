@@ -71,10 +71,12 @@ public class GameView  extends JPanel{
 		List<Enemy> enemies = model.getEnemies();
 		for(int i = 0; i <enemies.size();i++) {
 			Entity entity = (Entity) enemies.get(i);
-			Image img = enemyAnimations.getCurrentImage(i);
-			g.drawRect(entity.getX(), entity.getY(), Settings.PLAYER_DIMENSION, Settings.PLAYER_DIMENSION);
-			if(img != null) {
-				g.drawImage(img, entity.getX(), entity.getY(), Settings.PLAYER_DIMENSION, Settings.PLAYER_DIMENSION, null);				
+			if(entity.isAlive()) {
+				Image img = enemyAnimations.getCurrentImage(i);
+				g.drawRect(entity.getX(), entity.getY(), Settings.PLAYER_DIMENSION, Settings.PLAYER_DIMENSION);
+				if(img != null) {
+					g.drawImage(img, entity.getX(), entity.getY(), Settings.PLAYER_DIMENSION, Settings.PLAYER_DIMENSION, null);				
+				}				
 			}
 		}
 		List<Bubble> bubbles = model.getBubbles();
@@ -89,11 +91,11 @@ public class GameView  extends JPanel{
 	}
 	public void freeBubbleMemory() {
 		if(model == null) return;
-		List<Integer> removable = model.getRemovableBubbles();
-		for(int i : removable) {
+		for(int i : removableBubbles) {
 			bubbleAnimations.deleteBubble(i);
 		}
 		bubbleAnimations.removeNullValues();
+		removableBubbles.clear();
 	}
 	public void update() {
 		model = controller.getModel();
@@ -108,7 +110,9 @@ public class GameView  extends JPanel{
 		}
 		List<Enemy> enemies = model.getEnemies();
 		for (int i = 0; i < enemies.size(); i++) {
-			enemyAnimations.changeCurrentAnimation(i, enemies.get(i));
+			if(((Entity)enemies.get(i)).isAlive()){
+				enemyAnimations.changeCurrentAnimation(i, enemies.get(i));				
+			}
 		}
 		List<Bubble> bubbles = model.getBubbles();
 		for(int i = 0; i < bubbles.size();i++) {

@@ -97,16 +97,14 @@ public class GameModel {
 				i++;
 		}
 	}
-
 	// Funzioni di update chiamate dal controller
 	public void update() {
-		if (!started)
-			return;
+		if (!started) return;
 		updateEntity(playerOne);
 		if (playerTwo != null)
 			updateEntity(playerTwo);
 		for (Enemy e : enemies) {
-			if(!((Entity) e).isAlive) {
+			if(((Entity) e).isAlive) {
 				e.nextMove();
 				updateEntity((Entity) e);				
 			}
@@ -114,13 +112,26 @@ public class GameModel {
 		for (int i = 0; i < bubbles.size(); i++) {
 			Bubble b = bubbles.get(i);
 			b.aliveFrame++;
-			if (b.aliveFrame > Utilities.BUBBLE_TURN)
-				b.affectedByGravity = true;
-			if (b.aliveFrame >= Utilities.BUBBLE_LIFESPAN) {
+			if (b.aliveFrame > Utilities.BUBBLE_TURN) b.affectedByGravity = true;
+			if (b.aliveFrame >= Utilities.BUBBLE_LIFESPAN && b.enemyContained == null) {
 				b.isAlive = false;
 				removableBubbles.add(i);
-			} else {
+			} 
+			else {
 				updateEntity(b);
+			}
+			if(b.enemyContained != null) {
+				if(b.frameEnemyContained >= 80) {
+					b.isAlive = false;
+					Entity entity = (Entity) b.enemyContained;
+					entity.x = b.x;
+					entity.y = b.y;
+					entity.getHitbox().x = b.getHitbox().x;
+					entity.getHitbox().y = b.getHitbox().y;
+					entity.isAlive = true;
+					removableBubbles.add(i);
+				}
+				else b.frameEnemyContained++;
 			}
 		}
 		// Collisioni nemici-bolle
@@ -137,8 +148,9 @@ public class GameModel {
 			if(entity.isAlive) {
 				for (int i = 0; i < bubbles.size(); i++) {
 					Bubble b = bubbles.get(i);
-					if (b.isAlive && entity.getHitbox().intersects(b.getHitbox())) {
+					if (b.isAlive && entity.getHitbox().intersects(b.getHitbox()) && b.enemyContained == null) {
 						entity.isAlive = false;
+						b.enemyContained = e;
 					}
 				}				
 			}
