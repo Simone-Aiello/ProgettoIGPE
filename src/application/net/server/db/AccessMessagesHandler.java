@@ -6,6 +6,9 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
+import java.sql.SQLException;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 
 import application.model.Utilities;
 
@@ -71,7 +74,7 @@ public class AccessMessagesHandler implements Runnable {
 					}
 				}
 				sendMessage(Utilities.SUCCESS_ACCESS);
-			} else if (input.equals(Utilities.CLASSIFICATION)) {
+			} else if (input.equals(Utilities.ALL_CLASSIFICATION)) {
 				handleClassification();
 			}
 			while (true) {
@@ -87,7 +90,7 @@ public class AccessMessagesHandler implements Runnable {
 					else
 						sendMessage(Utilities.PROGRESS_SAVED);
 
-				} else if (request.equals(Utilities.CLASSIFICATION))
+				} else if (request.equals(Utilities.ALL_CLASSIFICATION))
 					handleClassification();
 			}
 		} catch (Exception e) {
@@ -103,8 +106,23 @@ public class AccessMessagesHandler implements Runnable {
 		out.println(message);
 	}
 
-	private void handleClassification() {
-
+	private void handleClassification() throws SQLException, IOException {
+		LinkedHashMap<String, Integer> classification = DBConnectionHandler.getInstance().getClassification();
+		if(DBConnectionHandler.getInstance().connectionError == true) {
+			sendMessage(Utilities.ERROR_CONNECTING_DB);
+			closeStreams();
+		    return;
+		}
+		if(classification.size() == 0) {
+			sendMessage(Utilities.STILL_NO_CLASSIFICATION);
+			return;
+		}
+		sendMessage(Utilities.START_CLASSIFICATION);
+		for(String username : classification.keySet()) {
+			sendMessage(username + Utilities.MESSAGE_SEPARATOR + classification.get(username));
+		}
+		sendMessage(Utilities.END_CLASSIFICATION);
+		return;
 	}
 
 }

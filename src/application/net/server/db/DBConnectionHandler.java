@@ -5,6 +5,10 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
+import java.util.List;
 
 import org.springframework.security.crypto.bcrypt.BCrypt;
 
@@ -80,12 +84,58 @@ public class DBConnectionHandler {
 		return result;
 	}
 	
-	public synchronized boolean updateGames(String username, int score, int time) {
-		return true;
+	public synchronized boolean updateGames(String username, int score, int time) throws SQLException {
+		if(connection == null || connection.isClosed() || username == null) {
+			connectionError = true;
+			return false;
+		}
+		
+		String query = "INSERT INTO Games ('Username', 'Score', 'PlayTime', 'data_time') VALUES(?, ?, ?, datetime('now', 'localtime');";
+		PreparedStatement p = connection.prepareStatement(query);
+		p.setString(1, username);
+		p.setInt(2, score);
+		p.setInt(3, time);
+		p.executeUpdate();
+		p.close();
+		return true;		
 	}
 	
-	public synchronized boolean getClassification() {  //gestisci questo
-		return true;
+	public synchronized LinkedHashMap<String, Integer> getClassification() throws SQLException {
+		if(connection == null || connection.isClosed()) {
+			connectionError = true;
+			return null;
+		}
+		
+		String query = "SELECT * FROM Classification ORDER BY 'high_score' DESC, 'username' ASC;";
+		PreparedStatement p = connection.prepareStatement(query);
+		ResultSet res = p.executeQuery();
+		LinkedHashMap<String, Integer> classification = new LinkedHashMap<String, Integer>();
+		while(res.next()) {
+			classification.put(res.getString("username"), res.getInt("high_score"));
+		}
+		return classification;		
+	}
+	
+	public synchronized List<Game> getUserClassification(String username) throws SQLException {  //gestisci questo
+		if(connection == null || connection.isClosed()) {
+			connectionError = true;
+			return null;
+		}
+		
+		String query = "SELECT * FROM Games WHERE Username = ?;";
+		PreparedStatement p = connection.prepareStatement(query);
+		p.setString(1, username);
+		ResultSet res = p.executeQuery();
+		ArrayList<Game> userGames = new ArrayList<Game>();
+		while(res.next()) {
+			userGames.add(new Game(res.getString("Username"), res.getString("data_time"), res.getInt("Score"), res.getInt("PlayTime")));
+		}
+		//a questo punto in userGames ho tutte le partite giocate dallo user con username dato
+		//ritorno la lista ordinata in base alla data
+		//fai l'ordinamento
+		
+		return userGames;
+			
 	}
 
 }

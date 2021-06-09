@@ -64,7 +64,8 @@ public class Utilities {
 	public static final String DB_ACCESS = "DBaccess";
 	public static final String LOGIN = "login";
 	public static final String SIGNUP = "signup";
-	public static final String CLASSIFICATION = "classification";
+	public static final String ALL_CLASSIFICATION = "all_classification";
+	public static final String MY_CLASSIFICATION = "my_classification";
 	public static final String UPDATE_SCORE = "update_score";
 	
 	//errori realtivi alla registrazione e al login	
@@ -74,6 +75,10 @@ public class Utilities {
 	public static final String WRONG_PASSWORD = "WRONG_PASSWORD";
 	public static final String ERROR_CONNECTING_DB = "DB_ERROR";
 	public static final String PROGRESS_SAVED = "PROGRESS_SAVED";
+	public static final String STILL_NO_CLASSIFICATION = "NO_CLASSIFICATION";
+	public static final String START_CLASSIFICATION = "CLASS_START";
+	public static final String END_CLASSIFICATION = "CLASS_END";
+	
 	
 	
 }

@@ -5,6 +5,8 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.Serializable;
+import java.time.Duration;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,12 +22,17 @@ public class GameModel implements Serializable{
 	private List<Enemy> enemies;
 	private int gravity;
 	private boolean started;
+	private Instant start;
+	private long playTime;
+	
 	public GameModel() {
 		started = false;
 		gravity = 12;
 	}
 	public void startGame(boolean isSinglePlayer) {
 		started = true;
+		start = Instant.now();
+		playTime = 0;
 		playerOne = new Player(Settings.INITIAL_POSITION_X, Settings.INITIAL_POSITION_Y);
 		playerOne.yspeed = gravity;
 		if(!isSinglePlayer) playerTwo = new Player(200, 200);
@@ -33,6 +40,7 @@ public class GameModel implements Serializable{
 		enemies = new ArrayList<Enemy>();
 		tilesInitForTestPurposes();
 	}
+
 	//Getters
 	public boolean isStarted() {
 		return started;
@@ -51,6 +59,16 @@ public class GameModel implements Serializable{
 	}
 	public List<Enemy> getEnemies() {
 		return enemies;
+	}
+	
+	public Instant getStart() {
+		return start;
+	}
+	
+	public void setPlayTime() {
+		Duration duration = Duration.between(start, Instant.now());
+		long time = duration.toSecondsPart(); 
+		playTime = time;
 	}
 	//Level handler
 	private void tilesInitForTestPurposes() {
