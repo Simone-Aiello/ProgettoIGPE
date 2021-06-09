@@ -1,8 +1,6 @@
 package application.model;
 
 
-import java.io.Serializable;
-
 import application.Settings;
 
 public class Player extends Entity{
@@ -20,5 +18,4 @@ public class Player extends Entity{
 	public void requestBubble() {
 		requestedBubble = true;
 	}
-
 }

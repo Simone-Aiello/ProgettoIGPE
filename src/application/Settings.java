@@ -8,6 +8,7 @@ public class Settings {
 	public static final int TILE_HEIGHT = 20;
 	
 	public static final int PLAYER_DIMENSION= 40;
+	public static final int FOOD_DIMENSION = 30;
 	
 	public static final int INITIAL_POSITION_X = 300;
 	public static final int INITIAL_POSITION_Y = 100;

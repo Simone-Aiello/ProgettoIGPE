@@ -20,6 +20,7 @@ public class GameController implements KeyListener {
 	private boolean spacebarAlreadyPressed;
 	private boolean shootAlreadyPressed;
 	private boolean isSinglePlayer;
+	private Instant lastBubble = Instant.now();
 	private Client client;
 	
 	private Instant lastUpdate = null;
@@ -89,8 +90,6 @@ public class GameController implements KeyListener {
 		else {
 			model.update();
 			view.update();
-			model.freeBubbleMemory();
-			view.freeBubbleMemory();
 		}
 	}
 
@@ -115,9 +114,11 @@ public class GameController implements KeyListener {
 				model.movePlayer(model.getPlayerOne(),Utilities.JUMPING);
 				break;
 			case KeyEvent.VK_P:
-				if(shootAlreadyPressed) return;
+				if(shootAlreadyPressed || Duration.between(lastBubble, Instant.now()).toMillis() < 500) return;
 				shootAlreadyPressed = true;
+				//Si potrebbe fare che il controller notifica alla view di creare un altra bolla, non so quale sia meglio come soluzione
 				model.movePlayer(model.getPlayerOne(), Utilities.SHOOT);
+				lastBubble = Instant.now();
 				break;
 			case KeyEvent.VK_ESCAPE:
 				System.exit(0);

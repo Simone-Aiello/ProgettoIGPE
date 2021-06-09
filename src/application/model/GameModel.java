@@ -4,7 +4,6 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
 import application.Settings;
@@ -16,9 +15,9 @@ public class GameModel {
 	private List<Tile> tiles;
 	private List<Enemy> enemies;
 	private List<Bubble> bubbles;
-	private List<Integer> removableBubbles;
+	private List<Food> food;
 	private boolean started;
-
+	private int score = 0;
 	public GameModel() {
 		started = false;
 	}
@@ -31,7 +30,7 @@ public class GameModel {
 		tiles = new ArrayList<Tile>();
 		enemies = new ArrayList<Enemy>();
 		bubbles = new ArrayList<Bubble>();
-		removableBubbles = new LinkedList<Integer>();
+		food = new ArrayList<Food>();
 		tilesInitForTestPurposes();
 	}
 
@@ -59,7 +58,9 @@ public class GameModel {
 	public List<Enemy> getEnemies() {
 		return enemies;
 	}
-
+	public List<Food> getFood() {
+		return food;
+	}
 	// Level handler
 	private void tilesInitForTestPurposes() {
 		try {
@@ -85,63 +86,74 @@ public class GameModel {
 		}
 	}
 
-	public void freeBubbleMemory() {
-		for (int i : removableBubbles) {
-			bubbles.set(i, null);
-		}
-		removableBubbles.clear();
-		for (int i = 0; i < bubbles.size();) {
-			if (bubbles.get(i) == null)
-				bubbles.remove(i);
-			else
-				i++;
-		}
-	}
 	// Funzioni di update chiamate dal controller
 	public void update() {
 		if (!started) return;
+		//Update dei giocatori
 		updateEntity(playerOne);
-		if (playerTwo != null)
-			updateEntity(playerTwo);
+		if (playerTwo != null) updateEntity(playerTwo);
+		//Update dei nemici
 		for (Enemy e : enemies) {
 			if(((Entity) e).isAlive) {
 				e.nextMove();
 				updateEntity((Entity) e);				
 			}
 		}
+		//Update delle bolle
 		for (int i = 0; i < bubbles.size(); i++) {
 			Bubble b = bubbles.get(i);
 			b.aliveFrame++;
 			if (b.aliveFrame > Utilities.BUBBLE_TURN) b.affectedByGravity = true;
 			if (b.aliveFrame >= Utilities.BUBBLE_LIFESPAN && b.enemyContained == null) {
 				b.isAlive = false;
-				removableBubbles.add(i);
-			} 
-			else {
-				updateEntity(b);
 			}
-			if(b.enemyContained != null) {
-				if(b.frameEnemyContained >= 80) {
+			if(b.isAlive && b.enemyContained != null) {
+				if(b.frameEnemyContained >= Utilities.BUBBLED_ENEMY_MAX_FRAME) {
 					b.isAlive = false;
 					Entity entity = (Entity) b.enemyContained;
+					b.enemyContained = null;
 					entity.x = b.x;
 					entity.y = b.y;
 					entity.getHitbox().x = b.getHitbox().x;
 					entity.getHitbox().y = b.getHitbox().y;
 					entity.isAlive = true;
-					removableBubbles.add(i);
 				}
 				else b.frameEnemyContained++;
 			}
+			updateEntity(b);
+		}
+		//Update del cibo
+		for(Food f : food) {
+			updateEntity(f);
 		}
 		// Collisioni nemici-bolle
 		updateBubbleEnemyCollision();
+		updatePlayerBubbleCollision(playerOne);
+		updatePlayerFoodCollision(playerOne);
+		if(playerTwo != null) updatePlayerBubbleCollision(playerTwo);
+	}
+	private void updatePlayerFoodCollision(Player playerOne) {
+		for(Food f : food) {
+			//Collisione con il pavimento solo per motivi di gameplay, non necessario per il corretto funzionamento
+			if(f.isAlive() && WallCollisionHandler.touchingGround(f, tiles) && f.getHitbox().intersects(playerOne.getHitbox())) {
+				f.isAlive = false;
+				score += f.getPoints();
+				System.out.println("SCORE: " + score);
+			}
+		}
 	}
 
-	public List<Integer> getRemovableBubbles() {
-		return removableBubbles;
+	private void updatePlayerBubbleCollision(Player player) {
+		for(int i = 0; i < bubbles.size();i++) {
+			Bubble b = bubbles.get(i);
+			if(b.isAlive && b.enemyContained != null && b.getHitbox().intersects(player.getHitbox())) {
+				b.isAlive = false;
+				((Entity) b.enemyContained).isAlive = false;
+				b.enemyContained = null;
+				food.add(new Food(b.x, b.y, Utilities.CAKE));
+			}
+		}
 	}
-
 	private void updateBubbleEnemyCollision() {
 		for (Enemy e : enemies) {
 			Entity entity = (Entity) e;
@@ -151,6 +163,7 @@ public class GameModel {
 					if (b.isAlive && entity.getHitbox().intersects(b.getHitbox()) && b.enemyContained == null) {
 						entity.isAlive = false;
 						b.enemyContained = e;
+						break;
 					}
 				}				
 			}
@@ -187,12 +200,11 @@ public class GameModel {
 	}
 
 	private void handleNewBubble(Player player) {
-		if (bubbles.size() > 15)
-			return;
 		int spawnDirection = Utilities.MOVE_LEFT;
 		if (player.xState == Utilities.MOVE_RIGHT || player.xState == Utilities.IDLE_RIGHT) {
 			spawnDirection = Utilities.MOVE_RIGHT;
 		}
+		player.yState = Utilities.SHOOT;
 		bubbles.add(new Bubble(player.x, player.y, spawnDirection));
 	}
 
@@ -209,7 +221,7 @@ public class GameModel {
 	private void processJump(Entity entity) {
 		if (entity.y > 0 && entity.y + entity.yspeed > entity.preJumpPos - 2.3 * Settings.PLAYER_DIMENSION) {
 			entity.jump();
-			entity.yState = Utilities.JUMPING;
+			if(entity.yState != Utilities.SHOOT) entity.yState = Utilities.JUMPING;
 		} else {
 			entity.jumping = false;
 		}
@@ -226,12 +238,14 @@ public class GameModel {
 				entity.y = t.y + Settings.TILE_HEIGHT;
 				entity.hitbox.y = t.y + Settings.TILE_HEIGHT;
 			} else {
-				entity.y = t.y - Settings.PLAYER_DIMENSION;
-				entity.hitbox.y = t.y - Settings.PLAYER_DIMENSION;
+				//entity.y = t.y - Settings.PLAYER_DIMENSION;
+				entity.y = t.y - entity.getHitbox().height;
+				//entity.hitbox.y = t.y - Settings.PLAYER_DIMENSION;
+				entity.hitbox.y = t.y - entity.getHitbox().height;
 			}
 		} else {
 			entity.fall();
-			entity.yState = Utilities.FALLING;
+			if(entity.yState != Utilities.SHOOT) entity.yState = Utilities.FALLING;
 		}
 	}
 
@@ -240,10 +254,10 @@ public class GameModel {
 		if (entity.requestedJump) {
 			tryToJump(entity);
 		}
+		entity.yState = Utilities.Y_IDLE;
 		if (entity instanceof Player && ((Player) entity).requestedBubble) {
 			tryToShoot((Player) entity);
 		}
-		entity.yState = Utilities.Y_IDLE;
 		if (entity.jumping) {
 			processJump(entity);
 		}

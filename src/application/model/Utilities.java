@@ -7,6 +7,8 @@ public class Utilities {
 	public static final int IDLE_RIGHT = 2;
 	public static final int IDLE_LEFT = 3;
 	public static final int SHOOT = 11;
+	public static final int SHOOT_RIGHT = 16;
+	public static final int SHOOT_LEFT = 15;
 	//Stati sull'asse y
 	public static final int Y_IDLE = 4;
 	public static final int FALLING = 5;
@@ -17,9 +19,13 @@ public class Utilities {
 	public static final int FALL_RIGHT = 8;
 	public static final int JUMP_LEFT = 9;
 	public static final int JUMP_RIGHT = 10;
-	//Parametri bolle in frame
+	//Parametri bolle
 	public static final int BUBBLE_LIFESPAN = 130;
 	public static final int BUBBLE_TURN = 17;
+	public static final int BUBBLED_ROBOT = 14;
+	public static final int BUBBLED_ENEMY_MAX_FRAME = 70;
+	//Food
+	public static final int CAKE = 18;
 	//Protocollo client-server
 	public static final String POSITION = "pos";
 	public static final String MOVE = "m";

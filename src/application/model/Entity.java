@@ -1,7 +1,6 @@
 package application.model;
 
 import java.awt.Rectangle;
-import java.io.Serializable;
 
 public abstract class Entity{
 	int x;

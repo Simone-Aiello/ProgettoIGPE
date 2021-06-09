@@ -13,8 +13,10 @@ import application.controller.GameController;
 import application.model.Bubble;
 import application.model.Enemy;
 import application.model.Entity;
+import application.model.Food;
 import application.model.GameModel;
 import application.model.Tile;
+import application.model.Utilities;
 
 
 public class GameView  extends JPanel{
@@ -28,12 +30,12 @@ public class GameView  extends JPanel{
 	private GameModel model = null;
 	private GameController controller;
 	private BubbleAnimation bubbleAnimations;
-	private List<Integer> removableBubbles;
+	private FoodImage foodImage;
 	public GameView() {
 			playerAnimation = new PlayerAnimationHandler();
 			enemyAnimations = new EnemyAnimation();
 			bubbleAnimations = new BubbleAnimation();
-			removableBubbles = new LinkedList<Integer>();
+			foodImage = new FoodImage();
 			this.setBackground(Color.BLACK);
 	}
 	public void setController(GameController controller) {
@@ -88,14 +90,10 @@ public class GameView  extends JPanel{
 				g.drawImage(img,entity.getX(),entity.getY(),Settings.PLAYER_DIMENSION,Settings.PLAYER_DIMENSION,null);				
 			}
 		}
-	}
-	public void freeBubbleMemory() {
-		if(model == null) return;
-		for(int i : removableBubbles) {
-			bubbleAnimations.deleteBubble(i);
+		List<Food> food = model.getFood();
+		for(Food f : food) {
+			if(f.isAlive()) g.drawImage(foodImage.getImage(f.getType()),f.getX(),f.getY(),Settings.FOOD_DIMENSION,Settings.FOOD_DIMENSION,null);
 		}
-		bubbleAnimations.removeNullValues();
-		removableBubbles.clear();
 	}
 	public void update() {
 		model = controller.getModel();
@@ -116,12 +114,7 @@ public class GameView  extends JPanel{
 		}
 		List<Bubble> bubbles = model.getBubbles();
 		for(int i = 0; i < bubbles.size();i++) {
-			if(!bubbles.get(i).isAlive()) {
-				removableBubbles.add(i);
-			}
-			else {
-				bubbleAnimations.changeCurrentAnimation(i);				
-			}
+			bubbleAnimations.changeCurrentAnimation(i,bubbles.get(i));				
 		}
 		repaint();
 	}
