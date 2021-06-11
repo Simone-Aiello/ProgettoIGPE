@@ -61,6 +61,9 @@ public class GameModel {
 	public List<Food> getFood() {
 		return food;
 	}
+	public int getScore() {
+		return score;
+	}
 	// Level handler
 	private void tilesInitForTestPurposes() {
 		try {
@@ -138,7 +141,6 @@ public class GameModel {
 			if(f.isAlive() && WallCollisionHandler.touchingGround(f, tiles) && f.getHitbox().intersects(playerOne.getHitbox())) {
 				f.isAlive = false;
 				score += f.getPoints();
-				System.out.println("SCORE: " + score);
 			}
 		}
 	}

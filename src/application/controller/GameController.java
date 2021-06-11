@@ -12,6 +12,7 @@ import application.model.Player;
 import application.model.Utilities;
 import application.net.Client;
 import application.view.GameView;
+import application.view.TopLayerGameView;
 
 public class GameController implements KeyListener {
 
@@ -24,15 +25,17 @@ public class GameController implements KeyListener {
 	private Client client;
 	
 	private Instant lastUpdate = null;
-	public GameController(GameView view, boolean isSinglePlayer) {
+	public GameController(GameView view, TopLayerGameView topView, boolean isSinglePlayer) {
 		this.view = view;
 		spacebarAlreadyPressed = false;
 		shootAlreadyPressed = false;
 		this.isSinglePlayer = isSinglePlayer;
 		model = new GameModel();
 		if (isSinglePlayer) {
+			ChangeSceneHandler.setTopBar(topView);
 			ChangeSceneHandler.add("game", view);
 			ChangeSceneHandler.setCurrentScene("game");
+			ChangeSceneHandler.setFrameUndecorated(true);
 			model.startGame(isSinglePlayer);
 		}
 		else {

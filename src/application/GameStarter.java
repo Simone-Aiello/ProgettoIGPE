@@ -5,6 +5,7 @@ import application.controller.GameController;
 import application.model.Utilities;
 import application.net.Client;
 import application.view.GameView;
+import application.view.TopLayerGameView;
 import menu.view.GenericMessagePanel;
 
 public class GameStarter {
@@ -13,9 +14,11 @@ public class GameStarter {
 	private static Client client = null;
 	private static GameLoop loop = null;
 	private static Thread t = null;
+	private static TopLayerGameView topView = null;
 	public static void startGame(boolean singlePlayer,Client c) {
-		view = new GameView();
-		controller = new GameController(view, singlePlayer);
+		topView = new TopLayerGameView();
+		view = new GameView(topView.getScoreLabel());
+		controller = new GameController(view,topView,singlePlayer);
 		view.setController(controller);
 		view.addKeyListener(controller);
 		controller.setClient(c);

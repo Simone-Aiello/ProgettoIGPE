@@ -1,11 +1,13 @@
 package application.view;
 
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Image;
 import java.util.LinkedList;
 import java.util.List;
 
+import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import application.Settings;
@@ -31,12 +33,14 @@ public class GameView  extends JPanel{
 	private GameController controller;
 	private BubbleAnimation bubbleAnimations;
 	private FoodImage foodImage;
-	public GameView() {
+	private JLabel scoreLabel;
+	public GameView(JLabel scoreLabel) {
 			playerAnimation = new PlayerAnimationHandler();
 			enemyAnimations = new EnemyAnimation();
 			bubbleAnimations = new BubbleAnimation();
 			foodImage = new FoodImage();
 			this.setBackground(Color.BLACK);
+			this.scoreLabel = scoreLabel;
 	}
 	public void setController(GameController controller) {
 		this.controller = controller;
@@ -98,6 +102,7 @@ public class GameView  extends JPanel{
 	public void update() {
 		model = controller.getModel();
 		if (!model.isStarted()) return;
+		scoreLabel.setText("" + model.getScore());
 		int playerXState = model.getPlayerOne().getXState();
 		int playerYState = model.getPlayerOne().getYState();
 		playerAnimation.changeCurrentAnimation(playerXState, playerYState);

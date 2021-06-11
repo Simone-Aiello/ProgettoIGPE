@@ -9,7 +9,9 @@ import java.util.HashMap;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
+import javax.swing.border.Border;
 
+import application.view.TopLayerGameView;
 import menu.view.GenericMessagePanel;
 
 
@@ -62,5 +64,16 @@ public class ChangeSceneHandler {
 		GenericMessagePanel p = (GenericMessagePanel) scenes.get("messagePanel");
 		p.setText(string);
 		setCurrentScene("messagePanel");
+	}
+
+	public static void setFrameUndecorated(boolean b) {
+		window.dispose();
+		window.setUndecorated(b);
+		window.setVisible(true);
+	}
+
+	public static void setTopBar(TopLayerGameView topView) {
+		window.add(topView,BorderLayout.NORTH);
+		SwingUtilities.updateComponentTreeUI(window);
 	}
 }
