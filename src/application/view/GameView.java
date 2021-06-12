@@ -79,8 +79,8 @@ public class GameView  extends JPanel{
 			Entity entity = (Entity) enemies.get(i);
 			if(entity.isAlive()) {
 				Image img = enemyAnimations.getCurrentImage(i);
-				g.drawRect(entity.getX(), entity.getY(), Settings.PLAYER_DIMENSION, Settings.PLAYER_DIMENSION);
 				if(img != null) {
+					g.drawRect(entity.getHitbox().x, entity.getHitbox().y, Settings.PLAYER_DIMENSION, Settings.PLAYER_DIMENSION);
 					g.drawImage(img, entity.getX(), entity.getY(), Settings.PLAYER_DIMENSION, Settings.PLAYER_DIMENSION, null);				
 				}				
 			}

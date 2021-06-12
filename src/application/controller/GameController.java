@@ -23,10 +23,11 @@ public class GameController implements KeyListener {
 	private boolean isSinglePlayer;
 	private Instant lastBubble = Instant.now();
 	private Client client;
-	
+	private TopLayerGameView topView;
 	private Instant lastUpdate = null;
 	public GameController(GameView view, TopLayerGameView topView, boolean isSinglePlayer) {
 		this.view = view;
+		this.topView = topView;
 		spacebarAlreadyPressed = false;
 		shootAlreadyPressed = false;
 		this.isSinglePlayer = isSinglePlayer;
@@ -56,12 +57,20 @@ public class GameController implements KeyListener {
 			if (update != null) {
 				if (!model.isStarted()) {
 					model.startGame(isSinglePlayer);
+					ChangeSceneHandler.setTopBar(topView);
 					ChangeSceneHandler.add("game", view);
 					ChangeSceneHandler.setCurrentScene("game");
+					ChangeSceneHandler.setFrameUndecorated(true);
 				}
 				for (String s : update) {
 					String[] message = s.split(" ");
-					if (message[1].equals(Utilities.PLAYER)) {
+					if(message[0].equals(Utilities.BUBBLE)) {
+						model.capture(Integer.parseInt(message[1]),Integer.parseInt(message[2]));
+					}
+					else if(message[0].equals(Utilities.SCORE)) {
+						model.setScore(Integer.parseInt(message[1]));
+					}
+					else if (message[1].equals(Utilities.PLAYER)) {
 						Player player;
 						if (message[2].equals("1")) {
 							player = model.getPlayerOne();
@@ -69,15 +78,17 @@ public class GameController implements KeyListener {
 						else { //Non ho controlli sul messaggio
 							player = model.getPlayerTwo();
 						}
-						player.setX(Integer.parseInt(message[3]));
-						player.setY(Integer.parseInt(message[4]));
-						player.getHitbox().x = Integer.parseInt(message[3]);
-						player.getHitbox().y = Integer.parseInt(message[4]);
-						player.setxState(Integer.parseInt(message[5]));
-						player.setyState(Integer.parseInt(message[6]));
+						model.setPlayerPosition(player,message);
 						
-					} else if (message[1].equals(Utilities.ENEMY)) {
+					} 
+					else if (message[1].equals(Utilities.ENEMY)) {
 						model.setEnemyPosition(message);
+					}
+					else if(message[1].equals(Utilities.BUBBLE)) {
+						model.setBubblePosition(message);
+					}
+					else if(message[1].equals(Utilities.FOOD)) {
+						model.setFoodPosition(message);
 					}
 				}
 				view.update();
@@ -86,6 +97,7 @@ public class GameController implements KeyListener {
 			else {
 				if(lastUpdate != null && Duration.between(lastUpdate, Instant.now()).toSecondsPart() > 3) {
 					ChangeSceneHandler.showMessage("Connection lost");
+					ChangeSceneHandler.removeTopBar(topView);
 					GameStarter.resetAll();
 				}
 			}
@@ -142,8 +154,15 @@ public class GameController implements KeyListener {
 				spacebarAlreadyPressed = true;
 				client.sendMessage(Utilities.requestJump());
 				break;
+			case KeyEvent.VK_P:
+				if(shootAlreadyPressed || Duration.between(lastBubble, Instant.now()).toMillis() < 500) return;
+				shootAlreadyPressed = true;
+				client.sendMessage(Utilities.BUBBLE);
+				lastBubble = Instant.now();
+				break;
 			case KeyEvent.VK_ESCAPE:
 				System.exit(0);
+				break;
 			default:
 				return;
 			}
@@ -178,6 +197,9 @@ public class GameController implements KeyListener {
 				break;
 			case KeyEvent.VK_SPACE:
 				spacebarAlreadyPressed = false;
+			case KeyEvent.VK_P:
+				shootAlreadyPressed = false;
+				break;
 			default:
 				return;
 			}

@@ -70,6 +70,7 @@ public class GameStarter {
 		if(client != null) {
 			client.sendMessage(Utilities.DISCONNECTED);
 		}
+		topView = null;
 		view = null;
 		controller = null;
 		client = null;

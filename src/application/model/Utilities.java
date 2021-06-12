@@ -13,7 +13,7 @@ public class Utilities {
 	public static final int Y_IDLE = 4;
 	public static final int FALLING = 5;
 	public static final int JUMPING = 6;
-	public static final int BUBBLED = 13;
+	//public static final int BUBBLED = 13;
 	//Campi di supporto per animazioni
 	public static final int FALL_LEFT = 7;
 	public static final int FALL_RIGHT = 8;
@@ -31,6 +31,9 @@ public class Utilities {
 	public static final String MOVE = "m";
 	public static final String ENEMY = "e";
 	public static final String PLAYER = "p";
+	public static final String BUBBLE = "b";
+	public static final String FOOD = "f";
+	public static final String SCORE = "s";
 	public static final String MESSAGE_SEPARATOR = ";";
 	public static final String OK_JOIN = "OK";
 	public static final String JOIN_ERROR = "NO";
@@ -38,6 +41,8 @@ public class Utilities {
 	public static final String DISCONNECTED = "DISCONNECTED";
 	public static final String ROOM_FULL_ERROR = "FULL";
 	public static final String NOT_EXIXTS_ROOM = "NOTEXTISTS";
+	public static final String ALIVE = "a";
+	public static final String DEAD = "d";
 	//I messaggi dal client al server saranno del tipo m xcord ycord
 	public static String moveLeft() {
 		return MOVE + " " + MOVE_LEFT; 
@@ -55,12 +60,20 @@ public class Utilities {
 		return MOVE + " " + JUMPING; 
 	}
 	//I messaggi dal server al client saranno p entity xcord ycord xstate ystate alive/dead
-	public static String position(String who,int index,int x,int y,int xState,int yState) {
-		return POSITION + " " + who + " " + index + " " + x + " " + y + " " + xState + " " + yState; 
+	//Nel caso del cibo xState viene sostituito con il tipo
+	public static String position(String who,int index,int x,int y,int xState,int yState,boolean alive) {
+		if(alive) return POSITION + " " + who + " " + index + " " + x + " " + y + " " + xState + " " + yState + " " + ALIVE + " "; 			
+		return POSITION + " " + who + " " + index + " " + x + " " + y + " " + xState + " " + yState + " " + DEAD + " ";
+	}
+	public static String captured(int bubbleIndex,int enemyIndex) {
+		return BUBBLE + " " + bubbleIndex + " " + enemyIndex;
+	}
+	public static String score(int score) {
+		return SCORE + " " + score;
 	}
 	public static final String HOST = "h";
 	public static final String JOIN = "j";
-	public static final String joinRequest(String code) {
+	public static String joinRequest(String code) {
 		return JOIN + " " + code;
 	}
 	

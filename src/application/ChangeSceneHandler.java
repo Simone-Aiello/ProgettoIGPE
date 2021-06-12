@@ -1,6 +1,7 @@
 package application;
 
 import java.awt.BorderLayout;
+import java.awt.Component;
 import java.awt.Font;
 import java.awt.GraphicsEnvironment;
 import java.io.File;
@@ -39,13 +40,11 @@ public class ChangeSceneHandler {
 	}
 	
 	public static void setCurrentScene(String current) {
-		if(currentScene != null)
-			window.remove(currentScene);
+		if(currentScene != null) window.remove(currentScene);
 		currentScene = scenes.get(current);
 		window.add(currentScene, BorderLayout.CENTER);
 		currentScene.requestFocus();
 		currentScene.setFocusable(true);
-
 		SwingUtilities.updateComponentTreeUI(window);
 	}
 	
@@ -74,6 +73,12 @@ public class ChangeSceneHandler {
 
 	public static void setTopBar(TopLayerGameView topView) {
 		window.add(topView,BorderLayout.NORTH);
-		SwingUtilities.updateComponentTreeUI(window);
+	}
+
+	public static void removeTopBar(TopLayerGameView topView) {
+		window.remove(topView);
+		window.revalidate();
+		setFrameUndecorated(false);
+		
 	}
 }

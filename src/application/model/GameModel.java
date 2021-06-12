@@ -133,7 +133,10 @@ public class GameModel {
 		updateBubbleEnemyCollision();
 		updatePlayerBubbleCollision(playerOne);
 		updatePlayerFoodCollision(playerOne);
-		if(playerTwo != null) updatePlayerBubbleCollision(playerTwo);
+		if(playerTwo != null) {
+			updatePlayerBubbleCollision(playerTwo);
+			updatePlayerFoodCollision(playerTwo);
+		}
 	}
 	private void updatePlayerFoodCollision(Player playerOne) {
 		for(Food f : food) {
@@ -312,16 +315,68 @@ public class GameModel {
 	}
 
 	// Funzioni chiamate dall'update del gameloop in caso di multiplayer
-	// Struttura del messaggio:pos e indice posx posy xState yState
+	// Struttura del messaggio:pos who indice posx posy xState yState alive/dead
 	public void setEnemyPosition(String[] message) {
-		try {
 			Entity e = (Entity) enemies.get(Integer.parseInt(message[2]));
-			e.x = Integer.parseInt(message[3]);
-			e.y = Integer.parseInt(message[4]);
-			e.xState = Integer.parseInt(message[5]);
-			e.yState = Integer.parseInt(message[6]);
-		} catch (NumberFormatException error) {
+			setEntityPosition(e, message);
+	}
+
+	public void setPlayerPosition(Player player, String[] message) {
+		setEntityPosition(player, message);	
+	}
+
+	public void setBubblePosition(String[] message) {
+		try {
+			int index = Integer.parseInt(message[2]);
+			if(index >= bubbles.size()) bubbles.add(new Bubble(Integer.parseInt(message[3]), Integer.parseInt(message[4]), Integer.parseInt(message[5])));
+			else {
+				Entity e = bubbles.get(index);
+				setEntityPosition(e, message);				
+			}
+		} catch(NumberFormatException error) {
 			return;
 		}
+	}
+	public void setFoodPosition(String message[]) {
+		try {
+			int index = Integer.parseInt(message[2]);
+			if(index >= food.size()) food.add(new Food(Integer.parseInt(message[3]), Integer.parseInt(message[4]), Integer.parseInt(message[5])));
+			else {
+				setEntityPosition(food.get(index), message);
+			}
+		} catch(NumberFormatException error) {
+			return;
+		}
+	}
+	public void capture(int bubbleIndex, int enemyIndex) {
+		Bubble b = bubbles.get(bubbleIndex);
+		Enemy e = enemies.get(enemyIndex);
+		b.enemyContained = e;
+		((Entity) e).isAlive = false;
+		
+	}
+	private void setEntityPosition(Entity e,String[] message) {
+		try {
+			e.x = Integer.parseInt(message[3]);
+			e.y = Integer.parseInt(message[4]);
+			e.hitbox.x = Integer.parseInt(message[3]);
+			e.hitbox.y = Integer.parseInt(message[4]);
+			e.xState = Integer.parseInt(message[5]);
+			e.yState = Integer.parseInt(message[6]);
+			if(message[7].equals(Utilities.DEAD)) {
+				e.isAlive = false;
+				if(e instanceof Bubble) {
+					((Bubble)e).enemyContained = null;
+				}
+			}
+			else {
+				e.isAlive = true;
+			}
+		}catch(NumberFormatException error) {
+			return;
+		}
+	}
+	public void setScore(int score) {
+		this.score = score;
 	}
 }

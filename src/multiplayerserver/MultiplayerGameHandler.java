@@ -9,7 +9,10 @@ import java.net.Socket;
 import java.time.Duration;
 import java.time.Instant;
 
+import application.model.Bubble;
+import application.model.Enemy;
 import application.model.Entity;
+import application.model.Food;
 import application.model.GameModel;
 import application.model.Player;
 import application.model.Utilities;
@@ -94,8 +97,11 @@ public class MultiplayerGameHandler implements Runnable {
 				direction = Utilities.IDLE_RIGHT;
 			} else if (line.equals(Utilities.requestJump())) {
 				direction = Utilities.JUMPING;
-			} else
-				return;
+			} 
+			else if(line.equals(Utilities.BUBBLE)){
+				direction = Utilities.SHOOT;
+			}
+			else return;
 			Player player;
 			if (in == in1)
 				player = model.getPlayerOne();
@@ -103,30 +109,57 @@ public class MultiplayerGameHandler implements Runnable {
 				player = model.getPlayerTwo();
 			if (direction == Utilities.JUMPING) {
 				player.requestJump();
-			} else {
+			} 
+			else if(direction == Utilities.SHOOT) {
+				player.requestBubble();
+			}
+			else {
 				model.movePlayer(player, direction);
 			}
 		}
 	}
 
 	public void sendNewPosition() throws IOException {
-		// Posizione dei player posizione dei nemici e posizione delle bolle
+		//Posizione dei due player
 		StringBuilder message = new StringBuilder();
 		String player1Pos = Utilities.position(Utilities.PLAYER, 1, model.getPlayerOne().getX(),
-				model.getPlayerOne().getY(), model.getPlayerOne().getXState(), model.getPlayerOne().getYState());
+				model.getPlayerOne().getY(), model.getPlayerOne().getXState(), model.getPlayerOne().getYState(),model.getPlayerOne().isAlive());
 		message.append(player1Pos + Utilities.MESSAGE_SEPARATOR);
 		// Stessa cosa per player 2
 		String player2Pos = Utilities.position(Utilities.PLAYER, 2, model.getPlayerTwo().getX(),
-				model.getPlayerTwo().getY(), model.getPlayerTwo().getXState(), model.getPlayerTwo().getYState());
+				model.getPlayerTwo().getY(), model.getPlayerTwo().getXState(), model.getPlayerTwo().getYState(),model.getPlayerTwo().isAlive());
 		message.append(player2Pos + Utilities.MESSAGE_SEPARATOR);
+		//Posizione dei nemici
 		for (int i = 0; i < model.getEnemies().size(); i++) {
 			Entity e = (Entity) model.getEnemies().get(i);
-			String enemyPos = Utilities.position(Utilities.ENEMY, i, e.getX(), e.getY(), e.getXState(), e.getYState());
-			message.append(enemyPos + ";");
+			String enemyPos = Utilities.position(Utilities.ENEMY, i, e.getX(), e.getY(), e.getXState(), e.getYState(),e.isAlive());
+			message.append(enemyPos + Utilities.MESSAGE_SEPARATOR);
 		}
+		//Posizione delle bolle
+		for(int i = 0; i <model.getBubbles().size();i++) {
+			Bubble b = model.getBubbles().get(i);
+			String bubblePos = Utilities.position(Utilities.BUBBLE, i,b.getX(), b.getY(), b.getXState(), b.getYState(),b.isAlive());
+			message.append(bubblePos + Utilities.MESSAGE_SEPARATOR);
+			if(b.getEnemyContained() != null) {
+				for(int j = 0; j < model.getEnemies().size();j++) {
+					if(b.getEnemyContained().equals(model.getEnemies().get(j))) {
+						message.append(Utilities.captured(i, j) + Utilities.MESSAGE_SEPARATOR);
+					}
+				}
+			}
+		}
+		//Posizione del cibo
+		for(int i = 0; i < model.getFood().size();i++) {
+			Food f = model.getFood().get(i);
+			String foodPos = Utilities.position(Utilities.FOOD, i,f.getX(), f.getY(), f.getType(), f.getYState(),f.isAlive());
+			message.append(foodPos + Utilities.MESSAGE_SEPARATOR);
+		}
+		//Punteggio
+		message.append(Utilities.score(model.getScore()));
+		//Send dei messaggi
 		out1.println(message.toString());
 		out2.println(message.toString());
-		// Se uno dei due giocatori si disconnette vengono chiuse le connessioni e
+		// Se uno dei due giocatori si disconnette vengono chiuse le connessioni e viene
 		// rimossa la stanza
 		if (out1.checkError() || out2.checkError()) {
 			closeAllConnections();
