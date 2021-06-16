@@ -34,11 +34,13 @@ public class GameView  extends JPanel{
 	private BubbleAnimation bubbleAnimations;
 	private FoodImage foodImage;
 	private JLabel scoreLabel;
+	private LevelTileHandler tiles;
 	public GameView(JLabel scoreLabel) {
 			playerAnimation = new PlayerAnimationHandler();
 			enemyAnimations = new EnemyAnimation();
 			bubbleAnimations = new BubbleAnimation();
 			foodImage = new FoodImage();
+			tiles = new LevelTileHandler();
 			this.setBackground(Color.BLACK);
 			this.scoreLabel = scoreLabel;
 	}
@@ -53,11 +55,9 @@ public class GameView  extends JPanel{
 	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);
 		if(model == null) return;
-		g.setColor(Color.CYAN);
-		//
 		List<Tile> tiles = model.getTiles();
 		for(Tile t : tiles) {
-			g.fillRect(t.x, t.y, t.width, t.height);
+			g.drawImage(this.tiles.getTile(0), t.x, t.y, Settings.TILE_WIDHT, Settings.TILE_HEIGHT, null);
 		}
 		int x = model.getPlayerOne().getX();
 		int y = model.getPlayerOne().getY();

@@ -17,6 +17,7 @@ public class GameModel {
 	private List<Bubble> bubbles;
 	private List<Food> food;
 	private boolean started;
+	private boolean paused;
 	private int score = 0;
 	public GameModel() {
 		started = false;
@@ -24,6 +25,7 @@ public class GameModel {
 
 	public void startGame(boolean isSinglePlayer) {
 		started = true;
+		paused = false;
 		playerOne = new Player(Settings.INITIAL_POSITION_X, Settings.INITIAL_POSITION_Y);
 		if (!isSinglePlayer)
 			playerTwo = new Player(200, 200);
@@ -91,7 +93,7 @@ public class GameModel {
 
 	// Funzioni di update chiamate dal controller
 	public void update() {
-		if (!started) return;
+		if (!started || paused) return;
 		//Update dei giocatori
 		updateEntity(playerOne);
 		if (playerTwo != null) updateEntity(playerTwo);
@@ -378,5 +380,9 @@ public class GameModel {
 	}
 	public void setScore(int score) {
 		this.score = score;
+	}
+
+	public void pauseGame(boolean pause) {
+		paused = pause;
 	}
 }

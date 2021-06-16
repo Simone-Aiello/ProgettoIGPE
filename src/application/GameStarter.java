@@ -62,6 +62,7 @@ public class GameStarter {
 		}
 		else {
 			String text = "Connection error\n\n"
+					+ "- Check your internet connection\n\n"
 					+ "- Try again in a few minutes";
 			ChangeSceneHandler.showMessage(text);
 		}
@@ -70,12 +71,21 @@ public class GameStarter {
 		if(client != null) {
 			client.sendMessage(Utilities.DISCONNECTED);
 		}
-		topView = null;
 		view = null;
+		if(controller != null) {
+			ChangeSceneHandler.removeTopBar(topView);
+		}
+		topView = null;
 		controller = null;
 		client = null;
 		loop = null;
 		if(t != null) t.interrupt();
 		t = null;
+	}
+	public static void pauseGame(boolean pause) {
+		if(controller != null) {
+			controller.pauseGame(pause);
+			if(!pause) ChangeSceneHandler.setCurrentScene("game");
+		}
 	}
 }

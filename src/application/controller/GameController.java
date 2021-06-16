@@ -97,7 +97,6 @@ public class GameController implements KeyListener {
 			else {
 				if(lastUpdate != null && Duration.between(lastUpdate, Instant.now()).toSecondsPart() > 3) {
 					ChangeSceneHandler.showMessage("Connection lost");
-					ChangeSceneHandler.removeTopBar(topView);
 					GameStarter.resetAll();
 				}
 			}
@@ -136,7 +135,9 @@ public class GameController implements KeyListener {
 				lastBubble = Instant.now();
 				break;
 			case KeyEvent.VK_ESCAPE:
-				System.exit(0);
+				//System.exit(0);
+				ChangeSceneHandler.setCurrentScene("pause");
+				GameStarter.pauseGame(true);
 			default:
 				return;
 			}
@@ -208,6 +209,9 @@ public class GameController implements KeyListener {
 
 	public GameModel getModel() {
 		return model;
+	}
+	public void pauseGame(boolean pause) {
+		if(isSinglePlayer) model.pauseGame(pause);
 	}
 
 }
