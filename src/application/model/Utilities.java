@@ -23,9 +23,13 @@ public class Utilities {
 	public static final int BUBBLE_LIFESPAN = 130;
 	public static final int BUBBLE_TURN = 17;
 	public static final int BUBBLED_ROBOT = 14;
+	public static final Integer BUBBLED_MAGE = 19;
+	public static final Integer BUBBLED_SPRING = 20;
 	public static final int BUBBLED_ENEMY_MAX_FRAME = 70;
 	//Food
-	public static final int CAKE = 18;
+	public static final int CAKE = 0;
+	public static final int EGG = 1;
+	public static final int HAMBURGER = 2;
 	//Protocollo client-server
 	public static final String POSITION = "pos";
 	public static final String MOVE = "m";
@@ -73,6 +77,8 @@ public class Utilities {
 	}
 	public static final String HOST = "h";
 	public static final String JOIN = "j";
+	public static final String CHANGE_LEVEL = "cl";
+
 	public static String joinRequest(String code) {
 		return JOIN + " " + code;
 	}

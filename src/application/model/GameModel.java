@@ -1,10 +1,9 @@
 package application.model;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import application.Settings;
 
@@ -16,9 +15,12 @@ public class GameModel {
 	private List<Enemy> enemies;
 	private List<Bubble> bubbles;
 	private List<Food> food;
+	private LevelChanger changer;
 	private boolean started;
 	private boolean paused;
 	private int score = 0;
+	private int currentLevel;
+	private ExecutorService executor;
 	public GameModel() {
 		started = false;
 	}
@@ -26,14 +28,14 @@ public class GameModel {
 	public void startGame(boolean isSinglePlayer) {
 		started = true;
 		paused = false;
-		playerOne = new Player(Settings.INITIAL_POSITION_X, Settings.INITIAL_POSITION_Y);
-		if (!isSinglePlayer)
-			playerTwo = new Player(200, 200);
-		tiles = new ArrayList<Tile>();
-		enemies = new ArrayList<Enemy>();
+		playerOne = new Player(Settings.PLAYER_ONE_INITIAL_X, Settings.PLAYER_ONE_INITIAL_Y);
+		if (!isSinglePlayer) playerTwo = new Player(Settings.PLAYER_TWO_INITIAL_X, Settings.PLAYER_TWO_INITIAL_Y);
 		bubbles = new ArrayList<Bubble>();
 		food = new ArrayList<Food>();
-		tilesInitForTestPurposes();
+		//Alcuni nemici hanno bisogno dei player per i movimenti e dato che i nemici vengono creati dal level changer mi serve passarglieli
+		changer = new LevelChanger(playerOne,playerTwo);
+		executor = Executors.newSingleThreadExecutor();
+		changeLevel();
 	}
 
 	// Getters
@@ -66,34 +68,10 @@ public class GameModel {
 	public int getScore() {
 		return score;
 	}
-	// Level handler
-	private void tilesInitForTestPurposes() {
-		try {
-			BufferedReader in = new BufferedReader(
-					new FileReader(getClass().getResource("/application/resources/level/Level0.csv").getFile()));
-			int j = 0;
-			while (in.ready()) {
-				String s = in.readLine();
-				String[] v = s.split(",");
-				for (int i = 0; i < v.length; i++) {
-					if (v[i].equals("0"))
-						tiles.add(new Tile(i * Settings.TILE_WIDHT, j * Settings.TILE_HEIGHT, Settings.TILE_WIDHT,
-								Settings.TILE_HEIGHT));
-					else if (v[i].equals("2"))
-						enemies.add(new RobotEnemy(i * Settings.TILE_WIDHT, j * Settings.TILE_HEIGHT,
-								Settings.PLAYER_DIMENSION, Settings.PLAYER_DIMENSION));
-				}
-				j++;
-			}
-			in.close();
-		} catch (IOException e) {
-			System.out.println("Cannot load the level");
-		}
-	}
-
 	// Funzioni di update chiamate dal controller
 	public void update() {
 		if (!started || paused) return;
+		boolean currentLevelCleared = true;
 		//Update dei giocatori
 		updateEntity(playerOne);
 		if (playerTwo != null) updateEntity(playerTwo);
@@ -101,6 +79,7 @@ public class GameModel {
 		for (Enemy e : enemies) {
 			if(((Entity) e).isAlive) {
 				e.nextMove();
+				currentLevelCleared = false;
 				updateEntity((Entity) e);				
 			}
 		}
@@ -113,6 +92,7 @@ public class GameModel {
 				b.isAlive = false;
 			}
 			if(b.isAlive && b.enemyContained != null) {
+				currentLevelCleared = false;
 				if(b.frameEnemyContained >= Utilities.BUBBLED_ENEMY_MAX_FRAME) {
 					b.isAlive = false;
 					Entity entity = (Entity) b.enemyContained;
@@ -129,7 +109,12 @@ public class GameModel {
 		}
 		//Update del cibo
 		for(Food f : food) {
+			if(f.isAlive) currentLevelCleared = false;
 			updateEntity(f);
+		}
+		//Se nessun nemico era vivo o intrappolato in una bolla allora il livello corrente è finito
+		if(currentLevelCleared && changer.getNextEnemies() != null && changer.getNextTiles() != null) {
+			changeLevel();
 		}
 		// Collisioni nemici-bolle
 		updateBubbleEnemyCollision();
@@ -140,6 +125,36 @@ public class GameModel {
 			updatePlayerFoodCollision(playerTwo);
 		}
 	}
+	public void changeLevel() {
+		enemies = changer.getNextEnemies();
+		tiles = changer.getNextTiles();
+		currentLevel = changer.getCurrentLevel();
+		bubbles.clear();
+		executor.execute(changer);
+		resetPlayerPosition(playerOne);
+		if(playerTwo != null) resetPlayerPosition(playerTwo);
+	}
+	private void resetPlayerPosition(Player player) {
+		player.jumping = false;
+		player.xState = Utilities.IDLE_RIGHT;
+		player.yState = Utilities.Y_IDLE;
+		player.requestedJump = false;
+		player.requestedBubble = false;
+		if(player == playerOne) {
+			player.x = Settings.PLAYER_ONE_INITIAL_X;
+			player.hitbox.x = Settings.PLAYER_ONE_INITIAL_X;
+			player.y = Settings.PLAYER_ONE_INITIAL_Y;
+			player.hitbox.y = Settings.PLAYER_ONE_INITIAL_Y;
+		}
+		else {
+			player.xState = Utilities.IDLE_LEFT;
+			player.x = Settings.PLAYER_TWO_INITIAL_X;
+			player.hitbox.x = Settings.PLAYER_TWO_INITIAL_X;
+			player.y = Settings.PLAYER_TWO_INITIAL_Y;
+			player.hitbox.y = Settings.PLAYER_TWO_INITIAL_Y;
+		}
+	}
+
 	private void updatePlayerFoodCollision(Player playerOne) {
 		for(Food f : food) {
 			//Collisione con il pavimento solo per motivi di gameplay, non necessario per il corretto funzionamento
@@ -157,7 +172,7 @@ public class GameModel {
 				b.isAlive = false;
 				((Entity) b.enemyContained).isAlive = false;
 				b.enemyContained = null;
-				food.add(new Food(b.x, b.y, Utilities.CAKE));
+				food.add(new Food(b.x, b.y));
 			}
 		}
 	}
@@ -384,5 +399,9 @@ public class GameModel {
 
 	public void pauseGame(boolean pause) {
 		paused = pause;
+	}
+
+	public int getCurrentLevel() {
+		return currentLevel;
 	}
 }

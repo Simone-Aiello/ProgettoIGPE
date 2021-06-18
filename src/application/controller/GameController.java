@@ -67,6 +67,9 @@ public class GameController implements KeyListener {
 					if(message[0].equals(Utilities.BUBBLE)) {
 						model.capture(Integer.parseInt(message[1]),Integer.parseInt(message[2]));
 					}
+					else if(message[0].equals(Utilities.CHANGE_LEVEL)) {
+						model.changeLevel();
+					}
 					else if(message[0].equals(Utilities.SCORE)) {
 						model.setScore(Integer.parseInt(message[1]));
 					}
@@ -75,7 +78,7 @@ public class GameController implements KeyListener {
 						if (message[2].equals("1")) {
 							player = model.getPlayerOne();
 						}  
-						else { //Non ho controlli sul messaggio
+						else {
 							player = model.getPlayerTwo();
 						}
 						model.setPlayerPosition(player,message);

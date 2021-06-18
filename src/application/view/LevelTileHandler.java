@@ -11,7 +11,9 @@ public class LevelTileHandler {
 	public LevelTileHandler() {
 		try {
 			images = new ArrayList<Image>();
-			images.add(ImageIO.read(getClass().getResourceAsStream("/application/resources/level/Tile1.png")));
+			for(int i = 0; i < 4;i++) {
+				images.add(ImageIO.read(getClass().getResourceAsStream("/application/resources/level/Tile"+i+".png")));
+			}
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

@@ -35,6 +35,7 @@ public class GameView  extends JPanel{
 	private FoodImage foodImage;
 	private JLabel scoreLabel;
 	private LevelTileHandler tiles;
+	private int currentLevel = 0;
 	public GameView(JLabel scoreLabel) {
 			playerAnimation = new PlayerAnimationHandler();
 			enemyAnimations = new EnemyAnimation();
@@ -51,18 +52,78 @@ public class GameView  extends JPanel{
 	public void loadPlayerTwo() {
 		playerAnimation.loadPlayerTwoImages();
 	}
+	private void drawFood(Graphics g,boolean drawHitbox) {
+		List<Food> food = model.getFood();
+		for(Food f : food) {
+			if(f.isAlive()) {
+				g.drawImage(foodImage.getImage(f.getType()),f.getX(),f.getY(),Settings.FOOD_DIMENSION,Settings.FOOD_DIMENSION,null);
+				if(drawHitbox) g.drawRect(f.getHitbox().x, f.getHitbox().y, f.getHitbox().width, f.getHitbox().height);
+			}
+		}
+	}
+	private void drawEnemies(Graphics g,boolean drawHitbox) {
+		List<Enemy> enemies = model.getEnemies();
+		for(int i = 0; i <enemies.size();i++) {
+			Entity entity = (Entity) enemies.get(i);
+			if(entity.isAlive()) {
+				Image img = enemyAnimations.getCurrentImage(i);
+				if(img != null) {
+					if(drawHitbox) g.drawRect(entity.getHitbox().x, entity.getHitbox().y, entity.getHitbox().width, entity.getHitbox().height);
+					g.drawImage(img, entity.getX(), entity.getY(), Settings.PLAYER_DIMENSION, Settings.PLAYER_DIMENSION, null);				
+				}				
+			}
+		}
+	}
+	private void drawTiles(Graphics g) {
+		List<Tile> tiles = model.getTiles();
+		for(Tile t : tiles) {
+			g.drawImage(this.tiles.getTile(model.getCurrentLevel()), t.x, t.y, Settings.TILE_WIDHT, Settings.TILE_HEIGHT, null);
+		}
+	}
+	private void drawBubbles(Graphics g,boolean drawHitbox) {
+		List<Bubble> bubbles = model.getBubbles();
+		for(int i = 0; i < bubbles.size();i++) {
+			if(bubbles.get(i).isAlive()) {
+				Entity entity = bubbles.get(i);
+				Image img = bubbleAnimations.getCurrentImage(i);
+				if(drawHitbox) g.drawRect(entity.getHitbox().x,entity.getHitbox().y,entity.getHitbox().width, entity.getHitbox().height);
+				g.drawImage(img,entity.getX(),entity.getY(),Settings.PLAYER_DIMENSION,Settings.PLAYER_DIMENSION,null);				
+			}
+		}
+	}
+	private void drawPlayerOne(Graphics g,boolean drawHitbox) {
+		int x = model.getPlayerOne().getX();
+		int y = model.getPlayerOne().getY();
+		g.drawImage(playerAnimation.getCurrentImage(), x, y, Settings.PLAYER_DIMENSION, Settings.PLAYER_DIMENSION, null);
+		int dim = (int) model.getPlayerOne().getHitbox().getHeight();
+		int hx = model.getPlayerOne().getHitbox().x;
+		int hy = model.getPlayerOne().getHitbox().y;
+		if(drawHitbox) g.drawRect(hx, hy, dim, dim);
+	}
+	private void drawPlayerTwo(Graphics g,boolean drawHitbox) {
+		int playerTwoX = model.getPlayerTwo().getX();
+		int playerTwoY = model.getPlayerTwo().getY();
+		if(drawHitbox) g.drawRect(model.getPlayerTwo().getX(), model.getPlayerTwo().getY(), Settings.PLAYER_DIMENSION, Settings.PLAYER_DIMENSION);
+		g.drawImage(playerAnimation.getPlayerTwoImage(), playerTwoX, playerTwoY, Settings.PLAYER_DIMENSION, Settings.PLAYER_DIMENSION, null);
+	}
 	@Override
 	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);
 		if(model == null) return;
-		List<Tile> tiles = model.getTiles();
+		g.setColor(Color.RED); //Colore delle hitbox in caso servano per debug
+		drawTiles(g);
+		drawFood(g, true);
+		drawEnemies(g,true);
+		drawBubbles(g, true);
+		drawPlayerOne(g, true);
+		if(model.getPlayerTwo() != null) drawPlayerTwo(g, true);
+		/*List<Tile> tiles = model.getTiles();
 		for(Tile t : tiles) {
-			g.drawImage(this.tiles.getTile(0), t.x, t.y, Settings.TILE_WIDHT, Settings.TILE_HEIGHT, null);
-		}
-		int x = model.getPlayerOne().getX();
+			g.drawImage(this.tiles.getTile(model.getCurrentLevel()), t.x, t.y, Settings.TILE_WIDHT, Settings.TILE_HEIGHT, null);
+		}*/
+		/*int x = model.getPlayerOne().getX();
 		int y = model.getPlayerOne().getY();
 		g.drawImage(playerAnimation.getCurrentImage(), x, y, Settings.PLAYER_DIMENSION, Settings.PLAYER_DIMENSION, null);
-		//Visualizing hitbox for debug purposes, to be removed
 		int dim = (int) model.getPlayerOne().getHitbox().getHeight();
 		int hx = model.getPlayerOne().getHitbox().x;
 		int hy = model.getPlayerOne().getHitbox().y;
@@ -73,8 +134,8 @@ public class GameView  extends JPanel{
 			int playerTwoY = model.getPlayerTwo().getY();
 			g.drawRect(model.getPlayerTwo().getX(), model.getPlayerTwo().getY(), Settings.PLAYER_DIMENSION, Settings.PLAYER_DIMENSION);
 			g.drawImage(playerAnimation.getPlayerTwoImage(), playerTwoX, playerTwoY, Settings.PLAYER_DIMENSION, Settings.PLAYER_DIMENSION, null);
-		}
-		List<Enemy> enemies = model.getEnemies();
+		}*/
+		/*List<Enemy> enemies = model.getEnemies();
 		for(int i = 0; i <enemies.size();i++) {
 			Entity entity = (Entity) enemies.get(i);
 			if(entity.isAlive()) {
@@ -84,8 +145,8 @@ public class GameView  extends JPanel{
 					g.drawImage(img, entity.getX(), entity.getY(), Settings.PLAYER_DIMENSION, Settings.PLAYER_DIMENSION, null);				
 				}				
 			}
-		}
-		List<Bubble> bubbles = model.getBubbles();
+		}*/
+		/*List<Bubble> bubbles = model.getBubbles();
 		for(int i = 0; i < bubbles.size();i++) {
 			if(bubbles.get(i).isAlive()) {
 				Entity entity = bubbles.get(i);
@@ -93,16 +154,21 @@ public class GameView  extends JPanel{
 				g.drawRect(entity.getHitbox().x,entity.getHitbox().y,Settings.PLAYER_DIMENSION, Settings.PLAYER_DIMENSION);
 				g.drawImage(img,entity.getX(),entity.getY(),Settings.PLAYER_DIMENSION,Settings.PLAYER_DIMENSION,null);				
 			}
-		}
-		List<Food> food = model.getFood();
+		}*/
+		/*List<Food> food = model.getFood();
 		for(Food f : food) {
 			if(f.isAlive()) g.drawImage(foodImage.getImage(f.getType()),f.getX(),f.getY(),Settings.FOOD_DIMENSION,Settings.FOOD_DIMENSION,null);
-		}
+		}*/
 	}
 	public void update() {
 		model = controller.getModel();
 		if (!model.isStarted()) return;
 		scoreLabel.setText("" + model.getScore());
+		if(currentLevel != model.getCurrentLevel()) {
+			bubbleAnimations.clear();
+			enemyAnimations.clear();
+			currentLevel = model.getCurrentLevel();
+		}
 		int playerXState = model.getPlayerOne().getXState();
 		int playerYState = model.getPlayerOne().getYState();
 		playerAnimation.changeCurrentAnimation(playerXState, playerYState);
