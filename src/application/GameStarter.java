@@ -49,7 +49,7 @@ public class GameStarter {
 		if(client.isStartedCorrectly()) {
 			startGame(false, client);
 		}
-		else if(client.getError() != null && client.getError().equals(Utilities.NOT_EXIXTS_ROOM)) {
+		else if(client.getError() != null && client.getError().equals(Utilities.NOT_EXISTS_ROOM)) {
 			String text = "There is no room with code: " + client.getRoomCode()+"\n\n"
 					+ "- Check the spelling of the code\n\n"
 					+ "- Make sure your friend hasn't returned to the main menu";
@@ -85,7 +85,6 @@ public class GameStarter {
 	public static void pauseGame(boolean pause) {
 		if(controller != null) {
 			controller.pauseGame(pause);
-			if(!pause) ChangeSceneHandler.setCurrentScene("game");
 		}
 	}
 }

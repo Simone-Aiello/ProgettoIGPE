@@ -1,11 +1,11 @@
 package application.view;
 
-import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Image;
-import java.util.LinkedList;
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -18,7 +18,6 @@ import application.model.Entity;
 import application.model.Food;
 import application.model.GameModel;
 import application.model.Tile;
-import application.model.Utilities;
 
 
 public class GameView  extends JPanel{
@@ -35,6 +34,8 @@ public class GameView  extends JPanel{
 	private FoodImage foodImage;
 	private JLabel scoreLabel;
 	private LevelTileHandler tiles;
+	private ResourcesLoader loader;
+	private ExecutorService executor;
 	private int currentLevel = 0;
 	public GameView(JLabel scoreLabel) {
 			playerAnimation = new PlayerAnimationHandler();
@@ -44,6 +45,17 @@ public class GameView  extends JPanel{
 			tiles = new LevelTileHandler();
 			this.setBackground(Color.BLACK);
 			this.scoreLabel = scoreLabel;
+			loader = new ResourcesLoader();
+			executor = Executors.newSingleThreadExecutor();
+			changeResources();
+	}
+	private void changeResources() {
+		bubbleAnimations.clear();
+		if(loader.getAnimations() != null) {
+			enemyAnimations.setMap(loader.getAnimations());
+			executor.submit(loader);
+		}
+		if(model != null) currentLevel = model.getCurrentLevel();
 	}
 	public void setController(GameController controller) {
 		this.controller = controller;
@@ -165,9 +177,10 @@ public class GameView  extends JPanel{
 		if (!model.isStarted()) return;
 		scoreLabel.setText("" + model.getScore());
 		if(currentLevel != model.getCurrentLevel()) {
-			bubbleAnimations.clear();
+			/*bubbleAnimations.clear();
 			enemyAnimations.clear();
-			currentLevel = model.getCurrentLevel();
+			currentLevel = model.getCurrentLevel();*/
+			changeResources();
 		}
 		int playerXState = model.getPlayerOne().getXState();
 		int playerYState = model.getPlayerOne().getYState();

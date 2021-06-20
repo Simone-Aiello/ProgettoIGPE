@@ -68,6 +68,7 @@ public class GameController implements KeyListener {
 						model.capture(Integer.parseInt(message[1]),Integer.parseInt(message[2]));
 					}
 					else if(message[0].equals(Utilities.CHANGE_LEVEL)) {
+						System.out.println("ENTRO");
 						model.changeLevel();
 					}
 					else if(message[0].equals(Utilities.SCORE)) {
@@ -108,6 +109,14 @@ public class GameController implements KeyListener {
 			model.update();
 			view.update();
 		}
+		if(model.getGameState() == Utilities.LOSE) {
+			ChangeSceneHandler.showMessage("Game over!\n\nYour score is : " + model.getScore() +"\n\nYour score will be automatically saved in the leaderboards");
+			GameStarter.resetAll();
+		}
+		else if(model.getGameState() == Utilities.WIN) {
+			ChangeSceneHandler.showMessage("Congratulations, you win!\n\n Your score is : " + model.getScore() +"\n\nYour score will be automatically saved in the leaderboards");
+			GameStarter.resetAll();
+		}
 	}
 
 	@Override
@@ -138,9 +147,7 @@ public class GameController implements KeyListener {
 				lastBubble = Instant.now();
 				break;
 			case KeyEvent.VK_ESCAPE:
-				//System.exit(0);
-				ChangeSceneHandler.setCurrentScene("pause");
-				GameStarter.pauseGame(true);
+				pauseGame(true);
 			default:
 				return;
 			}
@@ -165,7 +172,7 @@ public class GameController implements KeyListener {
 				lastBubble = Instant.now();
 				break;
 			case KeyEvent.VK_ESCAPE:
-				System.exit(0);
+				pauseGame(true);
 				break;
 			default:
 				return;
@@ -213,8 +220,12 @@ public class GameController implements KeyListener {
 	public GameModel getModel() {
 		return model;
 	}
+	//Se il gioco è in singleplayer viene effettivamente messo in pausa altrimenti viene solo cambiata la schermata
 	public void pauseGame(boolean pause) {
+		ChangeSceneHandler.setPauseMode(isSinglePlayer);
 		if(isSinglePlayer) model.pauseGame(pause);
+		if(pause) ChangeSceneHandler.setCurrentScene("pause");
+		else ChangeSceneHandler.setCurrentScene("game");
 	}
 
 }

@@ -13,6 +13,7 @@ import javax.swing.SwingUtilities;
 import javax.swing.border.Border;
 
 import application.view.TopLayerGameView;
+import menu.view.GamePauseMenu;
 import menu.view.GenericMessagePanel;
 
 
@@ -80,5 +81,17 @@ public class ChangeSceneHandler {
 		window.revalidate();
 		setFrameUndecorated(false);
 		
+	}
+
+	public static void setPauseMode(boolean isSinglePlayer) {
+		GamePauseMenu menu = (GamePauseMenu) scenes.get("pause");
+		if(isSinglePlayer) {
+			menu.setAlertText("Are you sure?\nYour score will still be saved and displayed on the leaderboard");
+			menu.setLabelText("Game paused");			
+		}
+		else {
+			menu.setAlertText("Are you sure you want to quit?\n Your friend will also be disconnected from the game");
+			menu.setLabelText("Game still in progress");	
+		}
 	}
 }

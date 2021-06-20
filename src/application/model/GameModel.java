@@ -21,6 +21,7 @@ public class GameModel {
 	private int score = 0;
 	private int currentLevel;
 	private ExecutorService executor;
+	private int gameState = Utilities.PLAYING;
 	public GameModel() {
 		started = false;
 	}
@@ -113,26 +114,36 @@ public class GameModel {
 			updateEntity(f);
 		}
 		//Se nessun nemico era vivo o intrappolato in una bolla allora il livello corrente è finito
-		if(currentLevelCleared && changer.getNextEnemies() != null && changer.getNextTiles() != null) {
+		if(currentLevelCleared) {
 			changeLevel();
 		}
 		// Collisioni nemici-bolle
 		updateBubbleEnemyCollision();
 		updatePlayerBubbleCollision(playerOne);
 		updatePlayerFoodCollision(playerOne);
+		updatePlayerEnemyCollision(playerOne);
 		if(playerTwo != null) {
 			updatePlayerBubbleCollision(playerTwo);
 			updatePlayerFoodCollision(playerTwo);
+			updatePlayerEnemyCollision(playerOne);
 		}
 	}
+	public int getGameState() {
+		return gameState;
+	}
 	public void changeLevel() {
-		enemies = changer.getNextEnemies();
-		tiles = changer.getNextTiles();
-		currentLevel = changer.getCurrentLevel();
-		bubbles.clear();
-		executor.execute(changer);
-		resetPlayerPosition(playerOne);
-		if(playerTwo != null) resetPlayerPosition(playerTwo);
+		if(changer.getNextEnemies() == null || changer.getNextTiles() == null) {
+			gameState = Utilities.WIN;
+		}
+		else {
+			enemies = changer.getNextEnemies();
+			tiles = changer.getNextTiles();
+			currentLevel = changer.getCurrentLevel();
+			bubbles.clear();
+			executor.execute(changer);
+			resetPlayerPosition(playerOne);
+			if(playerTwo != null) resetPlayerPosition(playerTwo);			
+		}
 	}
 	private void resetPlayerPosition(Player player) {
 		player.jumping = false;
@@ -155,6 +166,15 @@ public class GameModel {
 		}
 	}
 
+	private void updatePlayerEnemyCollision(Player player) {
+		for(Enemy e : enemies) {
+			Entity entity = (Entity) e;
+			if(entity.isAlive && player.hitbox.intersects(entity.hitbox)) {
+				player.isAlive = false;
+				gameState = Utilities.LOSE;
+			}
+		}
+	}
 	private void updatePlayerFoodCollision(Player playerOne) {
 		for(Food f : food) {
 			//Collisione con il pavimento solo per motivi di gameplay, non necessario per il corretto funzionamento
@@ -339,7 +359,8 @@ public class GameModel {
 	}
 
 	public void setPlayerPosition(Player player, String[] message) {
-		setEntityPosition(player, message);	
+		setEntityPosition(player, message);
+		if(!player.isAlive) gameState = Utilities.LOSE;
 	}
 
 	public void setBubblePosition(String[] message) {

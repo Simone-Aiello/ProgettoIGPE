@@ -23,6 +23,7 @@ public class GamePauseMenu extends JPanel{
 	private OldGameButton quitButton;
 	private OldGameButton resumeButton;
 	private OldGameLabel messageLabel;
+	private String alertText;
 	public GamePauseMenu(){
 		this.setBackground(Color.BLACK);
 		this.setLayout(new BorderLayout());
@@ -31,7 +32,7 @@ public class GamePauseMenu extends JPanel{
 		quitButton.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				int res = JOptionPane.showConfirmDialog(null, "Are you sure?\nYour score will still be saved and displayed on the leaderboard");
+				int res = JOptionPane.showConfirmDialog(null, alertText);
 				if(res == JOptionPane.YES_OPTION) {
 					GameStarter.resetAll();
 					ChangeSceneHandler.setCurrentScene("initialMenu");
@@ -52,12 +53,15 @@ public class GamePauseMenu extends JPanel{
 		bottom.setLayout(new GridLayout(1,2));
 		bottom.add(resumeButton);
 		bottom.add(quitButton);
-		messageLabel = new OldGameLabel("GAME PAUSED",MenuSettings.LABEL_TEXT_SIZE);
+		messageLabel = new OldGameLabel("Game paused",MenuSettings.LABEL_TEXT_SIZE);
 		messageLabel.setBackground(Color.BLACK);
 		this.add(messageLabel,BorderLayout.CENTER);
 		this.add(bottom,BorderLayout.SOUTH);
 	}
-	public void setText(String txt) {
+	public void setLabelText(String txt) {
 		messageLabel.setText(txt);
+	}
+	public void setAlertText(String string) {
+		alertText = string;
 	}
 }

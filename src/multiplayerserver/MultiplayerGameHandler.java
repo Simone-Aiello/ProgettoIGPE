@@ -87,8 +87,11 @@ public class MultiplayerGameHandler implements Runnable {
 	private void readMessage(BufferedReader in) throws IOException {
 		if (in != null && in.ready()) {
 			String line = in.readLine();
-			int direction;
-			if (line.equals(Utilities.moveLeft())) {
+			int direction = Utilities.IDLE_LEFT;
+			if(line.equals(Utilities.DISCONNECTED)) {
+				throw new IOException("User disconnected");
+			}
+			else if (line.equals(Utilities.moveLeft())) {
 				direction = Utilities.MOVE_LEFT;
 			} else if (line.equals(Utilities.moveRight())) {
 				direction = Utilities.MOVE_RIGHT;
@@ -102,7 +105,6 @@ public class MultiplayerGameHandler implements Runnable {
 			else if(line.equals(Utilities.BUBBLE)){
 				direction = Utilities.SHOOT;
 			}
-			else return;
 			Player player;
 			if (in == in1)
 				player = model.getPlayerOne();
@@ -122,7 +124,7 @@ public class MultiplayerGameHandler implements Runnable {
 
 	public void sendNewPosition() throws IOException {
 		//Cambio livello
-		if(currentLevel != model.getCurrentLevel()) {
+		if(currentLevel != model.getCurrentLevel() || model.getGameState() == Utilities.WIN) {
 			out1.println(Utilities.CHANGE_LEVEL);
 			out2.println(Utilities.CHANGE_LEVEL);
 			currentLevel = model.getCurrentLevel();
@@ -192,6 +194,7 @@ public class MultiplayerGameHandler implements Runnable {
 		} catch (IOException e) {
 			closeAllConnections();
 			RoomHandler.rooms.remove(roomCode);
+			return;
 		}
 	}
 

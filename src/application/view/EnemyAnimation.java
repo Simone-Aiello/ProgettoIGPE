@@ -12,10 +12,10 @@ import application.model.SpringEnemy;
 public class EnemyAnimation {
 	private HashMap<Integer, AnimationHandler> animations;
 	public EnemyAnimation() {
-		animations = new HashMap<Integer, AnimationHandler>();
+		//animations = new HashMap<Integer, AnimationHandler>();
 	}
 	public void changeCurrentAnimation(Integer index,Enemy enemy) {
-		if(!animations.containsKey(index)) {
+		/*if(!animations.containsKey(index)) {
 			if(enemy instanceof RobotEnemy) {
 				animations.put(index, new RobotEnemyAnimationHandler());
 			}
@@ -25,7 +25,7 @@ public class EnemyAnimation {
 			else if(enemy instanceof SpringEnemy) {
 				animations.put(index, new SpringAnimationHandler());
 			}
-		}
+		}*/
 		int xState = ((Entity) enemy).getXState();
 		int yState = ((Entity) enemy).getYState();
 		animations.get(index).changeCurrentAnimation(xState,yState);
@@ -38,5 +38,8 @@ public class EnemyAnimation {
 	}
 	public void clear() {
 		animations.clear();
+	}
+	public void setMap(HashMap<Integer, AnimationHandler> animations) {
+		this.animations = animations;
 	}
 }

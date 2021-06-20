@@ -10,6 +10,8 @@ public class MageEnemy extends Entity implements Enemy{
 	private Player playerOne;
 	private Player playerTwo;
 	private boolean chaseMode;
+	int distanceFromPlayerTwo = Settings.WINDOW_WIDTH;
+	int distanceFromPlayerOne = Settings.WINDOW_WIDTH;
 	public MageEnemy(int x, int y,Player playerOne,Player playerTwo) {
 		super(x, y, Settings.PLAYER_DIMENSION, Settings.PLAYER_DIMENSION);
 		r = new Random();
@@ -23,8 +25,8 @@ public class MageEnemy extends Entity implements Enemy{
 	//Se uno dei due player è sullo stesso piano del nemico allora viene inseguito, altrimenti vengono generate direzioni casuali
 	@Override
 	public void nextMove() {
-		int distanceFromPlayerTwo = 0;
-		int distanceFromPlayerOne = 0;
+		distanceFromPlayerTwo = Settings.WINDOW_WIDTH;
+		distanceFromPlayerOne = Settings.WINDOW_WIDTH;
 		chaseMode = false;
 		if(playerTwo != null && y == playerTwo.y) {
 			chaseMode = true;

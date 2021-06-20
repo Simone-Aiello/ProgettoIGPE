@@ -1,6 +1,10 @@
 package application.model;
 
 public class Utilities {
+	//Finali gioco
+	public static final int PLAYING = 0;
+	public static final int WIN = 1;
+	public static final int LOSE = 2;
 	//Stati sull'asse x
 	public static final int MOVE_RIGHT = 0;
 	public static final int MOVE_LEFT = 1;
@@ -44,7 +48,7 @@ public class Utilities {
 	public static final String GAME_START = "START";
 	public static final String DISCONNECTED = "DISCONNECTED";
 	public static final String ROOM_FULL_ERROR = "FULL";
-	public static final String NOT_EXIXTS_ROOM = "NOTEXTISTS";
+	public static final String NOT_EXISTS_ROOM = "NOTEXTISTS";
 	public static final String ALIVE = "a";
 	public static final String DEAD = "d";
 	//I messaggi dal client al server saranno del tipo m xcord ycord
