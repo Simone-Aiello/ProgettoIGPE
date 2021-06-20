@@ -2,7 +2,7 @@ package application.net.server.db;
 
 import application.model.Utilities;
 
-public class Game {
+public class Game implements Comparable<Game>{
 
 	private String username;
 	private String date_time;
@@ -36,6 +36,11 @@ public class Game {
 	public String toString() {
 		//gestisci se ti serve
 		return "";
+	}
+
+	@Override
+	public int compareTo(Game o) {
+		return date_time.compareTo(o.date_time);
 	}
 
 }

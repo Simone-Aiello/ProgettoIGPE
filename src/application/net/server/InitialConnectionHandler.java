@@ -40,8 +40,11 @@ public class InitialConnectionHandler implements Runnable {
 			}
 			else if(request.equals(Utilities.JOIN)){
 				String [] res = request.split(" ");
-				if(!RoomHandler.rooms.containsKey(res[1])) {
-					out.println(Utilities.NOT_EXIXTS_ROOM);
+
+				String joinResult = RoomHandler.joinRequest(res[1],socket);
+				/*if(!RoomHandler.rooms.containsKey(res[1])) {
+					out.println(Utilities.NOT_EXISTS_ROOM);
+
 				}
 				else if(RoomHandler.rooms.get(res[1]).isStarted()) {
 					out.println(Utilities.ROOM_FULL_ERROR);
@@ -50,9 +53,9 @@ public class InitialConnectionHandler implements Runnable {
 					out.println(Utilities.OK_JOIN);
 					RoomHandler.rooms.get(res[1]).addPlayerTwo(socket);
 					RoomHandler.excutor.submit(RoomHandler.rooms.get(res[1]));
-				}
-			}else if(request.equals(Utilities.DB_ACCESS)) {
-				DBexecutor.submit(new AccessMessagesHandler(socket));				
+
+				}*/
+				out.println(joinResult);
 			}
 		} catch (IOException e) {
 			return;

@@ -24,7 +24,6 @@ public class ServerStarter {
 		p.add(start);
 		p.add(new JScrollPane(area));
 		start.addMouseListener(new MouseListener() {
-			
 			@Override
 			public void mouseReleased(MouseEvent e) {}
 			@Override

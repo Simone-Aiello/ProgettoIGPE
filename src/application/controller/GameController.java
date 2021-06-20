@@ -2,30 +2,41 @@ package application.controller;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.time.Duration;
+import java.time.Instant;
 
 import application.ChangeSceneHandler;
+import application.GameStarter;
 import application.model.GameModel;
 import application.model.Player;
 import application.model.Utilities;
 import application.net.client.Client;
 import application.view.GameView;
+import application.view.TopLayerGameView;
 
 public class GameController implements KeyListener {
 
 	private GameView view;
 	private GameModel model;
 	private boolean spacebarAlreadyPressed;
+	private boolean shootAlreadyPressed;
 	private boolean isSinglePlayer;
+	private Instant lastBubble = Instant.now();
 	private Client client;
-
-	public GameController(GameView view, boolean isSinglePlayer) {
+	private TopLayerGameView topView;
+	private Instant lastUpdate = null;
+	public GameController(GameView view, TopLayerGameView topView, boolean isSinglePlayer) {
 		this.view = view;
+		this.topView = topView;
 		spacebarAlreadyPressed = false;
+		shootAlreadyPressed = false;
 		this.isSinglePlayer = isSinglePlayer;
 		model = new GameModel();
 		if (isSinglePlayer) {
+			ChangeSceneHandler.setTopBar(topView);
 			ChangeSceneHandler.add("game", view);
 			ChangeSceneHandler.setCurrentScene("game");
+			ChangeSceneHandler.setFrameUndecorated(true);
 			model.startGame(isSinglePlayer);
 		}
 		else {
@@ -46,35 +57,65 @@ public class GameController implements KeyListener {
 			if (update != null) {
 				if (!model.isStarted()) {
 					model.startGame(isSinglePlayer);
+					ChangeSceneHandler.setTopBar(topView);
 					ChangeSceneHandler.add("game", view);
 					ChangeSceneHandler.setCurrentScene("game");
+					ChangeSceneHandler.setFrameUndecorated(true);
 				}
 				for (String s : update) {
 					String[] message = s.split(" ");
-					if (message[1].equals(Utilities.PLAYER)) {
+					if(message[0].equals(Utilities.BUBBLE)) {
+						model.capture(Integer.parseInt(message[1]),Integer.parseInt(message[2]));
+					}
+					else if(message[0].equals(Utilities.CHANGE_LEVEL)) {
+						System.out.println("ENTRO");
+						model.changeLevel();
+					}
+					else if(message[0].equals(Utilities.SCORE)) {
+						model.setScore(Integer.parseInt(message[1]));
+					}
+					else if (message[1].equals(Utilities.PLAYER)) {
 						Player player;
 						if (message[2].equals("1")) {
 							player = model.getPlayerOne();
 						}  
-						else { //Non ho controlli sul messaggio
+						else {
 							player = model.getPlayerTwo();
 						}
-						player.setX(Integer.parseInt(message[3]));
-						player.setY(Integer.parseInt(message[4]));
-						player.getHitbox().x = Integer.parseInt(message[3]);
-						player.getHitbox().y = Integer.parseInt(message[4]);
-						player.setxState(Integer.parseInt(message[5]));
-						player.setyState(Integer.parseInt(message[6]));
+						model.setPlayerPosition(player,message);
 						
-					} else if (message[1].equals(Utilities.ENEMY)) {
+					} 
+					else if (message[1].equals(Utilities.ENEMY)) {
 						model.setEnemyPosition(message);
+					}
+					else if(message[1].equals(Utilities.BUBBLE)) {
+						model.setBubblePosition(message);
+					}
+					else if(message[1].equals(Utilities.FOOD)) {
+						model.setFoodPosition(message);
 					}
 				}
 				view.update();
+				lastUpdate = Instant.now();
 			}
-		} else {
+			else {
+				if(lastUpdate != null && Duration.between(lastUpdate, Instant.now()).toSecondsPart() > 3) {
+					ChangeSceneHandler.showMessage("Connection lost");
+					GameStarter.resetAll();
+				}
+			}
+		} 
+		else {
 			model.update();
 			view.update();
+		}
+		if(model.getGameState() == Utilities.LOSE) {
+			ChangeSceneHandler.showMessage("Game over!\n\nYour score is : " + model.getScore() +"\n\nYour score will be automatically saved in the leaderboards");
+			GameStarter.resetAll();
+		}
+		else if(model.getGameState() == Utilities.WIN) {
+			ChangeSceneHandler.showMessage("Congratulations, you win!\n\n Your score is : " + model.getScore() +"\n\nYour score will be automatically saved in the leaderboards");
+			GameStarter.resetAll();
 		}
 	}
 
@@ -98,8 +139,15 @@ public class GameController implements KeyListener {
 				spacebarAlreadyPressed = true;
 				model.movePlayer(model.getPlayerOne(),Utilities.JUMPING);
 				break;
+			case KeyEvent.VK_P:
+				if(shootAlreadyPressed || Duration.between(lastBubble, Instant.now()).toMillis() < 500) return;
+				shootAlreadyPressed = true;
+				//Si potrebbe fare che il controller notifica alla view di creare un altra bolla, non so quale sia meglio come soluzione
+				model.movePlayer(model.getPlayerOne(), Utilities.SHOOT);
+				lastBubble = Instant.now();
+				break;
 			case KeyEvent.VK_ESCAPE:
-				System.exit(0);
+				pauseGame(true);
 			default:
 				return;
 			}
@@ -117,8 +165,15 @@ public class GameController implements KeyListener {
 				spacebarAlreadyPressed = true;
 				client.sendMessage(Utilities.requestJump());
 				break;
+			case KeyEvent.VK_P:
+				if(shootAlreadyPressed || Duration.between(lastBubble, Instant.now()).toMillis() < 500) return;
+				shootAlreadyPressed = true;
+				client.sendMessage(Utilities.BUBBLE);
+				lastBubble = Instant.now();
+				break;
 			case KeyEvent.VK_ESCAPE:
-				System.exit(0);
+				pauseGame(true);
+				break;
 			default:
 				return;
 			}
@@ -137,6 +192,9 @@ public class GameController implements KeyListener {
 				break;
 			case KeyEvent.VK_SPACE:
 				spacebarAlreadyPressed = false;
+			case KeyEvent.VK_P:
+				shootAlreadyPressed = false;
+				break;
 			default:
 				return;
 			}
@@ -150,6 +208,9 @@ public class GameController implements KeyListener {
 				break;
 			case KeyEvent.VK_SPACE:
 				spacebarAlreadyPressed = false;
+			case KeyEvent.VK_P:
+				shootAlreadyPressed = false;
+				break;
 			default:
 				return;
 			}
@@ -158,6 +219,13 @@ public class GameController implements KeyListener {
 
 	public GameModel getModel() {
 		return model;
+	}
+	//Se il gioco è in singleplayer viene effettivamente messo in pausa altrimenti viene solo cambiata la schermata
+	public void pauseGame(boolean pause) {
+		ChangeSceneHandler.setPauseMode(isSinglePlayer);
+		if(isSinglePlayer) model.pauseGame(pause);
+		if(pause) ChangeSceneHandler.setCurrentScene("pause");
+		else ChangeSceneHandler.setCurrentScene("game");
 	}
 
 }

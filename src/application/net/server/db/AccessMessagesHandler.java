@@ -90,8 +90,12 @@ public class AccessMessagesHandler implements Runnable {
 					else
 						sendMessage(Utilities.PROGRESS_SAVED);
 
-				} else if (request.equals(Utilities.ALL_CLASSIFICATION))
+				} else if (request.equals(Utilities.ALL_CLASSIFICATION)) {
 					handleClassification();
+				}else if(request.equals(Utilities.MY_CLASSIFICATION)) {
+					DBConnectionHandler.getInstance().getUserClassification(username);
+				}
+				
 			}
 		} catch (Exception e) {
 			sendMessage(Utilities.ERROR_CONNECTING_DB);

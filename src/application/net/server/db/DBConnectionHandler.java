@@ -6,6 +6,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
@@ -126,14 +127,13 @@ public class DBConnectionHandler {
 		PreparedStatement p = connection.prepareStatement(query);
 		p.setString(1, username);
 		ResultSet res = p.executeQuery();
-		ArrayList<Game> userGames = new ArrayList<Game>();
+		List<Game> userGames = new ArrayList<Game>();
 		while(res.next()) {
 			userGames.add(new Game(res.getString("Username"), res.getString("data_time"), res.getInt("Score"), res.getInt("PlayTime")));
 		}
 		//a questo punto in userGames ho tutte le partite giocate dallo user con username dato
 		//ritorno la lista ordinata in base alla data
-		//fai l'ordinamento
-		
+	    Collections.sort(userGames, Collections.reverseOrder());  //dovrebbe essere ordinata in ordine di data di gioco dalla più recente alla meno recente
 		return userGames;
 			
 	}

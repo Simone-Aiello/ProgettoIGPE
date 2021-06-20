@@ -19,6 +19,7 @@ import javax.swing.text.StyledDocument;
 
 import application.ChangeSceneHandler;
 import application.GameStarter;
+import application.Settings;
 import menu.MenuSettings;
 
 public class GenericMessagePanel extends JPanel {
@@ -28,8 +29,8 @@ public class GenericMessagePanel extends JPanel {
 	private OldGameLabel label;
 	public GenericMessagePanel() {
 		label = new OldGameLabel("", MenuSettings.LABEL_TEXT_SIZE);
-		backToMenu = new OldGameButton("Back to main menu", MenuSettings.MULTIPLAYER_BUTTON_TEXT_SIZE);
-		backToMenu.setPreferredSize(new Dimension(200,130));
+		backToMenu = new OldGameButton("BACK TO MENU", MenuSettings.MULTIPLAYER_BUTTON_TEXT_SIZE);
+		backToMenu.setPreferredSize(new Dimension(Settings.WINDOW_WIDTH,130));
 		this.setLayout(new BorderLayout());
 		this.setBackground(Color.BLACK);
 		this.add(label,BorderLayout.CENTER);
@@ -39,6 +40,7 @@ public class GenericMessagePanel extends JPanel {
 			 public void mouseClicked(MouseEvent e) {
 				GameStarter.resetAll();
 				ChangeSceneHandler.setCurrentScene("initialMenu");
+				backToMenu.setBackground(Color.BLACK);
 			}
 		});
 	}
@@ -47,11 +49,3 @@ public class GenericMessagePanel extends JPanel {
 		label.setText("<html><div style='text-align: center;'>" + text + "</div></html>");
 	}
 }
-/*
-String text = "In early March, the city of Topeka, Kansas," + "<br>" +
-              "temporarily changed its name to Google..." + "<br>" + "<br>" +
-              "...in an attempt to capture a spot" + "<br>" +
-              "in Google's new broadband/fiber-optics project." + "<br>" + "<br>" +"<br>" +
-              "source: http://en.wikipedia.org/wiki/Google_server#Oil_Tanker_Data_Center";
-JLabel label = new JLabel("<html><div style='text-align: center;'>" + text + "</div></html>");
-*/
