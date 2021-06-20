@@ -21,5 +21,7 @@ public class PlayerAnimation {
 	public Image getCurrentImage() {
 		return currentImage;
 	}
-
+	public boolean hasReachedEnd() {
+		return currentIndex == images.size() - 1;
+	}
 }

@@ -1,6 +1,7 @@
 package application;
 
 import java.awt.BorderLayout;
+import java.awt.Component;
 import java.awt.Font;
 import java.awt.GraphicsEnvironment;
 import java.io.File;
@@ -9,7 +10,10 @@ import java.util.HashMap;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
+import javax.swing.border.Border;
 
+import application.view.TopLayerGameView;
+import menu.view.GamePauseMenu;
 import menu.view.GenericMessagePanel;
 
 
@@ -37,13 +41,11 @@ public class ChangeSceneHandler {
 	}
 	
 	public static void setCurrentScene(String current) {
-		if(currentScene != null)
-			window.remove(currentScene);
+		if(currentScene != null) window.remove(currentScene);
 		currentScene = scenes.get(current);
 		window.add(currentScene, BorderLayout.CENTER);
 		currentScene.requestFocus();
 		currentScene.setFocusable(true);
-
 		SwingUtilities.updateComponentTreeUI(window);
 	}
 	
@@ -62,5 +64,34 @@ public class ChangeSceneHandler {
 		GenericMessagePanel p = (GenericMessagePanel) scenes.get("messagePanel");
 		p.setText(string);
 		setCurrentScene("messagePanel");
+	}
+
+	public static void setFrameUndecorated(boolean b) {
+		window.dispose();
+		window.setUndecorated(b);
+		window.setVisible(true);
+	}
+
+	public static void setTopBar(TopLayerGameView topView) {
+		window.add(topView,BorderLayout.NORTH);
+	}
+
+	public static void removeTopBar(TopLayerGameView topView) {
+		window.remove(topView);
+		window.revalidate();
+		setFrameUndecorated(false);
+		
+	}
+
+	public static void setPauseMode(boolean isSinglePlayer) {
+		GamePauseMenu menu = (GamePauseMenu) scenes.get("pause");
+		if(isSinglePlayer) {
+			menu.setAlertText("Are you sure?\nYour score will still be saved and displayed on the leaderboard");
+			menu.setLabelText("Game paused");			
+		}
+		else {
+			menu.setAlertText("Are you sure you want to quit?\n Your friend will also be disconnected from the game");
+			menu.setLabelText("Game still in progress");	
+		}
 	}
 }

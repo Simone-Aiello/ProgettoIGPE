@@ -18,6 +18,11 @@ public class PlayerAnimationHandler implements AnimationHandler {
 	private HashMap<Integer, PlayerAnimation> animationsPlayerTwo = null;
 	private PlayerAnimation currentPlayerOneAnimation;
 	private PlayerAnimation currentPlayerTwoAnimation;
+	
+	//Quando parte l'animazione della bolla voglio che finisca anche se il player cade/salta
+	private boolean playerOneShooting = false;
+	private boolean playerTwoShooting = false;
+	
 	public PlayerAnimationHandler() {
 		animationsPlayerOne = new HashMap<Integer, PlayerAnimation>();
 		String pathPlayerOne = "/application/resources/Player/";
@@ -29,6 +34,8 @@ public class PlayerAnimationHandler implements AnimationHandler {
 		animationsPlayerOne.put(Utilities.FALL_RIGHT, new PlayerAnimation(getResources(pathPlayerOne + "FallRight/")));	
 		animationsPlayerOne.put(Utilities.JUMP_LEFT, new PlayerAnimation(getResources(pathPlayerOne + "JumpLeft/")));
 		animationsPlayerOne.put(Utilities.JUMP_RIGHT, new PlayerAnimation(getResources(pathPlayerOne + "JumpRight/")));
+		animationsPlayerOne.put(Utilities.SHOOT_LEFT, new PlayerAnimation(getResources(pathPlayerOne + "ShootLeft/")));
+		animationsPlayerOne.put(Utilities.SHOOT_RIGHT, new PlayerAnimation(getResources(pathPlayerOne + "ShootRight/")));
 		currentPlayerOneAnimation = animationsPlayerOne.get(Utilities.IDLE_RIGHT);	
 	}
 	public void loadPlayerTwoImages() {
@@ -42,23 +49,38 @@ public class PlayerAnimationHandler implements AnimationHandler {
 		animationsPlayerTwo.put(Utilities.FALL_RIGHT, new PlayerAnimation(getResources(pathPlayerTwo + "FallRight/")));	
 		animationsPlayerTwo.put(Utilities.JUMP_LEFT, new PlayerAnimation(getResources(pathPlayerTwo + "JumpLeft/")));
 		animationsPlayerTwo.put(Utilities.JUMP_RIGHT, new PlayerAnimation(getResources(pathPlayerTwo + "JumpRight/")));
+		animationsPlayerTwo.put(Utilities.SHOOT_LEFT, new PlayerAnimation(getResources(pathPlayerTwo + "ShootLeft/")));
+		animationsPlayerTwo.put(Utilities.SHOOT_RIGHT, new PlayerAnimation(getResources(pathPlayerTwo + "ShootRight/")));
 		currentPlayerTwoAnimation = animationsPlayerTwo.get(Utilities.IDLE_RIGHT);
 	}
 	@Override
 	public void changeCurrentAnimation(int playerXState,int playerYState) {
-		switch(playerYState) {
+		if(playerOneShooting) {
+			if(playerXState == Utilities.IDLE_RIGHT ||playerXState == Utilities.MOVE_RIGHT) currentPlayerOneAnimation = animationsPlayerOne.get(Utilities.SHOOT_RIGHT);
+			else currentPlayerOneAnimation = animationsPlayerOne.get(Utilities.SHOOT_LEFT);
+			if(currentPlayerOneAnimation.hasReachedEnd()) playerOneShooting = false;
+		}
+		else {
+			switch(playerYState) {
 			case Utilities.Y_IDLE:
 				currentPlayerOneAnimation = animationsPlayerOne.get(playerXState);
-			break;
+				break;
 			case Utilities.JUMPING:
 				if(playerXState == Utilities.IDLE_RIGHT ||playerXState == Utilities.MOVE_RIGHT) currentPlayerOneAnimation = animationsPlayerOne.get(Utilities.JUMP_RIGHT);
 				else currentPlayerOneAnimation = animationsPlayerOne.get(Utilities.JUMP_LEFT);
-			break;
+				break;
 			case Utilities.FALLING:
 				if(playerXState == Utilities.IDLE_RIGHT ||playerXState == Utilities.MOVE_RIGHT) currentPlayerOneAnimation = animationsPlayerOne.get(Utilities.FALL_RIGHT);
 				else currentPlayerOneAnimation = animationsPlayerOne.get(Utilities.FALL_LEFT);
-			break;
-			
+				break;
+			case Utilities.SHOOT:
+				playerOneShooting = true;
+				if(playerXState == Utilities.IDLE_RIGHT ||playerXState == Utilities.MOVE_RIGHT) currentPlayerOneAnimation = animationsPlayerOne.get(Utilities.SHOOT_RIGHT);
+				else currentPlayerOneAnimation = animationsPlayerOne.get(Utilities.SHOOT_LEFT);
+				break;	
+			default:
+				break;
+			}			
 		}
 		currentPlayerOneAnimation.update();
 	}
@@ -70,19 +92,32 @@ public class PlayerAnimationHandler implements AnimationHandler {
 		return currentPlayerTwoAnimation.getCurrentImage();
 	}
 	public void changeCurrentPlayerTwoAnimation(int playerXState,int playerYState) {
-		switch(playerYState) {
-			case Utilities.Y_IDLE:
-				currentPlayerTwoAnimation = animationsPlayerTwo.get(playerXState);
-			break;
-			case Utilities.JUMPING:
-				if(playerXState == Utilities.IDLE_RIGHT ||playerXState == Utilities.MOVE_RIGHT) currentPlayerTwoAnimation = animationsPlayerTwo.get(Utilities.JUMP_RIGHT);
-				else currentPlayerTwoAnimation = animationsPlayerTwo.get(Utilities.JUMP_LEFT);
-			break;
-			case Utilities.FALLING:
-				if(playerXState == Utilities.IDLE_RIGHT ||playerXState == Utilities.MOVE_RIGHT) currentPlayerTwoAnimation = animationsPlayerTwo.get(Utilities.FALL_RIGHT);
-				else currentPlayerTwoAnimation = animationsPlayerTwo.get(Utilities.FALL_LEFT);
-			break;
-			
+		if(playerTwoShooting) {
+			if(playerXState == Utilities.IDLE_RIGHT ||playerXState == Utilities.MOVE_RIGHT) currentPlayerTwoAnimation = animationsPlayerTwo.get(Utilities.SHOOT_RIGHT);
+			else currentPlayerTwoAnimation = animationsPlayerTwo.get(Utilities.SHOOT_LEFT);
+			if(currentPlayerTwoAnimation.hasReachedEnd()) playerTwoShooting = false;
+		}
+		else {
+			switch(playerYState) {
+				case Utilities.Y_IDLE:
+					currentPlayerTwoAnimation = animationsPlayerTwo.get(playerXState);
+				break;
+				case Utilities.JUMPING:
+					if(playerXState == Utilities.IDLE_RIGHT ||playerXState == Utilities.MOVE_RIGHT) currentPlayerTwoAnimation = animationsPlayerTwo.get(Utilities.JUMP_RIGHT);
+					else currentPlayerTwoAnimation = animationsPlayerTwo.get(Utilities.JUMP_LEFT);
+				break;
+				case Utilities.FALLING:
+					if(playerXState == Utilities.IDLE_RIGHT ||playerXState == Utilities.MOVE_RIGHT) currentPlayerTwoAnimation = animationsPlayerTwo.get(Utilities.FALL_RIGHT);
+					else currentPlayerTwoAnimation = animationsPlayerTwo.get(Utilities.FALL_LEFT);
+				break;
+				case Utilities.SHOOT:
+					playerTwoShooting = true;
+					if(playerXState == Utilities.IDLE_RIGHT ||playerXState == Utilities.MOVE_RIGHT) currentPlayerTwoAnimation = animationsPlayerTwo.get(Utilities.SHOOT_RIGHT);
+					else currentPlayerTwoAnimation = animationsPlayerTwo.get(Utilities.SHOOT_LEFT);
+					break;	
+				default:
+					break;
+			}
 		}
 		currentPlayerTwoAnimation.update();
 	}

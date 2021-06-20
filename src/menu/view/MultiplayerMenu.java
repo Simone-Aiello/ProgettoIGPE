@@ -7,9 +7,12 @@ import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 import javax.swing.JPanel;
 
+import application.ChangeSceneHandler;
 import application.GameStarter;
 import application.Settings;
 import menu.MenuSettings;
@@ -20,7 +23,7 @@ public class MultiplayerMenu extends JPanel{
 	private OldGameButton hostGameButton;
 	private OldGameTextField roomCodeField;
 	private OldGameButton joinButton;
-	
+	private OldGameButton backToMenu;
 	public MultiplayerMenu() {		
 		setBackground(Color.BLACK);
 		setLayout(new GridLayout(4,1));
@@ -54,16 +57,30 @@ public class MultiplayerMenu extends JPanel{
 		itemSettings(or, Settings.WINDOW_WIDTH, 50);
 		this.add(or);
 		
+		JPanel bottom = new JPanel();
+		bottom.setLayout(new GridLayout(1,2));
+		bottom.setBackground(Color.BLACK);
 		hostGameButton = new OldGameButton("HOST GAME", MenuSettings.MULTIPLAYER_BUTTON_TEXT_SIZE);
 		itemSettings(hostGameButton, 400, 50);
 		hostGameButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				GameStarter.hostRequest();
+				hostGameButton.setBackground(Color.BLACK);
 			}
 		});
-		
-		add(hostGameButton);		
+		backToMenu = new OldGameButton("BACK TO MENU", MenuSettings.MULTIPLAYER_BUTTON_TEXT_SIZE);
+		backToMenu.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseClicked(MouseEvent e) {
+				ChangeSceneHandler.setCurrentScene("initialMenu");
+				backToMenu.setBackground(Color.BLACK);
+			}
+		});
+		bottom.add(hostGameButton);
+		bottom.add(backToMenu);
+		add(bottom);
+		//add(hostGameButton);		
 		
 	}
 	

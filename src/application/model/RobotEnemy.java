@@ -2,14 +2,14 @@ package application.model;
 
 import java.util.Random;
 
-public class RobotEnemy extends Entity implements Enemy {
+import application.Settings;
 
-	private static final long serialVersionUID = 1L;
+public class RobotEnemy extends Entity implements Enemy {
 	private Random r;
 	private int frameWithTheSameDirection;
 	
-	public RobotEnemy(int x, int y, int hitboxWidht, int hitboxHeight) {
-		super(x, y, hitboxWidht, hitboxHeight);
+	public RobotEnemy(int x, int y) {
+		super(x, y, Settings.PLAYER_DIMENSION, Settings.PLAYER_DIMENSION);
 		r = new Random();
 		frameWithTheSameDirection = 5;
 		xState = Utilities.MOVE_LEFT;
