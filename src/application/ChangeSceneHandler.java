@@ -16,43 +16,56 @@ import application.view.TopLayerGameView;
 import menu.view.GamePauseMenu;
 import menu.view.GenericMessagePanel;
 
-
 public class ChangeSceneHandler {
-	
-	public static HashMap<String, JPanel> scenes;
+
+	private static HashMap<String, JPanel> scenes;
+
 	private static JFrame window;
 	private static JPanel currentScene = null;
 	private static ChangeSceneHandler instance = null;
-	
+
 	public void init(JFrame w) {
 		scenes = new HashMap<String, JPanel>();
 		window = w;
-		readFont(new File(getClass().getResource("/application/resources/font/oldGameFont.ttf").getPath()));	
+		readFont(new File(getClass().getResource("/application/resources/font/oldGameFont.ttf").getPath()));
 	}
-	
+
 	public static ChangeSceneHandler getInstance() {
-		if(instance == null)
+		if (instance == null)
 			instance = new ChangeSceneHandler();
 		return instance;
 	}
-	
+
 	public static void add(String name, JPanel scene) {
 		scenes.put(name, scene);
 	}
-	
+
 	public static void setCurrentScene(String current) {
-		if(currentScene != null) window.remove(currentScene);
+		if (currentScene != null)
+			window.remove(currentScene);
 		currentScene = scenes.get(current);
+
 		window.add(currentScene, BorderLayout.CENTER);
+
+		if (current.equals("start"))
+			SoundsHandler.setCurrentSound("menuMusic");
+
+		if (current.equals("game"))
+			SoundsHandler.setCurrentSound("gameMusic");
+
+		if ((!current.equals("game")) && SoundsHandler.isGameSoundOn())
+			SoundsHandler.setCurrentSound("menuMusic");
+
 		currentScene.requestFocus();
 		currentScene.setFocusable(true);
 		SwingUtilities.updateComponentTreeUI(window);
 	}
-	
+
+
 	private static void readFont(File fontFile) {
 		try {
 			Font oldGameFont = Font.createFont(Font.TRUETYPE_FONT, fontFile);
-			GraphicsEnvironment localGraphicEnv = GraphicsEnvironment.getLocalGraphicsEnvironment();			
+			GraphicsEnvironment localGraphicEnv = GraphicsEnvironment.getLocalGraphicsEnvironment();
 			localGraphicEnv.registerFont(oldGameFont);
 
 		} catch (Exception e) {
@@ -73,25 +86,24 @@ public class ChangeSceneHandler {
 	}
 
 	public static void setTopBar(TopLayerGameView topView) {
-		window.add(topView,BorderLayout.NORTH);
+		window.add(topView, BorderLayout.NORTH);
 	}
 
 	public static void removeTopBar(TopLayerGameView topView) {
 		window.remove(topView);
 		window.revalidate();
 		setFrameUndecorated(false);
-		
+
 	}
 
 	public static void setPauseMode(boolean isSinglePlayer) {
 		GamePauseMenu menu = (GamePauseMenu) scenes.get("pause");
-		if(isSinglePlayer) {
+		if (isSinglePlayer) {
 			menu.setAlertText("Are you sure?\nYour score will still be saved and displayed on the leaderboard");
-			menu.setLabelText("Game paused");			
-		}
-		else {
+			menu.setLabelText("Game paused");
+		} else {
 			menu.setAlertText("Are you sure you want to quit?\n Your friend will also be disconnected from the game");
-			menu.setLabelText("Game still in progress");	
+			menu.setLabelText("Game still in progress");
 		}
 	}
 }
