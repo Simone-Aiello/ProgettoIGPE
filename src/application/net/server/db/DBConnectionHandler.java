@@ -89,18 +89,17 @@ public class DBConnectionHandler {
 		return result;
 	}
 	
-	public synchronized boolean updateGames(String username, int score, int time) throws SQLException {
+	public synchronized boolean updateGames(String username, int score) throws SQLException {
 		connectionError = false;
 		if(connection == null || connection.isClosed() || username == null) {
 			connectionError = true;
 			return false;
 		}
 		
-		String query = "INSERT INTO Games ('Username', 'Score', 'PlayTime', 'data_time') VALUES(?, ?, ?, datetime('now', 'localtime');";
+		String query = "INSERT INTO Games ('Username', 'Score', 'data_time') VALUES(?, ?, datetime('now', 'localtime');";
 		PreparedStatement p = connection.prepareStatement(query);
 		p.setString(1, username);
 		p.setInt(2, score);
-		p.setInt(3, time);
 		p.executeUpdate();
 		p.close();
 		return true;		
@@ -137,7 +136,7 @@ public class DBConnectionHandler {
 		ResultSet res = p.executeQuery();
 		List<Game> userGames = new ArrayList<Game>();
 		while(res.next()) {
-			userGames.add(new Game(res.getString("Username"), res.getString("data_time"), res.getInt("Score"), res.getInt("PlayTime")));
+			userGames.add(new Game(res.getString("Username"), res.getString("data_time"), res.getInt("Score")));
 		}
 		//a questo punto in userGames ho tutte le partite giocate dallo user con username dato
 		//ritorno la lista ordinata in base alla data

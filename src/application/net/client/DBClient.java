@@ -148,5 +148,20 @@ public class DBClient {
 			return Utilities.ERROR_CONNECTING_DB;
 		}
 	}
+	
+	public String update_score_request(int score, int playTime) {
+		sendMessage(Utilities.UPDATE_SCORE);
+		sendMessage(score + Utilities.MESSAGE_SEPARATOR + playTime);
+		try {
+			if(in != null && in.ready()) {
+				String line = in.readLine();
+				return line;
+			}
+			return Utilities.ERROR_CONNECTING_DB;
+		} catch (IOException e) {
+			return Utilities.ERROR_CONNECTING_DB;
+		}
+			
+	}
 
 }

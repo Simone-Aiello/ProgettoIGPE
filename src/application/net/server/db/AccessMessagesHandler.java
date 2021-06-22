@@ -90,12 +90,10 @@ public class AccessMessagesHandler implements Runnable {
 			while (true) {
 				String request = in.readLine();
 				if (request.equals(Utilities.UPDATE_SCORE)) {
-					String line = in.readLine();
-					String[] gameData = line.split(Utilities.MESSAGE_SEPARATOR);
-					int score = Integer.parseInt(gameData[0]);
-					int playTime = Integer.parseInt(gameData[1]);
+					String scoreString = in.readLine();
+					int score = Integer.parseInt(scoreString);
 
-					if (!DBConnectionHandler.getInstance().updateGames(username, score, playTime))
+					if (!DBConnectionHandler.getInstance().updateGames(username, score))
 						sendMessage(Utilities.ERROR_CONNECTING_DB); // stabilisci cosa fare quando non riesce a salvare
 																	// il nuovo score
 					else

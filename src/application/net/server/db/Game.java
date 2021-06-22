@@ -7,13 +7,11 @@ public class Game implements Comparable<Game>{
 	private String username;
 	private String date_time;
 	private int score;
-	private long playTime;
 	
-	public Game(String username, String date_time, int score, long playTime) {
+	public Game(String username, String date_time, int score) {
 		this.username = username;
 		this.date_time = date_time;
 		this.score = score;
-		this.playTime = playTime;
 	}	
 	
 	public String getUsername() {
@@ -28,13 +26,10 @@ public class Game implements Comparable<Game>{
 		return score;
 	}
 
-	public long getPlayTime() {
-		return playTime;
-	}
 	
 	@Override
 	public String toString() {
-		return username + Utilities.MESSAGE_SEPARATOR + score + Utilities.MESSAGE_SEPARATOR + playTime + Utilities.MESSAGE_SEPARATOR + date_time;
+		return username + Utilities.MESSAGE_SEPARATOR + score + Utilities.MESSAGE_SEPARATOR + date_time;
 	}
 
 	@Override
