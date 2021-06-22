@@ -24,6 +24,7 @@ public class Server implements Runnable{
 			while(!Thread.currentThread().isInterrupted()) {
 				area.append("Waiting for connection..." + System.lineSeparator());
 				Socket connection1 = server.accept();
+				area.append("Client connected" + System.lineSeparator());
 				executor.submit(new InitialConnectionHandler(connection1));
 			}
 		} catch (IOException e) {

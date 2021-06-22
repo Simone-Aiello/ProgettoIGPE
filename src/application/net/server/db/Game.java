@@ -34,8 +34,7 @@ public class Game implements Comparable<Game>{
 	
 	@Override
 	public String toString() {
-		//gestisci se ti serve
-		return "";
+		return username + Utilities.MESSAGE_SEPARATOR + score + Utilities.MESSAGE_SEPARATOR + playTime + Utilities.MESSAGE_SEPARATOR + date_time;
 	}
 
 	@Override

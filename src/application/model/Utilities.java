@@ -107,6 +107,7 @@ public class Utilities {
 	public static final String ERROR_CONNECTING_DB = "DB_ERROR";
 	public static final String PROGRESS_SAVED = "PROGRESS_SAVED";
 	public static final String STILL_NO_CLASSIFICATION = "NO_CLASSIFICATION";
+	public static final String OK_CLASSIFICATION = "OK_CLASSIFICATION";
 	public static final String START_CLASSIFICATION = "CLASS_START";
 	public static final String END_CLASSIFICATION = "CLASS_END";
 	

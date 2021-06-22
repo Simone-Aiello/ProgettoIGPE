@@ -16,14 +16,15 @@ import org.springframework.security.crypto.bcrypt.BCrypt;
 public class DBConnectionHandler {
 	
 	private static DBConnectionHandler instance = null;
-	private Connection connection = null;
+	private Connection connection;
 	public boolean connectionError = false;
 	
 	private DBConnectionHandler() {		
 		try {
-			connection = DriverManager.getConnection("jdbc:sqlite:BubbleBobbleDB.bd");
+			connection = DriverManager.getConnection("jdbc:sqlite:BubbleBobbleDB.db");
+			System.out.println("connected to db");
 		} catch (SQLException e) {
-			e.printStackTrace();
+			System.out.println("error connecting DB");
 		}
 	}
 	
@@ -34,6 +35,7 @@ public class DBConnectionHandler {
 	}
 	
 	public synchronized boolean insertUser(User user) throws SQLException { //va bene cosi
+		connectionError = false;
 		if(connection == null || connection.isClosed() || user == null) {
 			connectionError = true;
 			return false;
@@ -52,6 +54,7 @@ public class DBConnectionHandler {
 	}
 	
 	public synchronized boolean existsUser(User user) throws SQLException {
+		connectionError = false;
 		if(connection == null || connection.isClosed() || user == null) {
 			connectionError = true;
 			return false;
@@ -67,6 +70,7 @@ public class DBConnectionHandler {
 	}
 	
 	public synchronized boolean checkUser(User user) throws SQLException { 
+		connectionError = false;
 		if(connection == null || connection.isClosed() || user == null) {
 			connectionError = true;
 			return false;
@@ -86,6 +90,7 @@ public class DBConnectionHandler {
 	}
 	
 	public synchronized boolean updateGames(String username, int score, int time) throws SQLException {
+		connectionError = false;
 		if(connection == null || connection.isClosed() || username == null) {
 			connectionError = true;
 			return false;
@@ -102,6 +107,8 @@ public class DBConnectionHandler {
 	}
 	
 	public synchronized LinkedHashMap<String, Integer> getClassification() throws SQLException {
+		
+		connectionError = false;
 		if(connection == null || connection.isClosed()) {
 			connectionError = true;
 			return null;
@@ -118,6 +125,7 @@ public class DBConnectionHandler {
 	}
 	
 	public synchronized List<Game> getUserClassification(String username) throws SQLException {  //gestisci questo
+		connectionError = false;
 		if(connection == null || connection.isClosed()) {
 			connectionError = true;
 			return null;

@@ -21,7 +21,8 @@ public class ChangeSceneHandler {
 	
 	public static HashMap<String, JPanel> scenes;
 	private static JFrame window;
-	private static JPanel currentScene = null;
+	private static String currentScene = null;
+	private static String previousScene = null;
 	private static ChangeSceneHandler instance = null;
 	
 	public void init(JFrame w) {
@@ -41,11 +42,12 @@ public class ChangeSceneHandler {
 	}
 	
 	public static void setCurrentScene(String current) {
-		if(currentScene != null) window.remove(currentScene);
-		currentScene = scenes.get(current);
-		window.add(currentScene, BorderLayout.CENTER);
-		currentScene.requestFocus();
-		currentScene.setFocusable(true);
+		if(currentScene != null) window.remove(scenes.get(currentScene));
+		previousScene = currentScene;
+		currentScene = current;
+		window.add(scenes.get(currentScene), BorderLayout.CENTER);
+		scenes.get(currentScene).requestFocus();
+		scenes.get(currentScene).setFocusable(true);
 		SwingUtilities.updateComponentTreeUI(window);
 	}
 	
@@ -64,6 +66,12 @@ public class ChangeSceneHandler {
 		GenericMessagePanel p = (GenericMessagePanel) scenes.get("messagePanel");
 		p.setText(string);
 		setCurrentScene("messagePanel");
+	}
+	
+	public static void showErrorMessage(String string) {
+		GenericMessagePanel p = (GenericMessagePanel) scenes.get("errorMessagePanel");
+		p.setText(string);
+		setCurrentScene("errorMessagePanel");
 	}
 
 	public static void setFrameUndecorated(boolean b) {
@@ -94,4 +102,9 @@ public class ChangeSceneHandler {
 			menu.setLabelText("Game still in progress");	
 		}
 	}
+
+	public static void returnToPreviousScene() {
+		setCurrentScene(previousScene);		
+	}
+	
 }

@@ -27,25 +27,45 @@ public class GenericMessagePanel extends JPanel {
 	private static final long serialVersionUID = 4387334406525363926L;
 	private OldGameButton backToMenu;
 	private OldGameLabel label;
-	public GenericMessagePanel() {
+
+	public GenericMessagePanel(boolean error) {
 		label = new OldGameLabel("", MenuSettings.LABEL_TEXT_SIZE);
-		backToMenu = new OldGameButton("BACK TO MENU", MenuSettings.MULTIPLAYER_BUTTON_TEXT_SIZE);
-		backToMenu.setPreferredSize(new Dimension(Settings.WINDOW_WIDTH,130));
+
+		if (error)
+			backToMenu = new OldGameButton("OK", MenuSettings.MULTIPLAYER_BUTTON_TEXT_SIZE);
+		else
+			backToMenu = new OldGameButton("BACK TO MENU", MenuSettings.MULTIPLAYER_BUTTON_TEXT_SIZE);
+		backToMenu.setPreferredSize(new Dimension(Settings.WINDOW_WIDTH, 130));
 		this.setLayout(new BorderLayout());
 		this.setBackground(Color.BLACK);
-		this.add(label,BorderLayout.CENTER);
-		this.add(backToMenu,BorderLayout.SOUTH);
-		backToMenu.addMouseListener(new MouseAdapter() {
-			@Override
-			 public void mouseClicked(MouseEvent e) {
-				GameStarter.resetAll();
-				ChangeSceneHandler.setCurrentScene("initialMenu");
-				backToMenu.setBackground(Color.BLACK);
-			}
-		});
+		this.add(label, BorderLayout.CENTER);
+		this.add(backToMenu, BorderLayout.SOUTH);
+
+		if (error) {
+			backToMenu.addMouseListener(new MouseAdapter() {
+				@Override
+				public void mouseClicked(MouseEvent e) {
+					GameStarter.resetAll();
+					ChangeSceneHandler.returnToPreviousScene();
+					backToMenu.setBackground(Color.BLACK);
+				}
+			});
+			
+		} else {
+			backToMenu.addMouseListener(new MouseAdapter() {
+				@Override
+				public void mouseClicked(MouseEvent e) {
+					GameStarter.resetAll();
+					ChangeSceneHandler.setCurrentScene("initialMenu");
+					backToMenu.setBackground(Color.BLACK);
+				}
+			});
+		}
 	}
+
 	public void setText(String text) {
 		text = text.replaceAll("\n", "<br>");
 		label.setText("<html><div style='text-align: center;'>" + text + "</div></html>");
 	}
+
 }

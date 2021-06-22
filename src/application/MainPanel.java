@@ -27,7 +27,8 @@ public class MainPanel {
 		InitialMenu initialMenu = new InitialMenu();
 		LoginMenu loginMenu = new LoginMenu();
 		MultiplayerMenu multiplayerMenu = new MultiplayerMenu();
-		GenericMessagePanel messagePanel = new GenericMessagePanel();
+		GenericMessagePanel messagePanel = new GenericMessagePanel(false);
+		GenericMessagePanel errorMessagePanel = new GenericMessagePanel(true);
 		LeaderboardMenu leaderboards = new LeaderboardMenu();
 		GamePauseMenu pauseMenu = new GamePauseMenu();
 		//ChangeSceneHandler.add("game", view);
@@ -36,6 +37,7 @@ public class MainPanel {
 		ChangeSceneHandler.add("loginMenu", loginMenu);
 		ChangeSceneHandler.add("multiplayerMenu", multiplayerMenu);
 		ChangeSceneHandler.add("messagePanel", messagePanel);
+		ChangeSceneHandler.add("errorMessagePanel", errorMessagePanel);
 		ChangeSceneHandler.add("leaderboard", leaderboards);
 		ChangeSceneHandler.add("pause", pauseMenu);
 		ChangeSceneHandler.setCurrentScene("start");

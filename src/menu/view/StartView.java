@@ -47,13 +47,13 @@ public class StartView extends JPanel implements MouseListener{
 
 	@Override
 	public void mouseClicked(MouseEvent e) {
-		ChangeSceneHandler.setCurrentScene("initialMenu");
+		ChangeSceneHandler.setCurrentScene("loginMenu");
 		fl.interrupt();
 	}
 
 	@Override
 	public void mousePressed(MouseEvent e) {
-		ChangeSceneHandler.setCurrentScene("initialMenu");
+		ChangeSceneHandler.setCurrentScene("loginMenu");
 		fl.interrupt();
 	}
 

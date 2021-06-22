@@ -40,7 +40,6 @@ public class InitialConnectionHandler implements Runnable {
 			}
 			else if(request.equals(Utilities.JOIN)){
 				String [] res = request.split(" ");
-
 				String joinResult = RoomHandler.joinRequest(res[1],socket);
 				/*if(!RoomHandler.rooms.containsKey(res[1])) {
 					out.println(Utilities.NOT_EXISTS_ROOM);
@@ -56,6 +55,10 @@ public class InitialConnectionHandler implements Runnable {
 
 				}*/
 				out.println(joinResult);
+			}
+			else if(request.equals(Utilities.DB_ACCESS)){
+				DBexecutor.submit(new AccessMessagesHandler(socket));
+				System.out.println("create accessMessagesHandler");
 			}
 		} catch (IOException e) {
 			return;

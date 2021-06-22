@@ -48,18 +48,7 @@ public class Client {
 		}
 	}
 	
-	public Client() { //se viene chiamato questo costruttore il client si connette sulla porta 9000 del server, quella per lo scambio di messaggi relativi al DB
-		try {
-			socket = new Socket("localhost",9000);
-			out = new PrintWriter(new BufferedOutputStream(socket.getOutputStream()),true);
-			in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-		} catch (Exception e) {
-			socket = null;
-			out = null;
-			in = null;
-			System.out.println("Error connecting to server");
-		}		
-	}
+	
 	
 	public boolean isStartedCorrectly() {
 		return startedCorrectly;
