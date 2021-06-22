@@ -57,8 +57,8 @@ public class InitialConnectionHandler implements Runnable {
 				out.println(joinResult);
 			}
 			else if(request.equals(Utilities.DB_ACCESS)){
-				DBexecutor.submit(new AccessMessagesHandler(socket));
 				System.out.println("create accessMessagesHandler");
+				DBexecutor.submit(new AccessMessagesHandler(socket));				
 			}
 		} catch (IOException e) {
 			return;

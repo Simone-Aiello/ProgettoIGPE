@@ -58,7 +58,7 @@ public class DBClient {
 	public String[] read() {
 		String[] res = null;
 		try {
-			if (in != null && in.ready()) {
+			if (in != null) {
 				String line = in.readLine();
 				res = line.split(Utilities.MESSAGE_SEPARATOR);
 			}
@@ -82,13 +82,15 @@ public class DBClient {
 		sendMessage(username + Utilities.MESSAGE_SEPARATOR + password);
 		System.out.println("messaggio mandato");
 		try {
-			if (in != null && in.ready()) {
+			if (in != null) {
 				String line = in.readLine();
 				return line;
 			}
+			System.out.println("in null oppure not ready");
 			return Utilities.ERROR_CONNECTING_DB;
 		} catch (Exception e) {
 			out = null;
+			System.out.println("exception");
 			return Utilities.ERROR_CONNECTING_DB;
 		}
 	}
@@ -100,7 +102,7 @@ public class DBClient {
 		}
 		sendMessage(Utilities.ALL_CLASSIFICATION);
 		try {
-			if (in != null && in.ready()) {
+			if (in != null) {
 				String line = in.readLine();
 				classification.clear();
 				if (line.equals(Utilities.START_CLASSIFICATION)) {
@@ -125,7 +127,7 @@ public class DBClient {
 	public String user_game_records_request() {
 		sendMessage(Utilities.MY_CLASSIFICATION);
 		try {
-			if (in != null && in.ready()) {
+			if (in != null) {
 				user_games_records.clear();
 				String line = in.readLine();
 

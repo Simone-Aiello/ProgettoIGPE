@@ -26,6 +26,7 @@ public class LeaderboardMenu extends JPanel{
 	JButton backToMenu = new OldGameButton("BACK TO MENU",MenuSettings.MULTIPLAYER_BUTTON_TEXT_SIZE);
 	Score score = new Score("Rank","Username", "High score");
 	JScrollPane scroll = new JScrollPane(s);
+	
 	public LeaderboardMenu() {
 		setBackground(Color.BLACK);
 		setLayout(new BorderLayout());
