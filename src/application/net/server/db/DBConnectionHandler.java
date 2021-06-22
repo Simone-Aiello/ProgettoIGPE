@@ -16,7 +16,7 @@ import org.springframework.security.crypto.bcrypt.BCrypt;
 public class DBConnectionHandler {
 	
 	private static DBConnectionHandler instance = null;
-	private Connection connection;
+	private Connection connection = null;
 	public boolean connectionError = false;
 	
 	private DBConnectionHandler() {		
