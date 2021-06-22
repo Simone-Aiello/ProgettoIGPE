@@ -6,21 +6,17 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
-import java.net.UnknownHostException;
 
 import application.model.Utilities;
 
 
 public class Client {
-	
 	private Socket socket;
 	private PrintWriter out;
 	private BufferedReader in;
 	private String roomCode;
-
 	private String error = null;
 	private boolean startedCorrectly;
-
 	public Client(String mode,String code) {
 		try {
 			startedCorrectly = true;
@@ -47,9 +43,6 @@ public class Client {
 			startedCorrectly = false;
 		}
 	}
-	
-	
-	
 	public boolean isStartedCorrectly() {
 		return startedCorrectly;
 	}
@@ -75,4 +68,4 @@ public class Client {
 	public String getError() {
 		return error;
 	}
-}
+}	
