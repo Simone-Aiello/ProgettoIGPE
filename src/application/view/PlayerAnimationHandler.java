@@ -56,8 +56,12 @@ public class PlayerAnimationHandler implements AnimationHandler {
 	@Override
 	public void changeCurrentAnimation(int playerXState,int playerYState) {
 		if(playerOneShooting) {
-			if(playerXState == Utilities.IDLE_RIGHT ||playerXState == Utilities.MOVE_RIGHT) currentPlayerOneAnimation = animationsPlayerOne.get(Utilities.SHOOT_RIGHT);
-			else currentPlayerOneAnimation = animationsPlayerOne.get(Utilities.SHOOT_LEFT);
+			if(playerXState == Utilities.IDLE_RIGHT ||playerXState == Utilities.MOVE_RIGHT) {
+				currentPlayerOneAnimation = animationsPlayerOne.get(Utilities.SHOOT_RIGHT);
+			}			
+			else {
+				currentPlayerOneAnimation = animationsPlayerOne.get(Utilities.SHOOT_LEFT);
+			}
 			if(currentPlayerOneAnimation.hasReachedEnd()) playerOneShooting = false;
 		}
 		else {
@@ -66,8 +70,12 @@ public class PlayerAnimationHandler implements AnimationHandler {
 				currentPlayerOneAnimation = animationsPlayerOne.get(playerXState);
 				break;
 			case Utilities.JUMPING:
-				if(playerXState == Utilities.IDLE_RIGHT ||playerXState == Utilities.MOVE_RIGHT) currentPlayerOneAnimation = animationsPlayerOne.get(Utilities.JUMP_RIGHT);
-				else currentPlayerOneAnimation = animationsPlayerOne.get(Utilities.JUMP_LEFT);
+				if(playerXState == Utilities.IDLE_RIGHT ||playerXState == Utilities.MOVE_RIGHT) {
+					currentPlayerOneAnimation = animationsPlayerOne.get(Utilities.JUMP_RIGHT);
+				}
+				else {
+					currentPlayerOneAnimation = animationsPlayerOne.get(Utilities.JUMP_LEFT);
+				}
 				break;
 			case Utilities.FALLING:
 				if(playerXState == Utilities.IDLE_RIGHT ||playerXState == Utilities.MOVE_RIGHT) currentPlayerOneAnimation = animationsPlayerOne.get(Utilities.FALL_RIGHT);
@@ -75,8 +83,12 @@ public class PlayerAnimationHandler implements AnimationHandler {
 				break;
 			case Utilities.SHOOT:
 				playerOneShooting = true;
-				if(playerXState == Utilities.IDLE_RIGHT ||playerXState == Utilities.MOVE_RIGHT) currentPlayerOneAnimation = animationsPlayerOne.get(Utilities.SHOOT_RIGHT);
-				else currentPlayerOneAnimation = animationsPlayerOne.get(Utilities.SHOOT_LEFT);
+				if(playerXState == Utilities.IDLE_RIGHT ||playerXState == Utilities.MOVE_RIGHT) {
+					currentPlayerOneAnimation = animationsPlayerOne.get(Utilities.SHOOT_RIGHT);
+				}
+				else {
+					currentPlayerOneAnimation = animationsPlayerOne.get(Utilities.SHOOT_LEFT);
+				}
 				break;	
 			default:
 				break;
@@ -93,8 +105,12 @@ public class PlayerAnimationHandler implements AnimationHandler {
 	}
 	public void changeCurrentPlayerTwoAnimation(int playerXState,int playerYState) {
 		if(playerTwoShooting) {
-			if(playerXState == Utilities.IDLE_RIGHT ||playerXState == Utilities.MOVE_RIGHT) currentPlayerTwoAnimation = animationsPlayerTwo.get(Utilities.SHOOT_RIGHT);
-			else currentPlayerTwoAnimation = animationsPlayerTwo.get(Utilities.SHOOT_LEFT);
+			if(playerXState == Utilities.IDLE_RIGHT ||playerXState == Utilities.MOVE_RIGHT) {
+				currentPlayerTwoAnimation = animationsPlayerTwo.get(Utilities.SHOOT_RIGHT);
+			}
+			else {
+				currentPlayerTwoAnimation = animationsPlayerTwo.get(Utilities.SHOOT_LEFT);
+			}
 			if(currentPlayerTwoAnimation.hasReachedEnd()) playerTwoShooting = false;
 		}
 		else {
@@ -103,8 +119,12 @@ public class PlayerAnimationHandler implements AnimationHandler {
 					currentPlayerTwoAnimation = animationsPlayerTwo.get(playerXState);
 				break;
 				case Utilities.JUMPING:
-					if(playerXState == Utilities.IDLE_RIGHT ||playerXState == Utilities.MOVE_RIGHT) currentPlayerTwoAnimation = animationsPlayerTwo.get(Utilities.JUMP_RIGHT);
-					else currentPlayerTwoAnimation = animationsPlayerTwo.get(Utilities.JUMP_LEFT);
+					if(playerXState == Utilities.IDLE_RIGHT ||playerXState == Utilities.MOVE_RIGHT) {
+						currentPlayerTwoAnimation = animationsPlayerTwo.get(Utilities.JUMP_RIGHT);
+					}
+					else {
+						currentPlayerTwoAnimation = animationsPlayerTwo.get(Utilities.JUMP_LEFT);
+					}
 				break;
 				case Utilities.FALLING:
 					if(playerXState == Utilities.IDLE_RIGHT ||playerXState == Utilities.MOVE_RIGHT) currentPlayerTwoAnimation = animationsPlayerTwo.get(Utilities.FALL_RIGHT);
@@ -112,8 +132,12 @@ public class PlayerAnimationHandler implements AnimationHandler {
 				break;
 				case Utilities.SHOOT:
 					playerTwoShooting = true;
-					if(playerXState == Utilities.IDLE_RIGHT ||playerXState == Utilities.MOVE_RIGHT) currentPlayerTwoAnimation = animationsPlayerTwo.get(Utilities.SHOOT_RIGHT);
-					else currentPlayerTwoAnimation = animationsPlayerTwo.get(Utilities.SHOOT_LEFT);
+					if(playerXState == Utilities.IDLE_RIGHT ||playerXState == Utilities.MOVE_RIGHT) {
+						currentPlayerTwoAnimation = animationsPlayerTwo.get(Utilities.SHOOT_RIGHT);
+					}
+					else {
+						currentPlayerTwoAnimation = animationsPlayerTwo.get(Utilities.SHOOT_LEFT);
+					}
 					break;	
 				default:
 					break;

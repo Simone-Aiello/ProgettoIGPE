@@ -11,6 +11,7 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 
 import application.Settings;
+import application.SoundsHandler;
 import application.controller.GameController;
 import application.model.Bubble;
 import application.model.Enemy;
@@ -18,6 +19,7 @@ import application.model.Entity;
 import application.model.Food;
 import application.model.GameModel;
 import application.model.Tile;
+import application.model.Utilities;
 
 
 public class GameView  extends JPanel{
@@ -26,6 +28,8 @@ public class GameView  extends JPanel{
 	 */
 	private static final long serialVersionUID = 1L;
 	
+	private int currentYStatePlayer1 = Utilities.Y_IDLE;
+	private int currentYStatePlayer2 = Utilities.Y_IDLE;
 	private PlayerAnimationHandler playerAnimation;
 	private EnemyAnimation enemyAnimations;
 	private GameModel model = null;
@@ -106,6 +110,16 @@ public class GameView  extends JPanel{
 	private void drawPlayerOne(Graphics g,boolean drawHitbox) {
 		int x = model.getPlayerOne().getX();
 		int y = model.getPlayerOne().getY();
+		int newYState = model.getPlayerOne().getYState();
+
+		if(newYState == Utilities.SHOOT|| newYState == Utilities.SHOOT_LEFT || newYState == Utilities.SHOOT_RIGHT) {
+			SoundsHandler.playSoundEffect("shootSound"); 
+		}
+		
+		if(newYState == Utilities.JUMPING && (currentYStatePlayer1 == Utilities.Y_IDLE || currentYStatePlayer1 == Utilities.FALLING) )
+			SoundsHandler.playSoundEffect("jumpSound");
+		currentYStatePlayer1 = newYState;
+		
 		g.drawImage(playerAnimation.getCurrentImage(), x, y, Settings.PLAYER_DIMENSION, Settings.PLAYER_DIMENSION, null);
 		int dim = (int) model.getPlayerOne().getHitbox().getHeight();
 		int hx = model.getPlayerOne().getHitbox().x;
@@ -115,6 +129,16 @@ public class GameView  extends JPanel{
 	private void drawPlayerTwo(Graphics g,boolean drawHitbox) {
 		int playerTwoX = model.getPlayerTwo().getX();
 		int playerTwoY = model.getPlayerTwo().getY();
+		
+		int newYState = model.getPlayerTwo().getYState();
+		
+		if(newYState == Utilities.SHOOT || newYState == Utilities.SHOOT_LEFT || newYState == Utilities.SHOOT_RIGHT ) 
+			SoundsHandler.playSoundEffect("shootSound");
+
+		if(newYState == Utilities.JUMPING && (currentYStatePlayer2 == Utilities.Y_IDLE || currentYStatePlayer2 == Utilities.FALLING))
+			SoundsHandler.playSoundEffect("jumpSound");
+		currentYStatePlayer2 = newYState;
+		
 		if(drawHitbox) g.drawRect(model.getPlayerTwo().getX(), model.getPlayerTwo().getY(), Settings.PLAYER_DIMENSION, Settings.PLAYER_DIMENSION);
 		g.drawImage(playerAnimation.getPlayerTwoImage(), playerTwoX, playerTwoY, Settings.PLAYER_DIMENSION, Settings.PLAYER_DIMENSION, null);
 	}

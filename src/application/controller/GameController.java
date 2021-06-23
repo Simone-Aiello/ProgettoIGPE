@@ -7,6 +7,7 @@ import java.time.Instant;
 
 import application.ChangeSceneHandler;
 import application.GameStarter;
+import application.SoundsHandler;
 import application.model.GameModel;
 import application.model.Player;
 import application.model.Utilities;
@@ -53,7 +54,7 @@ public class GameController implements KeyListener {
 	public void update() {
 		if (!isSinglePlayer) {
 			String[] update = client.read();
-			//è null fino a quando non entra il secondo giocatore, perché prima il server non manda nessun messaggio
+			//ï¿½ null fino a quando non entra il secondo giocatore, perchï¿½ prima il server non manda nessun messaggio
 			if (update != null) {
 				if (!model.isStarted()) {
 					model.startGame(isSinglePlayer);
@@ -139,7 +140,7 @@ public class GameController implements KeyListener {
 				spacebarAlreadyPressed = true;
 				model.movePlayer(model.getPlayerOne(),Utilities.JUMPING);
 				break;
-			case KeyEvent.VK_P:
+			case KeyEvent.VK_J:
 				if(shootAlreadyPressed || Duration.between(lastBubble, Instant.now()).toMillis() < 500) return;
 				shootAlreadyPressed = true;
 				//Si potrebbe fare che il controller notifica alla view di creare un altra bolla, non so quale sia meglio come soluzione
@@ -165,7 +166,7 @@ public class GameController implements KeyListener {
 				spacebarAlreadyPressed = true;
 				client.sendMessage(Utilities.requestJump());
 				break;
-			case KeyEvent.VK_P:
+			case KeyEvent.VK_J:
 				if(shootAlreadyPressed || Duration.between(lastBubble, Instant.now()).toMillis() < 500) return;
 				shootAlreadyPressed = true;
 				client.sendMessage(Utilities.BUBBLE);
@@ -192,7 +193,7 @@ public class GameController implements KeyListener {
 				break;
 			case KeyEvent.VK_SPACE:
 				spacebarAlreadyPressed = false;
-			case KeyEvent.VK_P:
+			case KeyEvent.VK_J:
 				shootAlreadyPressed = false;
 				break;
 			default:
@@ -208,7 +209,7 @@ public class GameController implements KeyListener {
 				break;
 			case KeyEvent.VK_SPACE:
 				spacebarAlreadyPressed = false;
-			case KeyEvent.VK_P:
+			case KeyEvent.VK_J:
 				shootAlreadyPressed = false;
 				break;
 			default:
@@ -220,7 +221,7 @@ public class GameController implements KeyListener {
 	public GameModel getModel() {
 		return model;
 	}
-	//Se il gioco è in singleplayer viene effettivamente messo in pausa altrimenti viene solo cambiata la schermata
+	//Se il gioco ï¿½ in singleplayer viene effettivamente messo in pausa altrimenti viene solo cambiata la schermata
 	public void pauseGame(boolean pause) {
 		ChangeSceneHandler.setPauseMode(isSinglePlayer);
 		if(isSinglePlayer) model.pauseGame(pause);
