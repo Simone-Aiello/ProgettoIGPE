@@ -20,7 +20,10 @@ public class SoundsHandler {
 	}
 	
 	public static void playSoundEffect(String sound) {
+		/*sounds.get(sound).reset();
+		sounds.get(sound).start();*/
 		sounds.get(sound).restart();
+		
 	}
 	
 	public static SoundEffect getCurrentSound() {

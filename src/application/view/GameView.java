@@ -116,7 +116,7 @@ public class GameView  extends JPanel{
 			SoundsHandler.playSoundEffect("shootSound"); 
 		}
 		
-		if(newYState == Utilities.JUMPING && currentYStatePlayer1 == Utilities.Y_IDLE)
+		if(newYState == Utilities.JUMPING && (currentYStatePlayer1 == Utilities.Y_IDLE || currentYStatePlayer1 == Utilities.FALLING) )
 			SoundsHandler.playSoundEffect("jumpSound");
 		currentYStatePlayer1 = newYState;
 		
@@ -135,7 +135,7 @@ public class GameView  extends JPanel{
 		if(newYState == Utilities.SHOOT || newYState == Utilities.SHOOT_LEFT || newYState == Utilities.SHOOT_RIGHT ) 
 			SoundsHandler.playSoundEffect("shootSound");
 
-		if(newYState == Utilities.JUMPING && currentYStatePlayer2 == Utilities.Y_IDLE)
+		if(newYState == Utilities.JUMPING && (currentYStatePlayer2 == Utilities.Y_IDLE || currentYStatePlayer2 == Utilities.FALLING))
 			SoundsHandler.playSoundEffect("jumpSound");
 		currentYStatePlayer2 = newYState;
 		
