@@ -70,7 +70,6 @@ public class InitialConnectionHandler implements Runnable {
 				in = null;
 				
 			}else if(splittedReq[0].equals(Utilities.UPDATE_SCORE)){
-				System.out.println("sono entrato");
 				String username = splittedReq[1];
 				int score = Integer.parseInt(splittedReq[2]);
 				String res = DBAccessHandler.updateScores(username, score);

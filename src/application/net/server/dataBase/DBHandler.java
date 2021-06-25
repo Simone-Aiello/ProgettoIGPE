@@ -106,7 +106,6 @@ public class DBHandler {
 		ResultSet res = p.executeQuery();
 		LinkedHashMap<String, Integer> classification = new LinkedHashMap<String, Integer>();
 		while(res.next()) {
-			System.out.println(res.getString("username") + res.getInt("high_score"));
 			classification.put(res.getString("username"), res.getInt("high_score"));			
 		}
 		return classification;		

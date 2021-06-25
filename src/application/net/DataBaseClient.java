@@ -72,7 +72,6 @@ public class DataBaseClient {
 				sendMessage(Utilities.signUpRequest(username, password));
 			}
 			String answer = in.readLine();
-			System.out.println(answer);
 			return answer;
 
 		} catch (IOException e) {

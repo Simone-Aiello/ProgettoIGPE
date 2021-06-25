@@ -13,7 +13,6 @@ import javax.swing.JPasswordField;
 import application.ChangeSceneHandler;
 import application.model.Utilities;
 import application.net.DataBaseClient;
-import application.net.server.dataBase.DBHandler;
 import menu.MenuSettings;
 
 public class LoginMenu extends JPanel{
