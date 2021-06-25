@@ -11,6 +11,9 @@ import javax.swing.JPanel;
 import javax.swing.JPasswordField;
 
 import application.ChangeSceneHandler;
+import application.model.Utilities;
+import application.net.DataBaseClient;
+import application.server.dataBase.DBHandler;
 import menu.MenuSettings;
 
 public class LoginMenu extends JPanel{
@@ -64,7 +67,6 @@ public class LoginMenu extends JPanel{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				checkAccess(true);				
-				
 			}
 			
 		});
@@ -77,7 +79,6 @@ public class LoginMenu extends JPanel{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				checkAccess(false);
-				
 			}
 			
 		});
@@ -117,10 +118,35 @@ public class LoginMenu extends JPanel{
 		String username = usernameField.getText();
 		char[] passwordChar = passwordField.getPassword();
 		String password = new String(passwordChar);
-		if(login) {
-			 //provvisorio va implementato login
+		
+		String res = DataBaseClient.getInstance().authentication(login, username, password);
+		
+		if (res.equals(Utilities.SUCCESS_ACCESS)) {
+			DataBaseClient.getInstance().setUsername(username);
+			ChangeSceneHandler.setCurrentScene("initialMenu");		
+			DataBaseClient.getInstance().reset();
+			return;
+		}		
+		else if(res.equals(Utilities.USER_ALREADY_EXIST)) {
+				ChangeSceneHandler.showErrorMessage("A user with this username already exists. \n Please change username.");
+				DataBaseClient.getInstance().reset();
+				return;
+		}else if(res.equals(Utilities.USER_NOT_EXIST)) {
+			ChangeSceneHandler.showErrorMessage("It doesn't exist a user with this username. \n Please retry.");
+			DataBaseClient.getInstance().reset();
+			return;
+		}else if(res.equals(Utilities.WRONG_PASSWORD)) {
+			ChangeSceneHandler.showErrorMessage("Wrong password. \n Please retry.");
+			DataBaseClient.getInstance().reset();
+			return;
+		}else if(res.equals(Utilities.ERROR_CONNECTING_DB)){
+			ChangeSceneHandler.showErrorMessage("Ops! An error occurred while trying to connect to DataBase.");
+			DataBaseClient.getInstance().reset();
+			return;
 		}else {
-			 //va implementato register
+			ChangeSceneHandler.showErrorMessage("Ops! An error occurred while trying to estabilish a connection with the server.");
+			DataBaseClient.getInstance().reset();
+			return;
 		}
 	}
 

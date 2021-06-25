@@ -11,6 +11,7 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
+import javax.swing.SwingUtilities;
 
 import application.ChangeSceneHandler;
 import application.Settings;
@@ -43,6 +44,21 @@ public class LeaderboardMenu extends JPanel{
 		add(backToMenu,BorderLayout.SOUTH);
 		add(scroll,BorderLayout.CENTER);
 		
+	}
+	public void cleanScore() {
+		this.remove(scroll);
+		s = new ScoreBoard();
+		JScrollPane newScroll = new JScrollPane(s); 
+		newScroll.setBorder(BorderFactory.createEmptyBorder());
+		this.add(newScroll);
+		
+	}
+	public void addScore(Score score2) {
+		s.addScore(score2);
+		
+	}
+	public void revalidateScores() {
+		s.revalidateScores();		
 	}
 
 }

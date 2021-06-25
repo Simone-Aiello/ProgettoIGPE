@@ -22,6 +22,8 @@ public class GameModel {
 	private int currentLevel;
 	private ExecutorService executor;
 	private int gameState = Utilities.PLAYING;
+
+
 	public GameModel() {
 		started = false;
 	}
@@ -38,6 +40,7 @@ public class GameModel {
 		executor = Executors.newSingleThreadExecutor();
 		changeLevel();
 	}
+		
 
 	// Getters
 	public boolean isStarted() {
@@ -113,7 +116,7 @@ public class GameModel {
 			if(f.isAlive) currentLevelCleared = false;
 			updateEntity(f);
 		}
-		//Se nessun nemico era vivo o intrappolato in una bolla allora il livello corrente è finito
+		//Se nessun nemico era vivo o intrappolato in una bolla allora il livello corrente ï¿½ finito
 		if(currentLevelCleared) {
 			changeLevel();
 		}
@@ -303,7 +306,7 @@ public class GameModel {
 		if (entity.jumping) {
 			processJump(entity);
 		}
-		// Se non tocca terra oppure è all'interno di una tile applichiamo la gravità
+		// Se non tocca terra oppure ï¿½ all'interno di una tile applichiamo la gravitï¿½
 		else if (!WallCollisionHandler.touchingGround(entity, tiles)
 				|| WallCollisionHandler.currentlyInsideTiles(entity, tiles)) {
 			processGravity(entity);

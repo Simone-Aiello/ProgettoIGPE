@@ -17,14 +17,17 @@ public class ScoreBoard extends JPanel{
 		this.setLayout(new BoxLayout(this, BoxLayout.PAGE_AXIS));
 		this.setBackground(Color.BLACK);
 		scoreboard = new ArrayList<Score>();
-		for(int i = 0; i < 25;i++) {
-			Score s = new Score(""+(i+1),"aaa", "47283947");
-			this.add(s);
-		}
 	}
 	public void addScore(Score s) {
 		scoreboard.add(s);
 		this.add(s);
+	}
+	
+	public void cleanScore() {
+		scoreboard.clear();
+	}
+	
+	public void revalidateScores() {
 		this.revalidate();
 	}
 }

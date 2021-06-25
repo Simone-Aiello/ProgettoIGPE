@@ -1,4 +1,4 @@
-package multiplayerserver;
+package application.server;
 
 import java.awt.GridLayout;
 import java.awt.event.MouseEvent;

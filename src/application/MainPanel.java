@@ -2,7 +2,7 @@ package application;
 
 import javax.swing.JFrame;
 
-
+import menu.view.ErrorPanel;
 import menu.view.GamePauseMenu;
 import menu.view.GenericMessagePanel;
 import menu.view.InitialMenu;
@@ -30,6 +30,7 @@ public class MainPanel {
 		GenericMessagePanel messagePanel = new GenericMessagePanel();
 		LeaderboardMenu leaderboards = new LeaderboardMenu();
 		GamePauseMenu pauseMenu = new GamePauseMenu();
+		ErrorPanel errorMessagePanel = new ErrorPanel();
 		//ChangeSceneHandler.add("game", view);
 		ChangeSceneHandler.add("start", startScene);
 		ChangeSceneHandler.add("initialMenu", initialMenu);
@@ -38,6 +39,7 @@ public class MainPanel {
 		ChangeSceneHandler.add("messagePanel", messagePanel);
 		ChangeSceneHandler.add("leaderboard", leaderboards);
 		ChangeSceneHandler.add("pause", pauseMenu);
+		ChangeSceneHandler.add("errorMessagePanel", errorMessagePanel);
 		ChangeSceneHandler.setCurrentScene("start");
 		//ChangeSceneHandler.setCurrentScene("start");
 		

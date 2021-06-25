@@ -14,6 +14,7 @@ import javax.swing.JPanel;
 
 import application.ChangeSceneHandler;
 import application.GameStarter;
+import application.net.DataBaseClient;
 import menu.MenuSettings;
 
 public class InitialMenu extends JPanel{
@@ -23,7 +24,7 @@ public class InitialMenu extends JPanel{
 	private OldGameButton singlePlayer;
 	private OldGameButton howToPlay;
 	private OldGameButton leaderboard;
-	//nel menu iniziale c'è solo la scelta tra single player e multi player
+	//nel menu iniziale c'ï¿½ solo la scelta tra single player e multi player
 	
 	public InitialMenu() {
 		this.setLayout(new GridLayout(4, 1));
@@ -113,7 +114,7 @@ public class InitialMenu extends JPanel{
 				String text = "CONTROLS: \n"
 						+ "- Press A/D to move left/right\n\n"
 						+ "- Press SPACE to jump\n\n"
-						+ "- Press P to shoot bubbles\n\n"
+						+ "- Press J to shoot bubbles\n\n"
 						+ "GOAL OF THE GAME: \n"
 						+ "- Trap enemies by shooting bubbles at them\n\n"
 						+ "- Touch bubbles to kill trapped enemies\n\n"
@@ -127,7 +128,8 @@ public class InitialMenu extends JPanel{
 		leaderboard.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				ChangeSceneHandler.setCurrentScene("leaderboard");
+				ChangeSceneHandler.showLeaderboards(DataBaseClient.getInstance().getLeaderboards());
+				DataBaseClient.getInstance().reset();
 				leaderboard.setBackground(Color.BLACK);
 			}
 		});
