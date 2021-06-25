@@ -1,4 +1,4 @@
-package application.server.dataBase;
+package application.net.server.dataBase;
 
 import java.sql.Connection;
 import java.sql.DriverManager;

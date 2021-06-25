@@ -1,4 +1,4 @@
-package application.server;
+package application.net.server;
 
 import java.awt.GridLayout;
 import java.awt.event.MouseEvent;

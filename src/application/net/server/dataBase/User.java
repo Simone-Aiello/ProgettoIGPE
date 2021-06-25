@@ -1,4 +1,4 @@
-package application.server.dataBase;
+package application.net.server.dataBase;
 
 public class User {
 	

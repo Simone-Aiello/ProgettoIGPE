@@ -1,4 +1,4 @@
-package application.server;
+package application.net.server;
 
 import java.io.IOException;
 import java.io.ObjectInputStream;

@@ -1,4 +1,4 @@
-package application.server.multiplayer;
+package application.net.server.multiplayer;
 
 import java.io.IOException;
 import java.net.Socket;

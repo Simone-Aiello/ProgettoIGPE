@@ -1,4 +1,4 @@
-package application.server;
+package application.net.server;
 
 import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
@@ -7,22 +7,20 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.LinkedHashMap;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
+
 
 import application.model.Utilities;
-import application.server.dataBase.DBAccessHandler;
-import application.server.multiplayer.MultiplayerGameHandler;
-import application.server.multiplayer.RoomHandler;
+import application.net.server.dataBase.DBAccessHandler;
+import application.net.server.multiplayer.MultiplayerGameHandler;
+import application.net.server.multiplayer.RoomHandler;
 
 public class InitialConnectionHandler implements Runnable {
 	private Socket socket;
 	private PrintWriter out;
 	private BufferedReader in;
-	//private ExecutorService dataBaseExecutor;
+
 	
 	public InitialConnectionHandler(Socket s) throws IOException{
-		//dataBaseExecutor = Executors.newCachedThreadPool();
 		this.socket = s;
 		out = new PrintWriter(new BufferedOutputStream(socket.getOutputStream()),true);
 		in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
