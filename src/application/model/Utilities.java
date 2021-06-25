@@ -120,6 +120,7 @@ public class Utilities {
 		public static final String UPDATE_SCORE = "update_score";
 		
 		//errori realtivi alla registrazione e al login	
+		public static final String SERVER_NOT_REACHABLE = "NO CONNECTION TO SERVER";
 		public static final String GO_ON = "GO_ON";
 		public static final String ERROR = "GENERIC ERROR";
 		public static final String ILLEGAL_REQUEST = "ILLEGAL REQUEST";

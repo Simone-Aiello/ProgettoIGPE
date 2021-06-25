@@ -23,6 +23,7 @@ import menu.view.GenericMessagePanel;
 import menu.view.LeaderboardMenu;
 import menu.view.Score;
 import menu.view.ScoreBoard;
+import menu.view.WarningPanel;
 
 
 
@@ -127,6 +128,13 @@ public class ChangeSceneHandler {
 		p.setText(text);
 		setCurrentScene("errorMessagePanel");
 	}
+	
+	public static void showWarningMessage(String text, String nextScene) {
+		WarningPanel p = (WarningPanel) scenes.get("warningPanel");
+		p.setNextScene(nextScene);
+		p.setText(text);
+		setCurrentScene("warningPanel");
+	}
 
 	public static void returnToPreviousScene() {
 		setCurrentScene(previousScene);
@@ -135,6 +143,10 @@ public class ChangeSceneHandler {
 	public static void showLeaderboards(String scores) {
 		if (scores.equals(Utilities.STILL_NO_CLASSIFICATION)) {
 			showMessage("Still no leaderboard to show");
+			return;
+		}
+		if (scores.equals(Utilities.SERVER_NOT_REACHABLE)) {
+			showErrorMessage("Cannot estabilish a connection with the server. Please check your internet connection.");
 			return;
 		}
 		LeaderboardMenu scoreboard = (LeaderboardMenu) scenes.get("leaderboard");

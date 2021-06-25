@@ -24,10 +24,11 @@ public class InitialMenu extends JPanel{
 	private OldGameButton singlePlayer;
 	private OldGameButton howToPlay;
 	private OldGameButton leaderboard;
+	private OldGameButton backToLogin;
 	//nel menu iniziale c'� solo la scelta tra single player e multi player
 	
 	public InitialMenu() {
-		this.setLayout(new GridLayout(4, 1));
+		this.setLayout(new GridLayout(5, 1));
 		this.setBackground(Color.BLACK);
 		
 		singlePlayer = new OldGameButton("SINGLE PLAYER", MenuSettings.INITIAL_ITEM_SIZE);
@@ -49,6 +50,11 @@ public class InitialMenu extends JPanel{
 		leaderboard.setPreferredSize(new Dimension(400, 100));
 		//multiplayer.setMaximumSize(multiplayer.getPreferredSize());
 		this.add(leaderboard);
+		
+		backToLogin = new OldGameButton("GO BACK TO LOGIN", MenuSettings.INITIAL_ITEM_SIZE);
+		backToLogin.setPreferredSize(new Dimension(400, 100));
+		backToLogin.setMaximumSize(backToLogin.getPreferredSize());
+		this.add(backToLogin);
 		
 		addListeners();
 		
@@ -108,9 +114,9 @@ public class InitialMenu extends JPanel{
 			
 		});
 		
-		howToPlay.addMouseListener(new MouseAdapter() {
+		howToPlay.addActionListener(new ActionListener() {
 			@Override
-			public void mouseClicked(MouseEvent e) {
+			public void actionPerformed(ActionEvent e) {
 				String text = "CONTROLS: \n"
 						+ "- Press A/D to move left/right\n\n"
 						+ "- Press SPACE to jump\n\n"
@@ -122,16 +128,29 @@ public class InitialMenu extends JPanel{
 						+ "- Be careful not to touch the enemies, you have only one life";
 				ChangeSceneHandler.showMessage(text);
 				howToPlay.setBackground(Color.BLACK);
+				
 			}
 		});
 		
-		leaderboard.addMouseListener(new MouseAdapter() {
+		leaderboard.addActionListener(new ActionListener() {
+
 			@Override
-			public void mouseClicked(MouseEvent e) {
+			public void actionPerformed(ActionEvent e) {
 				ChangeSceneHandler.showLeaderboards(DataBaseClient.getInstance().getLeaderboards());
 				DataBaseClient.getInstance().reset();
 				leaderboard.setBackground(Color.BLACK);
+				
 			}
+		});
+		
+		backToLogin.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				ChangeSceneHandler.setCurrentScene("loginMenu");
+				backToLogin.setBackground(Color.BLACK);
+				
+			}		
 		});
 	}
 }

@@ -6,6 +6,9 @@ import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.FocusEvent;
+import java.awt.event.FocusListener;
+import java.util.regex.Pattern;
 
 import javax.swing.JPanel;
 import javax.swing.JPasswordField;
@@ -26,8 +29,6 @@ public class LoginMenu extends JPanel{
 	private OldGameButton loginButton;
 	private OldGameButton signUpButton;
 	private OldGameButton goOnWitouthLogInButton;
-	
-	
 	
 	public LoginMenu() {
 
@@ -60,27 +61,12 @@ public class LoginMenu extends JPanel{
 		JPanel buttons = new JPanel();
 		buttons.setBackground(Color.BLACK);
 		loginButton = new OldGameButton("LOG IN", MenuSettings.REGISTRATION_BUTTON_TEXT_SIZE);
+		//loginButton.setEnabled(false);
 		
-		loginButton.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				checkAccess(true);				
-			}
-			
-		});
 		itemSettings(loginButton, 200, 80);
 		
 		signUpButton = new OldGameButton("SIGN UP", MenuSettings.REGISTRATION_BUTTON_TEXT_SIZE);
-		
-		signUpButton.addActionListener(new ActionListener() {
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				checkAccess(false);
-			}
-			
-		});
+		//signUpButton.setEnabled(false);
 		itemSettings(signUpButton, 200, 80);
 		buttons.add(loginButton);
 		buttons.add(signUpButton);
@@ -94,17 +80,79 @@ public class LoginMenu extends JPanel{
 		goOnWitouthLogInButton = new OldGameButton("PROCEED WITHOUT SAVING YOUR PROGRESSES", MenuSettings.REGISTRATION_BUTTON_TEXT_SIZE);
 		itemSettings(goOnWitouthLogInButton, 800, 50);
 		
+		this.add(goOnWitouthLogInButton);
+		addListeners();
+		
+	}
+	
+	private void addListeners() {
+		usernameField.addFocusListener(new FocusListener() {
+
+			@Override
+			public void focusGained(FocusEvent e) {
+				/*while(Pattern.matches(" *", usernameField.getText())) {
+					loginButton.setEnabled(false);
+					signUpButton.setEnabled(false);
+				}
+					loginButton.setEnabled(true);
+					signUpButton.setEnabled(true);*/
+			}
+			@Override
+			public void focusLost(FocusEvent e) {}
+			
+		});
+		
+		passwordField.addFocusListener(new FocusListener() {
+
+			@Override
+			public void focusGained(FocusEvent e) {
+				/*while(Pattern.matches(" *", usernameField.getText())) {
+					loginButton.setEnabled(false);
+					signUpButton.setEnabled(false);
+				}
+					loginButton.setEnabled(true);
+					signUpButton.setEnabled(true);*/
+			}
+
+			@Override
+			public void focusLost(FocusEvent e) {}
+			
+		});
+		
+		loginButton.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent event) {
+				
+				checkAccess(true);	
+				loginButton.setBackground(Color.BLACK);
+			}
+			
+		});
+		
+		signUpButton.addActionListener(new ActionListener() {
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if(Pattern.matches(" *", usernameField.getText())) {
+					
+				}
+				checkAccess(false);
+				signUpButton.setBackground(Color.BLACK);
+			}
+			
+		});
+		
 		goOnWitouthLogInButton.addActionListener(new ActionListener() {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				ChangeSceneHandler.setCurrentScene("initialMenu");
+				ChangeSceneHandler.showWarningMessage("Are you sure you don't want to login?\n\n In this way your progresses in the game won't be saved", "initialMenu");
+				goOnWitouthLogInButton.setBackground(Color.BLACK);
 				
 			}
 			
 		});
-		this.add(goOnWitouthLogInButton);
-		
 	}
 	
 
@@ -117,6 +165,7 @@ public class LoginMenu extends JPanel{
 		String username = usernameField.getText();
 		char[] passwordChar = passwordField.getPassword();
 		String password = new String(passwordChar);
+			
 		
 		String res = DataBaseClient.getInstance().authentication(login, username, password);
 		
@@ -143,7 +192,7 @@ public class LoginMenu extends JPanel{
 			DataBaseClient.getInstance().reset();
 			return;
 		}else {
-			ChangeSceneHandler.showErrorMessage("Ops! An error occurred while trying to estabilish a connection with the server.");
+			ChangeSceneHandler.showErrorMessage("Ops! An error occurred while trying to estabilish a connection with the server. ");
 			DataBaseClient.getInstance().reset();
 			return;
 		}

@@ -16,10 +16,11 @@ public class DataBaseClient {
 	private PrintWriter out;
 	private BufferedReader in;
 	private String username = null;
-	private boolean isResetted = false;
+	private String errorServerNotStarted = null;
+	// private boolean isResetted = false;
 
 	private DataBaseClient() {
-		initialize();
+		super();
 	}
 
 	public static DataBaseClient getInstance() {
@@ -33,12 +34,13 @@ public class DataBaseClient {
 			socket = new Socket("localhost", 8000);
 			out = new PrintWriter(new BufferedOutputStream(socket.getOutputStream()), true);
 			in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-			isResetted = false;
+			errorServerNotStarted = null;
+			// isResetted = false;
 		} catch (Exception e) {
 			socket = null;
 			out = null;
 			in = null;
-			System.out.println("Error connecting to server");
+			errorServerNotStarted = Utilities.SERVER_NOT_REACHABLE;
 		}
 	}
 
@@ -46,7 +48,7 @@ public class DataBaseClient {
 		out = null;
 		in = null;
 		socket = null;
-		isResetted = true;
+		// isResetted = true;
 	}
 
 	public void sendMessage(String message) {
@@ -63,8 +65,10 @@ public class DataBaseClient {
 	}
 
 	public String authentication(boolean login, String username, String password) {
-		if (isResetted)
-			initialize();
+		// if (isResetted)
+		initialize();
+		if(errorServerNotStarted != null)
+			return errorServerNotStarted;
 		try {
 			if (login) {
 				sendMessage(Utilities.loginRequest(username, password));
@@ -81,8 +85,10 @@ public class DataBaseClient {
 	}
 
 	public String getLeaderboards() {
-		if (isResetted)
-			initialize();
+		// if (isResetted)
+		initialize();
+		if(errorServerNotStarted != null)
+			return errorServerNotStarted;
 		sendMessage(Utilities.LEADERBOARDS);
 		String answer;
 		try {
@@ -94,8 +100,10 @@ public class DataBaseClient {
 	}
 
 	public String updateScores(int score) {
-		if (isResetted)
-			initialize();
+		// if (isResetted)
+		initialize();
+		if(errorServerNotStarted != null)
+			return errorServerNotStarted;
 		sendMessage(Utilities.updateGamesRequest(this.username, score));
 		String answer;
 		try {

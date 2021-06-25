@@ -4,6 +4,8 @@ import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridLayout;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
@@ -35,12 +37,13 @@ public class GenericMessagePanel extends JPanel {
 		this.setBackground(Color.BLACK);
 		this.add(label,BorderLayout.CENTER);
 		this.add(backToMenu,BorderLayout.SOUTH);
-		backToMenu.addMouseListener(new MouseAdapter() {
+		backToMenu.addActionListener(new ActionListener() {
 			@Override
-			 public void mouseClicked(MouseEvent e) {
+			public void actionPerformed(ActionEvent e) {
 				GameStarter.resetAll();
 				ChangeSceneHandler.setCurrentScene("initialMenu");
 				backToMenu.setBackground(Color.BLACK);
+				
 			}
 		});
 	}

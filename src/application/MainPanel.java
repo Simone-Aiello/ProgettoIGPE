@@ -10,6 +10,7 @@ import menu.view.LeaderboardMenu;
 import menu.view.LoginMenu;
 import menu.view.MultiplayerMenu;
 import menu.view.StartView;
+import menu.view.WarningPanel;
 
 public class MainPanel {
 	
@@ -30,8 +31,8 @@ public class MainPanel {
 		GenericMessagePanel messagePanel = new GenericMessagePanel();
 		LeaderboardMenu leaderboards = new LeaderboardMenu();
 		GamePauseMenu pauseMenu = new GamePauseMenu();
-
 		ErrorPanel errorMessagePanel = new ErrorPanel();
+		WarningPanel warningPanel = new WarningPanel();
 
 		
 		SoundEffect menuMusic = new SoundEffect("menuMusic.wav");
@@ -51,8 +52,8 @@ public class MainPanel {
 		ChangeSceneHandler.add("messagePanel", messagePanel);
 		ChangeSceneHandler.add("leaderboard", leaderboards);
 		ChangeSceneHandler.add("pause", pauseMenu);
-
 		ChangeSceneHandler.add("errorMessagePanel", errorMessagePanel);
+		ChangeSceneHandler.add("warningPanel", warningPanel);
 
 		
 		SoundsHandler.addSoundEffect("menuMusic", menuMusic);

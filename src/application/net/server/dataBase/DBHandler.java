@@ -20,9 +20,8 @@ public class DBHandler {
 	private DBHandler() {		
 		try {
 			connection = DriverManager.getConnection("jdbc:sqlite:BubbleBobbleDB.db");
-			System.out.println("connected to db");
 		} catch (SQLException e) {
-			System.out.println("error connecting DB");
+			return;
 		}
 	}
 	
