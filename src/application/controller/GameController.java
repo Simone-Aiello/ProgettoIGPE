@@ -7,6 +7,7 @@ import java.time.Instant;
 
 import application.ChangeSceneHandler;
 import application.GameStarter;
+import application.SoundsHandler;
 import application.model.GameModel;
 import application.model.Player;
 import application.model.Utilities;
@@ -56,8 +57,12 @@ public class GameController implements KeyListener {
 	public void update() {
 		if (!isSinglePlayer) {
 			String[] update = client.read();
+
 			// � null fino a quando non entra il secondo giocatore, perch� prima il server
 			// non manda nessun messaggio
+
+			//� null fino a quando non entra il secondo giocatore, perch� prima il server non manda nessun messaggio
+
 			if (update != null) {
 				if (!model.isStarted()) {
 					model.startGame(isSinglePlayer);
@@ -169,8 +174,7 @@ public class GameController implements KeyListener {
 				model.movePlayer(model.getPlayerOne(), Utilities.JUMPING);
 				break;
 			case KeyEvent.VK_J:
-				if (shootAlreadyPressed || Duration.between(lastBubble, Instant.now()).toMillis() < 500)
-					return;
+				if(shootAlreadyPressed || Duration.between(lastBubble, Instant.now()).toMillis() < 500) return;
 				shootAlreadyPressed = true;
 				// Si potrebbe fare che il controller notifica alla view di creare un altra
 				// bolla, non so quale sia meglio come soluzione
@@ -197,8 +201,8 @@ public class GameController implements KeyListener {
 				client.sendMessage(Utilities.requestJump());
 				break;
 			case KeyEvent.VK_J:
-				if (shootAlreadyPressed || Duration.between(lastBubble, Instant.now()).toMillis() < 500)
-					return;
+
+				if(shootAlreadyPressed || Duration.between(lastBubble, Instant.now()).toMillis() < 500) return;
 				shootAlreadyPressed = true;
 				client.sendMessage(Utilities.BUBBLE);
 				lastBubble = Instant.now();
@@ -253,8 +257,12 @@ public class GameController implements KeyListener {
 		return model;
 	}
 
+
 	// Se il gioco � in singleplayer viene effettivamente messo in pausa altrimenti
 	// viene solo cambiata la schermata
+
+	//Se il gioco � in singleplayer viene effettivamente messo in pausa altrimenti viene solo cambiata la schermata
+
 	public void pauseGame(boolean pause) {
 		ChangeSceneHandler.setPauseMode(isSinglePlayer);
 		if (isSinglePlayer)

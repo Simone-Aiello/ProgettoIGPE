@@ -128,7 +128,7 @@ public class GameModel {
 		if(playerTwo != null) {
 			updatePlayerBubbleCollision(playerTwo);
 			updatePlayerFoodCollision(playerTwo);
-			updatePlayerEnemyCollision(playerOne);
+			updatePlayerEnemyCollision(playerTwo);
 		}
 	}
 	public int getGameState() {

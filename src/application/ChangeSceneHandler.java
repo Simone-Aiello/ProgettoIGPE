@@ -19,13 +19,17 @@ import application.view.TopLayerGameView;
 import menu.view.ErrorPanel;
 import menu.view.GamePauseMenu;
 import menu.view.GenericMessagePanel;
+
 import menu.view.LeaderboardMenu;
 import menu.view.Score;
 import menu.view.ScoreBoard;
 
+
+
 public class ChangeSceneHandler {
 
-	public static HashMap<String, JPanel> scenes;
+	private static HashMap<String, JPanel> scenes;
+
 	private static JFrame window;
 	private static String currentScene = null;
 	private static String previousScene = null;
@@ -56,7 +60,22 @@ public class ChangeSceneHandler {
 		scenes.get(currentScene).requestFocus();
 		scenes.get(currentScene).setFocusable(true);
 		SwingUtilities.updateComponentTreeUI(window);
+
+
+		if (current.equals("start"))
+			SoundsHandler.setCurrentSound("menuMusic");
+
+		if (current.equals("game"))
+			SoundsHandler.setCurrentSound("gameMusic");
+
+		if ((!current.equals("game")) && SoundsHandler.isGameSoundOn())
+			SoundsHandler.setCurrentSound("menuMusic");
+
+		scenes.get(current).requestFocus();
+		scenes.get(current).setFocusable(true);
+		SwingUtilities.updateComponentTreeUI(window);
 	}
+
 
 	private static void readFont(File fontFile) {
 		try {
