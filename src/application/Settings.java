@@ -1,9 +1,9 @@
 package application;
 
 public class Settings {
-	public static final int WINDOW_HEIGHT = 500 + 40;
+	public static final int TOPBAR_HEIGHT = 40;
+	public static final int WINDOW_HEIGHT = 500 + TOPBAR_HEIGHT;
 	public static final int WINDOW_WIDTH = 800;
-	
 	public static final int TILE_WIDHT = 40;
 	public static final int TILE_HEIGHT = 20;
 	

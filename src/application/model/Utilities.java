@@ -29,6 +29,7 @@ public class Utilities {
 	public static final int BUBBLED_ROBOT = 14;
 	public static final Integer BUBBLED_MAGE = 19;
 	public static final Integer BUBBLED_SPRING = 20;
+	public static final Integer BUBBLED_JELL = 21;
 	public static final int BUBBLED_ENEMY_MAX_FRAME = 70;
 	// Food
 	public static final int CAKE = 0;
@@ -99,23 +100,40 @@ public class Utilities {
 		return JOIN + " " + code;
 	}
 
-	// campi per il portocollo di connessione al db
-	public static final String DB_ACCESS = "DBaccess";
-	public static final String LOGIN = "login";
-	public static final String SIGNUP = "signup";
-	public static final String ALL_CLASSIFICATION = "all_classification";
-	//public static final String MY_CLASSIFICATION = "my_classification";
-	public static final String UPDATE_SCORE = "update_score";
+	
+	public static String loginRequest(String username, String password) {
+		return LOGIN + MESSAGE_SEPARATOR + username + MESSAGE_SEPARATOR + password;
+	}
+	
+	public static String signUpRequest(String username, String password) {
+		return SIGNUP + MESSAGE_SEPARATOR + username + MESSAGE_SEPARATOR + password;
+	}
+	
+	public static String updateGamesRequest(String username, int score) {
+		return UPDATE_SCORE + MESSAGE_SEPARATOR + username + MESSAGE_SEPARATOR + score;
+	}
+	
+	//campi per il portocollo di connessione al db
+		public static final String DB_ACCESS = "DBaccess";
+		public static final String LOGIN = "login";
+		public static final String SIGNUP = "signup";
+		public static final String LEADERBOARDS = "leaderboards";
+		public static final String UPDATE_SCORE = "update_score";
+		
+		//errori realtivi alla registrazione e al login	
+		public static final String SERVER_NOT_REACHABLE = "NO CONNECTION TO SERVER";
+		public static final String GO_ON = "GO_ON";
+		public static final String ERROR = "GENERIC ERROR";
+		public static final String ILLEGAL_REQUEST = "ILLEGAL REQUEST";
+		public static final String SUCCESS_ACCESS = "OK_ACCESS";	
+		public static final String USER_ALREADY_EXIST = "USER_EXIST";
+		public static final String USER_NOT_EXIST = "USER_NOT_EXIST";
+		public static final String WRONG_PASSWORD = "WRONG_PASSWORD";
+		public static final String ERROR_CONNECTING_DB = "DB_ERROR";
+		public static final String PROGRESS_SAVED = "PROGRESS_SAVED";
+		public static final String STILL_NO_CLASSIFICATION = "NO_CLASSIFICATION";
+		public static final String OK_CLASSIFICATION = "OK_CLASSIFICATION";
+		public static final String START_CLASSIFICATION = "CLASS_START";
+		public static final String END_CLASSIFICATION = "CLASS_END";
 
-	// errori realtivi alla registrazione e al login
-	public static final String SUCCESS_ACCESS = "OK_ACCESS";
-	public static final String USER_ALREADY_EXIST = "USER_EXIST";
-	public static final String USER_NOT_EXIST = "USER_NOT_EXIST";
-	public static final String WRONG_PASSWORD = "WRONG_PASSWORD";
-	public static final String ERROR_CONNECTING_DB = "DB_ERROR";
-	public static final String PROGRESS_SAVED = "PROGRESS_SAVED";
-	public static final String STILL_NO_CLASSIFICATION = "NO_CLASSIFICATION";
-	public static final String OK_CLASSIFICATION = "OK_CLASSIFICATION";
-	public static final String START_CLASSIFICATION = "CLASS_START";
-	public static final String END_CLASSIFICATION = "CLASS_END";
 }

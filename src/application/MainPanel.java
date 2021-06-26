@@ -2,7 +2,7 @@ package application;
 
 import javax.swing.JFrame;
 
-
+import menu.view.ErrorPanel;
 import menu.view.GamePauseMenu;
 import menu.view.GenericMessagePanel;
 import menu.view.InitialMenu;
@@ -10,6 +10,7 @@ import menu.view.LeaderboardMenu;
 import menu.view.LoginMenu;
 import menu.view.MultiplayerMenu;
 import menu.view.StartView;
+import menu.view.WarningPanel;
 
 public class MainPanel {
 	
@@ -30,6 +31,9 @@ public class MainPanel {
 		GenericMessagePanel messagePanel = new GenericMessagePanel();
 		LeaderboardMenu leaderboards = new LeaderboardMenu();
 		GamePauseMenu pauseMenu = new GamePauseMenu();
+		ErrorPanel errorMessagePanel = new ErrorPanel();
+		WarningPanel warningPanel = new WarningPanel();
+
 		
 		SoundEffect menuMusic = new SoundEffect("menuMusic.wav");
 		menuMusic.setVolume(-25.0f);
@@ -39,6 +43,7 @@ public class MainPanel {
 		jumpSound.setVolume(-15.0f);
 		SoundEffect shootSound = new SoundEffect("Shoot.wav");
 		shootSound.setVolume(-15.0f);
+
 		//ChangeSceneHandler.add("game", view);
 		ChangeSceneHandler.add("start", startScene);
 		ChangeSceneHandler.add("initialMenu", initialMenu);
@@ -47,12 +52,16 @@ public class MainPanel {
 		ChangeSceneHandler.add("messagePanel", messagePanel);
 		ChangeSceneHandler.add("leaderboard", leaderboards);
 		ChangeSceneHandler.add("pause", pauseMenu);
+		ChangeSceneHandler.add("errorMessagePanel", errorMessagePanel);
+		ChangeSceneHandler.add("warningPanel", warningPanel);
+
 		
 		SoundsHandler.addSoundEffect("menuMusic", menuMusic);
 		SoundsHandler.addSoundEffect("gameMusic", gameMusic);
 		SoundsHandler.addSoundEffect("jumpSound", jumpSound);
 		SoundsHandler.addSoundEffect("shootSound", shootSound);
 		
+
 		ChangeSceneHandler.setCurrentScene("start");
 		
 		f.setVisible(true);

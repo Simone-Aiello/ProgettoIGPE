@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import application.model.Bubble;
+import application.model.JellEnemy;
 import application.model.MageEnemy;
 import application.model.RobotEnemy;
 import application.model.SpringEnemy;
@@ -28,6 +29,9 @@ public class BubbleAnimation {
 			}
 			else if(b.getEnemyContained() instanceof SpringEnemy) {
 				animations.get(index).setEnemyContained(Utilities.BUBBLED_SPRING);
+			}
+			else if(b.getEnemyContained() instanceof JellEnemy) {
+				animations.get(index).setEnemyContained(Utilities.BUBBLED_JELL);
 			}
 		}
 		if(b.isAlive()) animations.get(index).changeCurrentAnimation(Utilities.IDLE_RIGHT,Utilities.Y_IDLE);

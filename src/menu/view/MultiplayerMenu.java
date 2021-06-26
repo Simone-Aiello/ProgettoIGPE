@@ -79,8 +79,7 @@ public class MultiplayerMenu extends JPanel{
 		});
 		bottom.add(hostGameButton);
 		bottom.add(backToMenu);
-		add(bottom);
-		//add(hostGameButton);		
+		add(bottom);	
 		
 	}
 	

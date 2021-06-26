@@ -32,11 +32,7 @@ public class GamePauseMenu extends JPanel{
 		quitButton.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseClicked(MouseEvent e) {
-				int res = JOptionPane.showConfirmDialog(null, alertText);
-				if(res == JOptionPane.YES_OPTION) {
-					GameStarter.resetAll();
-					ChangeSceneHandler.setCurrentScene("initialMenu");
-				}
+				ChangeSceneHandler.showWarningMessage("Are you sure?\n\n Your progress wont be saved in the leaderboard", "initialMenu");
 			}
 		});
 		

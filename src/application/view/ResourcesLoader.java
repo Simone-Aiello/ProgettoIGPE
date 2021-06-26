@@ -32,6 +32,9 @@ public class ResourcesLoader implements Runnable {
 					} else if (v[i].equals("4")) {
 						animations.put(index++, new SpringAnimationHandler());
 					}
+					else if(v[i].equals("5")) {
+						animations.put(index++, new JellEnemyAnimationHandler());
+					}
 				}
 			}
 			in.close();
