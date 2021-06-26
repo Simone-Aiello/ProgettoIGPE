@@ -148,6 +148,8 @@ public class InitialMenu extends JPanel{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				ChangeSceneHandler.setCurrentScene("loginMenu");
+				DataBaseClient.getInstance().reset();
+				DataBaseClient.getInstance().setUsername(null);
 				backToLogin.setBackground(Color.BLACK);
 				
 			}		

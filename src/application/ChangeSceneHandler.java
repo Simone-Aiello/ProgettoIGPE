@@ -149,9 +149,8 @@ public class ChangeSceneHandler {
 			showErrorMessage("Cannot estabilish a connection with the server. Please check your internet connection.");
 			return;
 		}
-		LeaderboardMenu scoreboard = (LeaderboardMenu) scenes.get("leaderboard");
-		scoreboard.cleanScore();
-
+		LeaderboardMenu scoreboard = new LeaderboardMenu();
+		scenes.put("leaderboard", scoreboard);
 		String[] scoresList = scores.split(Utilities.MESSAGE_SEPARATOR);
 
 		boolean userScoreAlreadyShowed = false;
