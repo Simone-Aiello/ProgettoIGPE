@@ -89,8 +89,6 @@ public class LoginMenu extends JPanel {
 		String username = usernameField.getText();
 		String password = new String(passwordField.getPassword());
 		
-		System.out.println(username + " " + password);
-		
 
 		if (username == null || password == null || Pattern.matches(" *", username) || Pattern.matches(" *", password)
 				|| Pattern.matches(" +.*", username) || Pattern.matches(" +.*", password)) {
@@ -174,19 +172,33 @@ public class LoginMenu extends JPanel {
 		String res = DataBaseClient.getInstance().authentication(login, username, password);
 
 		if (res.equals(Utilities.SUCCESS_ACCESS)) {
+			usernameField.setText("");
+			passwordField.setText("");
+			loginButton.setEnabled(false);
+			signUpButton.setEnabled(false);
+			
 			DataBaseClient.getInstance().setUsername(username);
 			ChangeSceneHandler.setCurrentScene("initialMenu");
 			DataBaseClient.getInstance().reset();
 			return;
 		} else if (res.equals(Utilities.USER_ALREADY_EXIST)) {
+			loginButton.setEnabled(false);
+			signUpButton.setEnabled(false);
+			
 			ChangeSceneHandler.showErrorMessage("A user with this username already exists. \n Please change username.");
 			DataBaseClient.getInstance().reset();
 			return;
 		} else if (res.equals(Utilities.USER_NOT_EXIST)) {
+			loginButton.setEnabled(false);
+			signUpButton.setEnabled(false);
+			
 			ChangeSceneHandler.showErrorMessage("It doesn't exist a user with this username. \n Please retry.");
 			DataBaseClient.getInstance().reset();
 			return;
 		} else if (res.equals(Utilities.WRONG_PASSWORD)) {
+			loginButton.setEnabled(false);
+			signUpButton.setEnabled(false);
+			
 			ChangeSceneHandler.showErrorMessage("Wrong password. \n Please retry.");
 			DataBaseClient.getInstance().reset();
 			return;
