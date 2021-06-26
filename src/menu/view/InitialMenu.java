@@ -1,15 +1,11 @@
 package menu.view;
 
-import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 
-import javax.swing.BoxLayout;
 import javax.swing.JPanel;
 
 import application.ChangeSceneHandler;
@@ -43,12 +39,10 @@ public class InitialMenu extends JPanel{
 		
 		howToPlay = new OldGameButton("HOW TO PLAY", MenuSettings.INITIAL_ITEM_SIZE);
 		howToPlay.setPreferredSize(new Dimension(400, 100));
-		//multiplayer.setMaximumSize(multiplayer.getPreferredSize());
 		this.add(howToPlay);
 		
 		leaderboard = new OldGameButton("LEADERBOARD", MenuSettings.INITIAL_ITEM_SIZE);
 		leaderboard.setPreferredSize(new Dimension(400, 100));
-		//multiplayer.setMaximumSize(multiplayer.getPreferredSize());
 		this.add(leaderboard);
 		
 		backToLogin = new OldGameButton("GO BACK TO LOGIN", MenuSettings.INITIAL_ITEM_SIZE);
@@ -57,42 +51,6 @@ public class InitialMenu extends JPanel{
 		this.add(backToLogin);
 		
 		addListeners();
-		
-		
-		/*this.setBackground(Color.BLACK);
-		this.setLayout(new BorderLayout());
-		
-		JPanel center = new JPanel();
-		center.setBackground(Color.BLACK);
-		//BoxLayout centerLayout = new BoxLayout(center,BoxLayout.LINE_AXIS);
-		//center.setLayout(centerLayout);
-		center.setLayout(new GridLayout(2,2));
-		singlePlayer = new OldGameButton("SINGLE PLAYER", MenuSettings.INITIAL_ITEM_SIZE);
-		singlePlayer.setPreferredSize(new Dimension(400, 100));
-		singlePlayer.setMaximumSize(singlePlayer.getPreferredSize());
-		center.add(singlePlayer);
-		
-		multiplayer = new OldGameButton("MULTIPLAYER", MenuSettings.INITIAL_ITEM_SIZE);
-		multiplayer.setPreferredSize(new Dimension(400, 100));
-		multiplayer.setMaximumSize(multiplayer.getPreferredSize());
-		center.add(multiplayer);
-		
-		howToPlay = new OldGameButton("HOW TO PLAY", MenuSettings.INITIAL_ITEM_SIZE);
-		howToPlay.setPreferredSize(new Dimension(400, 100));
-		//multiplayer.setMaximumSize(multiplayer.getPreferredSize());
-		center.add(howToPlay);
-		
-		leaderboard = new OldGameButton("LEADERBOARD", MenuSettings.INITIAL_ITEM_SIZE);
-		leaderboard.setPreferredSize(new Dimension(400, 100));
-		//multiplayer.setMaximumSize(multiplayer.getPreferredSize());
-		center.add(leaderboard);
-		addListeners();
-
-		OldGameLabel select = new OldGameLabel("SELECT GAME MODE", MenuSettings.INITIAL_ITEM_SIZE);
-		select.setPreferredSize(new Dimension(800, 250));		
-		
-		this.add(select, BorderLayout.NORTH);
-		this.add(center, BorderLayout.CENTER);*/
 		
 	}
 	

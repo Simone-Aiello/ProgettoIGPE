@@ -2,7 +2,6 @@ package application.model;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -46,6 +45,9 @@ public class LevelChanger implements Runnable {
 					}
 					else if(v[i].equals("4")) {
 						nextEnemies.add(new SpringEnemy(i * Settings.TILE_WIDHT, j * Settings.TILE_HEIGHT));	
+					}
+					else if(v[i].equals("5")) {
+						nextEnemies.add(new JellEnemy(i * Settings.TILE_WIDHT, j * Settings.TILE_HEIGHT));
 					}
 				}
 				j++;

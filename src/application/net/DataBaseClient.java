@@ -17,7 +17,6 @@ public class DataBaseClient {
 	private BufferedReader in;
 	private String username = null;
 	private String errorServerNotStarted = null;
-	// private boolean isResetted = false;
 
 	private DataBaseClient() {
 		super();
@@ -35,7 +34,6 @@ public class DataBaseClient {
 			out = new PrintWriter(new BufferedOutputStream(socket.getOutputStream()), true);
 			in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 			errorServerNotStarted = null;
-			// isResetted = false;
 		} catch (Exception e) {
 			socket = null;
 			out = null;
@@ -48,7 +46,6 @@ public class DataBaseClient {
 		out = null;
 		in = null;
 		socket = null;
-		// isResetted = true;
 	}
 
 	public void sendMessage(String message) {
@@ -65,7 +62,6 @@ public class DataBaseClient {
 	}
 
 	public String authentication(boolean login, String username, String password) {
-		// if (isResetted)
 		initialize();
 		if(errorServerNotStarted != null)
 			return errorServerNotStarted;
@@ -85,7 +81,6 @@ public class DataBaseClient {
 	}
 
 	public String getLeaderboards() {
-		// if (isResetted)
 		initialize();
 		if(errorServerNotStarted != null)
 			return errorServerNotStarted;
@@ -100,7 +95,6 @@ public class DataBaseClient {
 	}
 
 	public String updateScores(int score) {
-		// if (isResetted)
 		initialize();
 		if(errorServerNotStarted != null)
 			return errorServerNotStarted;
@@ -108,7 +102,6 @@ public class DataBaseClient {
 		String answer;
 		try {
 			answer = in.readLine();
-			System.out.println("answer server" + answer);
 		} catch (IOException e) {
 			answer = Utilities.ERROR_CONNECTING_DB;
 		}

@@ -21,6 +21,7 @@ public class BubbleAnimationHandler implements AnimationHandler {
 			bubbledEnemyAnimations.put(Utilities.BUBBLED_ROBOT, getResources("/application/resources/RobotEnemy/Bubbled/"));
 			bubbledEnemyAnimations.put(Utilities.BUBBLED_MAGE, getResources("/application/resources/MageEnemy/Bubbled/"));
 			bubbledEnemyAnimations.put(Utilities.BUBBLED_SPRING, getResources("/application/resources/SpringEnemy/Bubbled/"));
+			bubbledEnemyAnimations.put(Utilities.BUBBLED_JELL, getResources("/application/resources/JellEnemy/Bubbled/"));
 		}
 		index = 0;
 	}

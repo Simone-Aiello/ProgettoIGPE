@@ -80,17 +80,6 @@ public class InitialConnectionHandler implements Runnable {
 			else {
 				String [] res = request.split(" ");
 				String joinResult = RoomHandler.joinRequest(res[1],socket);
-				/*if(!RoomHandler.rooms.containsKey(res[1])) {
-					out.println(Utilities.NOT_EXISTS_ROOM);
-				}
-				else if(RoomHandler.rooms.get(res[1]).isStarted()) {
-					out.println(Utilities.ROOM_FULL_ERROR);
-				}
-				else {
-					out.println(Utilities.OK_JOIN);
-					RoomHandler.rooms.get(res[1]).addPlayerTwo(socket);
-					RoomHandler.excutor.submit(RoomHandler.rooms.get(res[1]));
-				}*/
 				out.println(joinResult);
 			}
 		} catch (IOException e) {

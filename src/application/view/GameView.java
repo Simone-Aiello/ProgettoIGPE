@@ -148,62 +148,17 @@ public class GameView  extends JPanel{
 		if(model == null) return;
 		g.setColor(Color.RED); //Colore delle hitbox in caso servano per debug
 		drawTiles(g);
-		drawFood(g, true);
-		drawEnemies(g,true);
-		drawBubbles(g, true);
-		drawPlayerOne(g, true);
-		if(model.getPlayerTwo() != null) drawPlayerTwo(g, true);
-		/*List<Tile> tiles = model.getTiles();
-		for(Tile t : tiles) {
-			g.drawImage(this.tiles.getTile(model.getCurrentLevel()), t.x, t.y, Settings.TILE_WIDHT, Settings.TILE_HEIGHT, null);
-		}*/
-		/*int x = model.getPlayerOne().getX();
-		int y = model.getPlayerOne().getY();
-		g.drawImage(playerAnimation.getCurrentImage(), x, y, Settings.PLAYER_DIMENSION, Settings.PLAYER_DIMENSION, null);
-		int dim = (int) model.getPlayerOne().getHitbox().getHeight();
-		int hx = model.getPlayerOne().getHitbox().x;
-		int hy = model.getPlayerOne().getHitbox().y;
-		g.setColor(Color.RED);
-		g.drawRect(hx, hy, dim, dim);
-		if(model.getPlayerTwo() != null) {
-			int playerTwoX = model.getPlayerTwo().getX();
-			int playerTwoY = model.getPlayerTwo().getY();
-			g.drawRect(model.getPlayerTwo().getX(), model.getPlayerTwo().getY(), Settings.PLAYER_DIMENSION, Settings.PLAYER_DIMENSION);
-			g.drawImage(playerAnimation.getPlayerTwoImage(), playerTwoX, playerTwoY, Settings.PLAYER_DIMENSION, Settings.PLAYER_DIMENSION, null);
-		}*/
-		/*List<Enemy> enemies = model.getEnemies();
-		for(int i = 0; i <enemies.size();i++) {
-			Entity entity = (Entity) enemies.get(i);
-			if(entity.isAlive()) {
-				Image img = enemyAnimations.getCurrentImage(i);
-				if(img != null) {
-					g.drawRect(entity.getHitbox().x, entity.getHitbox().y, Settings.PLAYER_DIMENSION, Settings.PLAYER_DIMENSION);
-					g.drawImage(img, entity.getX(), entity.getY(), Settings.PLAYER_DIMENSION, Settings.PLAYER_DIMENSION, null);				
-				}				
-			}
-		}*/
-		/*List<Bubble> bubbles = model.getBubbles();
-		for(int i = 0; i < bubbles.size();i++) {
-			if(bubbles.get(i).isAlive()) {
-				Entity entity = bubbles.get(i);
-				Image img = bubbleAnimations.getCurrentImage(i);
-				g.drawRect(entity.getHitbox().x,entity.getHitbox().y,Settings.PLAYER_DIMENSION, Settings.PLAYER_DIMENSION);
-				g.drawImage(img,entity.getX(),entity.getY(),Settings.PLAYER_DIMENSION,Settings.PLAYER_DIMENSION,null);				
-			}
-		}*/
-		/*List<Food> food = model.getFood();
-		for(Food f : food) {
-			if(f.isAlive()) g.drawImage(foodImage.getImage(f.getType()),f.getX(),f.getY(),Settings.FOOD_DIMENSION,Settings.FOOD_DIMENSION,null);
-		}*/
+		drawFood(g, false);
+		drawEnemies(g,false);
+		drawBubbles(g, false);
+		drawPlayerOne(g, false);
+		if(model.getPlayerTwo() != null) drawPlayerTwo(g, false);
 	}
 	public void update() {
 		model = controller.getModel();
 		if (!model.isStarted()) return;
 		scoreLabel.setText("" + model.getScore());
 		if(currentLevel != model.getCurrentLevel()) {
-			/*bubbleAnimations.clear();
-			enemyAnimations.clear();
-			currentLevel = model.getCurrentLevel();*/
 			changeResources();
 		}
 		int playerXState = model.getPlayerOne().getXState();

@@ -29,10 +29,10 @@ public class WarningPanel extends JPanel{
 		title = new OldGameLabel("WARNING...", MenuSettings.ERROR_SIZE);
 		title.setPreferredSize(new Dimension(Settings.WINDOW_WIDTH,130));
 		
-		yesButton = new OldGameButton("OK", MenuSettings.MULTIPLAYER_BUTTON_TEXT_SIZE);
+		yesButton = new OldGameButton("YES", MenuSettings.MULTIPLAYER_BUTTON_TEXT_SIZE);
 		yesButton.setPreferredSize(new Dimension(Settings.WINDOW_WIDTH/2,130));
 		
-		noButton = new OldGameButton("CANCEL", MenuSettings.MULTIPLAYER_BUTTON_TEXT_SIZE);
+		noButton = new OldGameButton("NO", MenuSettings.MULTIPLAYER_BUTTON_TEXT_SIZE);
 		noButton.setPreferredSize(new Dimension(Settings.WINDOW_WIDTH/2,130));
 		
 		JPanel buttonsPanel = new JPanel();
@@ -51,6 +51,7 @@ public class WarningPanel extends JPanel{
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				GameStarter.resetAll();
 				ChangeSceneHandler.setCurrentScene(nextScene);
 				yesButton.setBackground(Color.BLACK);
 				

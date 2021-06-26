@@ -29,6 +29,7 @@ public class Utilities {
 	public static final int BUBBLED_ROBOT = 14;
 	public static final Integer BUBBLED_MAGE = 19;
 	public static final Integer BUBBLED_SPRING = 20;
+	public static final Integer BUBBLED_JELL = 21;
 	public static final int BUBBLED_ENEMY_MAX_FRAME = 70;
 	// Food
 	public static final int CAKE = 0;

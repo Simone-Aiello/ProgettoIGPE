@@ -2,7 +2,6 @@ package application;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Font;
 import java.awt.GraphicsEnvironment;
 import java.io.File;
@@ -11,7 +10,6 @@ import java.util.HashMap;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
-import javax.swing.border.Border;
 
 import application.model.Utilities;
 import application.net.DataBaseClient;
@@ -22,7 +20,6 @@ import menu.view.GenericMessagePanel;
 
 import menu.view.LeaderboardMenu;
 import menu.view.Score;
-import menu.view.ScoreBoard;
 import menu.view.WarningPanel;
 
 

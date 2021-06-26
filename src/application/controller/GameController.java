@@ -7,7 +7,6 @@ import java.time.Instant;
 
 import application.ChangeSceneHandler;
 import application.GameStarter;
-import application.SoundsHandler;
 import application.model.GameModel;
 import application.model.Player;
 import application.model.Utilities;
@@ -76,7 +75,6 @@ public class GameController implements KeyListener {
 					if (message[0].equals(Utilities.BUBBLE)) {
 						model.capture(Integer.parseInt(message[1]), Integer.parseInt(message[2]));
 					} else if (message[0].equals(Utilities.CHANGE_LEVEL)) {
-						System.out.println("ENTRO");
 						model.changeLevel();
 					} else if (message[0].equals(Utilities.SCORE)) {
 						model.setScore(Integer.parseInt(message[1]));
@@ -117,7 +115,6 @@ public class GameController implements KeyListener {
 				if (DataBaseClient.getInstance().getUsername() != null) {
 					String res = DataBaseClient.getInstance().updateScores(model.getScore());
 					DataBaseClient.getInstance().reset();
-					System.out.println(res);
 					if (res.equals(Utilities.PROGRESS_SAVED)) {
 						response = " Your score has been saved into the leaderboards";
 					} else {

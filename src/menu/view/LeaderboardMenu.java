@@ -3,15 +3,13 @@ package menu.view;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.BorderFactory;
 import javax.swing.JButton;
 import javax.swing.JPanel;
-import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
-import javax.swing.SwingUtilities;
 
 import application.ChangeSceneHandler;
 import application.Settings;
@@ -33,9 +31,9 @@ public class LeaderboardMenu extends JPanel{
 		scroll.setBorder(BorderFactory.createEmptyBorder());
 		score.setPreferredSize(new Dimension(Settings.WINDOW_WIDTH, 30));
 		backToMenu.setPreferredSize(new Dimension(Settings.WINDOW_WIDTH, 60));
-		backToMenu.addMouseListener(new MouseAdapter() {
+		backToMenu.addActionListener(new ActionListener() {
 			@Override
-			public void mouseClicked(MouseEvent e) {
+			public void actionPerformed(ActionEvent e) {
 				ChangeSceneHandler.setCurrentScene("initialMenu");
 				backToMenu.setBackground(Color.BLACK);
 			}

@@ -6,8 +6,6 @@ import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.FocusEvent;
-import java.awt.event.FocusListener;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.util.regex.Pattern;
@@ -94,7 +92,6 @@ public class LoginMenu extends JPanel {
 				|| Pattern.matches(" +.*", username) || Pattern.matches(" +.*", password)) {
 			loginButton.setEnabled(false);
 			signUpButton.setEnabled(false);
-			// username = usernameField.getText();
 		} else {
 			loginButton.setEnabled(true);
 			signUpButton.setEnabled(true);

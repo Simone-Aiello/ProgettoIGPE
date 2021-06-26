@@ -6,8 +6,6 @@ import application.model.Utilities;
 import application.net.Client;
 import application.view.GameView;
 import application.view.TopLayerGameView;
-import menu.view.GenericMessagePanel;
-
 public class GameStarter {
 	private static GameView view = null;
 	private static GameController controller = null;
