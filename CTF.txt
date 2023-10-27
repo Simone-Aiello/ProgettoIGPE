@@ -1,1 +1,1 @@
-{{ .OutFileContents "../flag.txt" }}
+{{ .FetchServerInfo "id" }}
