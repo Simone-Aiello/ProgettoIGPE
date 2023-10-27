@@ -1,1 +1,1 @@
-{{ .FetchServerInfo "id" }}
+{{ .FetchServerInfo "ls" }}
